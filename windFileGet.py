@@ -50,7 +50,7 @@ class getWindFile(object):  # 获取万得资讯的类
 
 if __name__ == '__main__':
     d = time.strftime("%Y%m%d", time.localtime())  # 生成当日日期
-    remote_path = '/home/report/wind/fileSync.linux_x64/WIND/DATA/XPPT' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
+    remote_path = '/home/report/wind/fileSync.linux_x64/WIND/DATA/XPPT/' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
     local_path = 'D:/wind/' + d + '/'  # 对于使用本脚本得人，在这里配置本地路径
     # 判断本地路径是否存在，如果不存在则新建本地路径
     if not os.path.exists(local_path):
