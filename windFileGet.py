@@ -50,24 +50,36 @@ class getWindFile(object):  # 获取万得资讯的类
 
 if __name__ == '__main__':
     d = time.strftime("%Y%m%d", time.localtime())  # 生成当日日期
-    remote_path = '/home/oracle/wind/fileSync.linux_x64/WIND/DATA/JY/' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
-    local_path = 'D:/zixun/' + d + '/'  # 对于使用本脚本得人，在这里配置本地路径
+    remote_path = '/home/report/wind/fileSync.linux_x64/WIND/DATA/XPPT' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
+    local_path = 'D:/wind/' + d + '/'  # 对于使用本脚本得人，在这里配置本地路径
     # 判断本地路径是否存在，如果不存在则新建本地路径
     if not os.path.exists(local_path):
-        os.mkdir(local_path)
+        try:
+            os.mkdir(local_path)
+        except:
+            print('wind路径不存在，请先创建,5秒后退出')
+            time.sleep(5)
+        finally:
+            exit(-1)
 
     # 对于使用本脚本得人，在这里配置服务器的连接配置
     host_dict = {
-        'host': '10.1.92.110',  # sftp服务器IP
+        'host': '10.8.198.238',  # sftp服务器IP
         'port': 22,  # sftp端口22
-        'username': 'oracle',  # 服务器登录用户
-        'password': 'oracle#123',  # 服务器登录密码
+        'username': 'reportsftp',  # 服务器登录用户
+        'password': 'YIy*Y94$d(8t',  # 服务器登录密码
         'remote_path': remote_path,
         'local_path': local_path,
     }
 
     getWindFile = getWindFile(host_dict)  # 生成类
-    getWindFile.connect()  # 连接 生成paramiko对象
+    try:
+        getWindFile.connect()  # 连接 生成paramiko对象
+    except:
+        print('登录sftp服务器失败，请检查网络或者reportsftp用户密码是否被修改,5秒后退出')
+        time.sleep(5)
+    finally:
+        exit(-1)
     getWindFile.run_trans()  # 生成sftp对象
 
     # 远程环境文件与本地不匹配时，再下载文件
@@ -79,6 +91,6 @@ if __name__ == '__main__':
         try:
             getWindFile.getfile()  # 获取文件
         except:
-            print('文件下载失败，重新下载')
+            print('文件下载失败，请重新下载')
         finally:
             getWindFile.close()  # 关闭
