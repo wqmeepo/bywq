@@ -49,19 +49,25 @@ class getWindFile(object):  # 获取万得资讯的类
 
 
 if __name__ == '__main__':
+    print('脚本开始')
+    time.sleep(2)
     d = time.strftime("%Y%m%d", time.localtime())  # 生成当日日期
-    remote_path = '/home/report/wind/fileSync.linux_x64/WIND/DATA/XPPT/' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
+    remote_path = '/home/report/wind/fileSync.linux_x64/WIND/DATA/JY/' + d + '/'  # 对于使用本脚本得人，在这里配置远程路径
     local_path = 'D:/wind/' + d + '/'  # 对于使用本脚本得人，在这里配置本地路径
     # 判断本地路径是否存在，如果不存在则新建本地路径
+    print('开始判断本地路径是否存在')
+    time.sleep(2)
     if not os.path.exists(local_path):
         try:
             os.mkdir(local_path)
+            print('基于日期的路径不存在，已自动创建')
         except:
             print('wind路径不存在，请先创建,5秒后退出')
             time.sleep(5)
-        finally:
-            exit(-1)
-
+            exit('-1')
+    print('路径判断完成')
+    print('开始读取字典')
+    time.sleep(2)
     # 对于使用本脚本得人，在这里配置服务器的连接配置
     host_dict = {
         'host': '10.8.198.238',  # sftp服务器IP
@@ -71,17 +77,22 @@ if __name__ == '__main__':
         'remote_path': remote_path,
         'local_path': local_path,
     }
-
+    print('字典读取完成')
+    time.sleep(2)
+    print('开始登录万得sftp服务器')
+    time.sleep(2)
     getWindFile = getWindFile(host_dict)  # 生成类
     try:
         getWindFile.connect()  # 连接 生成paramiko对象
+        print('paramiko对象生成成功')
     except:
         print('登录sftp服务器失败，请检查网络或者reportsftp用户密码是否被修改,5秒后退出')
         time.sleep(5)
-    finally:
         exit(-1)
     getWindFile.run_trans()  # 生成sftp对象
 
+    print('判断远程文件是否更新')
+    time.sleep(2)
     # 远程环境文件与本地不匹配时，再下载文件
     if sorted(getWindFile.file_in_remote_path()) == sorted(os.listdir(local_path)):
         print('本地文件与远程文件一致，无需下载')
@@ -90,7 +101,10 @@ if __name__ == '__main__':
         time.sleep(3)
         try:
             getWindFile.getfile()  # 获取文件
+            print('文件下载完成,5秒后关闭')
+            time.sleep(5)
         except:
-            print('文件下载失败，请重新下载')
+            print('文件下载失败，请重新下载，5秒后关闭')
+            time.sleep(5)
         finally:
             getWindFile.close()  # 关闭
