@@ -1,68 +1,72 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-import os, json, logging, subprocess, time
+import os, json, logging, subprocess, time, random
 from apscheduler.jobstores.memory import MemoryJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
 
 class AutoMaintenance(object):
     def __init__(self, config_path):
-        self.job_stores = {
+        self.job_stores = {  # 设置任务储存器存储方式-内存
             'default': MemoryJobStore(),
         }
-        self.executors = {
+        self.executors = {  # 设置执行器线程池进程池
             'default': ThreadPoolExecutor(20),
             'processpool': ProcessPoolExecutor(10)
         }
-        self.job_defaults = {
+        self.job_defaults = {  # 设置最大实例数量
             'coalesce': False,
-            'max_instances': 5
+            'max_instances': 15
         }
-        self.config_path = config_path
-        self.process_list = []
+        self.config_path = config_path  # 获取配置文件地址
+        self.process_list = []  # 用于存储线程
 
-    def jsonParse(self):
+    def jsonParse(self):  # 配置文件读取
+        # 配置文件名写死为taskconfig.json
         with open(self.config_path + '\\taskconfig.json', 'r', encoding='utf-8')as fp:
             json_data = json.load(fp)
         return json_data
 
-    def jobStart(self, *args):
+    def jobStart(self, *args):  # 获取调度器传来的任务路径
+        time.sleep(random.randrange(0, 6))  # 避免任务同时启动造成卡顿
         print(args[1] + ' 任务启动')
-        self.process_list.append(subprocess.Popen(args[0]))
+        self.process_list.append(subprocess.Popen(args[0]))  # 启动子线程并将线程存储在processlist里
 
-    def jobEnd(self):
-        print('任务进程关闭开始')
-        for process in self.process_list:
+    def jobEnd(self):  # 关闭任务
+        for process in self.process_list:  # 遍历processlist并杀掉所有线程
             process.kill()
-            time.sleep(2)
-        self.process_list = []
+            time.sleep(2)  # 避免任务关闭太快
+        self.process_list = []  # 清空processlist
 
-    def jobStartGenerator(self):
-        json_data = self.jsonParse()
+    def jobGenerator(self):  # 任务调度器
+        json_data = self.jsonParse()  # 获取配置文件
+        # 设置APScheduler执行配置
         scheduler = BlockingScheduler(jobstores=self.job_stores, executors=self.executors,
                                       job_defaults=self.job_defaults)
         for data in json_data:
-            if json_data[data]['startstatus'] == 'on' or 'ON':
+            if json_data[data]['startstatus'] == 'on':  # 判断任务是否启动
+                # 启动调度器设置，写死为按每周1-周五执行，小时与分钟支持配置文件配置
                 scheduler.add_job(self.jobStart, trigger='cron',
                                   args=(json_data[data]['taskpath'], json_data[data]['taskname']),
                                   id=json_data[data]['taskname'] + ' start',
                                   day_of_week='mon-fri',
                                   hour=json_data[data]['starthour'],
-                                  minute=json_data[data]['startmin'],
-                                  jitter=3)
+                                  minute=json_data[data]['startmin'], )
+                # 关闭调度器设置
                 scheduler.add_job(self.jobEnd, trigger='cron',
                                   day_of_week='mon-fri',
                                   hour=json_data[data]['endhour'],
                                   minute=json_data[data]['endmin'], )
-        try:
+        try:  # 获取调度器启动异常
             print('任务监控开始')
             scheduler.start()
         except SystemExit:
-            print('任务监控结束')
+            print('调度器启动失败')
             exit()
 
 
 if __name__ == '__main__':
-    config_path = os.getcwd()
-    print(config_path)
+    logging.basicConfig(level=logging.INFO)
+    config_path = os.getcwd()  # 获取当前脚本所在目录，即配置文件与脚本文件同目录
+    print('当前目录为：' + config_path)
     auto_maintenance = AutoMaintenance(config_path)
-    auto_maintenance.jobStartGenerator()
+    auto_maintenance.jobGenerator()
