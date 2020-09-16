@@ -1,0 +1,22 @@
+{
+	"task1": {
+		"taskid": "1",
+		"taskname": "百度盘download",
+		"taskpath": "D:\\Program Files (x86)\\PanDownload\\PanDownload.exe",
+		"starthour": "17",
+		"startmin":"41",
+		"endhour": "17",
+		"endmin":"43",
+		"startstatus":"on"
+	},
+	"task2": {
+		"taskid": "2",
+		"taskname": "beyond compare",
+		"taskpath": "E:\\software\\Beyond Compare 3\\BCompare.exe",
+		"starthour": "17",
+		"startmin":"42",
+		"endhour": "17",
+		"endmin":"43",
+		"startstatus":"on"
+	}
+}
