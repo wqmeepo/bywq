@@ -79,18 +79,19 @@ class Ui_MainWindow(object):
             # textedit里面填入路径
             self.selectPath.setText(self.tempSelectPath)
             # 该目录下所有文件的列表
-            self.fileList = os.listdir(self.tempSelectPath)
-            # print(self.fileList)
+            self.fileList = []
+            self.filePath = []
+            # 使用os.walk遍历文件夹下所有文件
+            for root, dirs, files in os.walk(self.tempSelectPath):
+                for file in files:
+                    self.filePath.append(os.path.join(root, file))
+                    self.fileList.append(file)
             num = 0  # 统计总数用
             self.listExistFile.clear()  # 清空列表内容
             for i in range(0, len(self.fileList)):
-                filePath = os.path.join(self.tempSelectPath, self.fileList[i])  # 获取每个文件的具体路径
-                if os.path.isfile(filePath):  # 判断是不是文件
-                    num += 1
-                    self.item = QtWidgets.QListWidgetItem(self.listExistFile)  # 创建列表
-                    self.item.setText(self.fileList[i])
-                    # print(self.fileList[i])
-                    # print(self.item.text())
+                num += 1
+                self.item = QtWidgets.QListWidgetItem(self.listExistFile)  # 创建列表
+                self.item.setText(self.filePath[i])
             self.statusbar.showMessage('此目录共有文件 ”' + str(num) + '“ 个')
         except Exception as e:
             QtWidgets.QMessageBox.warning(None, '警告', '请选择一个有效路径', QtWidgets.QMessageBox.Ok)
@@ -113,8 +114,7 @@ class Ui_MainWindow(object):
                               newline='') as f:
                         writer = csv.writer(f, dialect='excel')
                         for i in self.fileList:
-                            if os.path.isfile(os.path.join(self.tempSelectPath, i)):  # 注意检查写入excel的时候是不是文件
-                                writer.writerow([i])
+                            writer.writerow([i])
                     QtWidgets.QMessageBox.information(None, '提示', '写入完成', QtWidgets.QMessageBox.Ok)
                 else:
                     QtWidgets.QMessageBox.information(None, '提示', '请输入营业部全程', QtWidgets.QMessageBox.Ok)
