@@ -62,7 +62,7 @@ class Ui_MainWindow(object):
         self.selectButton.clicked.connect(self.setSelectPath)
         self.exportButton.clicked.connect(self.setExportPath)
         self.pushButton.clicked.connect(self.exportFile)
-        self.listExistFile.clicked.connect(self.itemClick)
+        # self.listExistFile.clicked.connect(self.itemClick)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -124,10 +124,10 @@ class Ui_MainWindow(object):
             QtWidgets.QMessageBox.warning(None, '警告', '请检查以上三个选项是否都填写正确', QtWidgets.QMessageBox.Ok)
             print(e)
 
-    def itemClick(self):
-        # 提供点击列表内的文件打开功能
-        print('click' + self.item.text())
-        os.startfile(self.tempSelectPath + '\\' + self.item.text())
+    # def itemClick(self):
+    #     # 提供点击列表内的文件打开功能
+    #     print('click' + self.item.text())
+    #     os.startfile(self.tempSelectPath + '\\' + self.item.text())
 
 
 if __name__ == '__main__':
