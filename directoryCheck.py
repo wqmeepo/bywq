@@ -113,7 +113,8 @@ class Ui_MainWindow(object):
                               newline='') as f:
                         writer = csv.writer(f, dialect='excel')
                         for i in self.fileList:
-                            writer.writerow([i])
+                            if os.path.isfile(os.path.join(self.tempSelectPath, i)):  # 注意检查写入excel的时候是不是文件
+                                writer.writerow([i])
                     QtWidgets.QMessageBox.information(None, '提示', '写入完成', QtWidgets.QMessageBox.Ok)
                 else:
                     QtWidgets.QMessageBox.information(None, '提示', '请输入营业部全程', QtWidgets.QMessageBox.Ok)
