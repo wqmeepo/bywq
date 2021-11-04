@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
                 else:
                     QtWidgets.QMessageBox.information(None, '提示', '请输入营业部全程', QtWidgets.QMessageBox.Ok)
             else:
-                QtWidgets.QMessageBox.warning(None, '警告', '请检查2个目录是否选择或者是否都存在', QtWidgets.QMessageBox.Ok)
+                QtWidgets.QMessageBox.warning(None, '警告', '请检查检索目录或者保存路径是否填写', QtWidgets.QMessageBox.Ok)
         except Exception as e:
             QtWidgets.QMessageBox.warning(None, '警告', '请检查以上三个选项是否都填写正确', QtWidgets.QMessageBox.Ok)
             print(e)
