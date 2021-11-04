@@ -80,7 +80,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "目录文件检索工具"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "csv文件批量对比工具"))
         self.selectDbButton.setText(_translate("MainWindow", "选择营业部文件"))
         self.selectHqbutton.setText(_translate("MainWindow", "选择总部文件"))
         self.beginButton.setText(_translate("MainWindow", "开始比较"))
