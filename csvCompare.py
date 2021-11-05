@@ -50,16 +50,20 @@ class Ui_MainWindow(object):
         self.listHq = QtWidgets.QListWidget(self.centralwidget)
         self.listHq.setGeometry(QtCore.QRect(450, 170, 161, 241))
         self.listHq.setObjectName("listHq")
-        # self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        # self.progressBar.setGeometry(QtCore.QRect(270, 320, 118, 23))
-        # self.progressBar.setProperty("value", 24)
-        # self.progressBar.setObjectName("progressBar")
+        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar.setGeometry(QtCore.QRect(210, 320, 241, 23))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.progressBar.setFormat('%p%')
         self.label_1 = QtWidgets.QLabel(self.centralwidget)
         self.label_1.setGeometry(QtCore.QRect(20, 150, 131, 16))
         self.label_1.setObjectName("label_1")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(450, 150, 131, 16))
         self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(290, 350, 131, 16))
+        self.label_3.setObjectName("label_3")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 640, 23))
@@ -87,6 +91,7 @@ class Ui_MainWindow(object):
         self.exportButton.setText(_translate("MainWindow", "结果保存路径"))
         self.label_1.setText(_translate("MainWindow", "营业部文件"))
         self.label_2.setText(_translate("MainWindow", "总部文件"))
+        self.label_3.setText(_translate("MainWindow", "处理进度"))
 
     def setSelectDbPath(self):
         try:
@@ -97,18 +102,15 @@ class Ui_MainWindow(object):
             self.selectDbPath.setText(self.tempSelectDbPath[0][0].rsplit('/', 1)[0])
             # 在list里填入该目录下所有文件的列表
             self.fileListDb = self.tempSelectDbPath[0]
-            # print(self.fileList)
-            num = 0  # 统计总数用
+            self.dbNum = 0  # 统计总数用
             self.listDb.clear()  # 清空列表内容
             for i in range(0, len(self.fileListDb)):
                 filePath = self.fileListDb[i]  # 获取每个文件的具体路径
                 if os.path.isfile(filePath):  # 判断是不是文件
-                    num += 1
+                    self.dbNum += 1
                     self.itemDb = QtWidgets.QListWidgetItem(self.listDb)  # 创建列表
                     self.itemDb.setText(self.fileListDb[i].split('/')[-1])
-                    # print(self.fileList[i])
-                    # print(self.item.text())
-            self.statusbar.showMessage('营业部目录共有文件 ”' + str(num) + '“ 个')
+            self.statusbar.showMessage('营业部目录共有文件 ”' + str(self.dbNum) + '“ 个')
         except Exception as e:
             QtWidgets.QMessageBox.warning(None, '警告', '请选择一个有效路径或有效文件', QtWidgets.QMessageBox.Ok)
             print(e)
@@ -122,18 +124,15 @@ class Ui_MainWindow(object):
             self.selectHqPath.setText(self.tempSelectHqPath[0][0].rsplit('/', 1)[0])
             # 在list里填入该目录下所有文件的列表
             self.fileListHq = self.tempSelectHqPath[0]
-            # print(self.fileList)
-            num = 0  # 统计总数用
+            self.hqNum = 0  # 统计总数用
             self.listHq.clear()  # 清空列表内容
             for i in range(0, len(self.fileListHq)):
                 filePath = self.fileListHq[i]  # 获取每个文件的具体路径
                 if os.path.isfile(filePath):  # 判断是不是文件
-                    num += 1
+                    self.hqNum += 1
                     self.itemHq = QtWidgets.QListWidgetItem(self.listHq)  # 创建列表
                     self.itemHq.setText(self.fileListHq[i].split('/')[-1])
-                    # print(self.fileList[i])
-                    # print(self.item.text())
-            self.statusbar.showMessage('总部目录共有文件 ”' + str(num) + '“ 个')
+            self.statusbar.showMessage('总部目录共有文件 ”' + str(self.hqNum) + '“ 个')
         except Exception as e:
             QtWidgets.QMessageBox.warning(None, '警告', '请选择一个有效路径或有效文件', QtWidgets.QMessageBox.Ok)
             print(e)
@@ -148,12 +147,14 @@ class Ui_MainWindow(object):
 
     def beginCompare(self):
         db_list = self.tempSelectDbPath[0]
-        # print(db_list)
         hq_list = self.tempSelectHqPath[0]
+        self.progressBar.setMaximum(self.dbNum * self.hqNum)
+        num = 0
         for hq_file in hq_list:
-            # print(hq_file)
             for db_file in db_list:
                 self.csvParse(hq_file, db_file)
+                num += 1
+                self.progressBar.setValue(num)
         QtWidgets.QMessageBox.information(None, '提示', '分析导出完成', QtWidgets.QMessageBox.Ok)
 
     def csvParse(self, hq_file, db_file):
@@ -170,6 +171,7 @@ class Ui_MainWindow(object):
             if os.path.isdir(self.selectDbPath.toPlainText()) and os.path.isdir(self.selectHqPath.toPlainText()):
                 if os.path.isdir(self.exportPath.toPlainText()):
                     with open(os.path.join(self.exportPath.toPlainText(),
+                                           hq_file.rsplit('.csv', 1)[0].rsplit('/', 1)[-1] + '_' +
                                            db_file.rsplit('.csv', 1)[0].rsplit('_', 1)[-1] + '_对比结果.csv'), 'w',
                               newline='') as f:
                         writer = csv.writer(f, dialect='excel')
