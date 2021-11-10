@@ -148,16 +148,17 @@ class Ui_MainWindow(object):
     def beginCompare(self):
         db_list = self.tempSelectDbPath[0]
         hq_list = self.tempSelectHqPath[0]
-        self.progressBar.setMaximum(self.dbNum * self.hqNum)
+        self.progressBar.setMaximum(self.dbNum)
         num = 0
         for hq_file in hq_list:
             for db_file in db_list:
-                self.csvParse(hq_file, db_file)
-                num += 1
-                self.progressBar.setValue(num)
+                if hq_file.rsplit('.csv', 1)[0].rsplit('_', 1)[-1] == db_file.rsplit('.csv', 1)[0].rsplit('_', 1)[-1]:
+                    self.csvParse(hq_file, db_file, db_file.rsplit('.csv', 1)[0].rsplit('_', 1)[-1])
+            num += 1
+            self.progressBar.setValue(num)
         QtWidgets.QMessageBox.information(None, '提示', '分析导出完成', QtWidgets.QMessageBox.Ok)
 
-    def csvParse(self, hq_file, db_file):
+    def csvParse(self, hq_file, db_file, db_num):
         hq_list = []
         result_list = []
         try:
@@ -170,10 +171,7 @@ class Ui_MainWindow(object):
                         result_list.append(db)
             if os.path.isdir(self.selectDbPath.toPlainText()) and os.path.isdir(self.selectHqPath.toPlainText()):
                 if os.path.isdir(self.exportPath.toPlainText()):
-                    with open(os.path.join(self.exportPath.toPlainText(),
-                                           hq_file.rsplit('.csv', 1)[0].rsplit('/', 1)[-1] + '_' +
-                                           db_file.rsplit('.csv', 1)[0].rsplit('_', 1)[-1] + '_对比结果.csv'), 'w',
-                              newline='') as f:
+                    with open(os.path.join(self.exportPath.toPlainText(), db_num + '_对比结果.csv'), 'w', newline='') as f:
                         writer = csv.writer(f, dialect='excel')
                         for i in result_list:
                             writer.writerow([i])
