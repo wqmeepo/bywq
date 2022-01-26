@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -8,68 +8,83 @@
     <title>登录|交易系统研发中心管理系统</title>
 
     <!-- Bootstrap core CSS -->
-<link href="{{url_for('static',filename='home/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
-      }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
     </style>
 
 
     <!-- Custom styles for this template -->
-    <link href="{{url_for('static',filename='home/css/signin.css')}}" type="text/css" rel="stylesheet">
-  </head>
-  <body class="text-center">
+    <link href="{{ url_for('static',filename='home/css/signin.css') }}" rel="stylesheet">
+</head>
+<body class="text-center">
 
 <main class="form-signin">
-  <form>
-      <div class="mb-4" style="max-width: 360px; margin: 0 auto;">
-						<a href="url_for{{ 'home.index' }}" title="点击返回首页"><img class="img-rounded img-responsive"
-                                src="{{url_for('static',filename='home/images/JYLOGO.png')}}"></a>
-					</div>
+    <form>
+        <div class="mb-4" style="max-width: 360px; margin: 0 auto;">
+            <a href="{{ url_for('home.index') }}" title="点击返回首页"><img class="img-rounded img-responsive"
+                                                                      src="{{ url_for('static',filename='home/images/JYLOGO.png') }}"></a>
+        </div>
 
-    <h1 class="h3 mb-4 fw-normal">请登录</h1>
+        <h2 class="h4 mb-4 fw-normal">请登录</h2>
+        <p>
+            {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                <div style="color:red;text-align:center;font-size:16px">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        </p>
 
-      {% for msg in get_flashed_messages(category_filter=["err"]) %}
-          <div style="color:red;text-align:center;font-size:16px">
-              {{ msg }}
-          </div>
-      {% endfor %}
+        <div class="form-floating">
+            {{ form.username }}
+            <label class="text-muted" for="floatingInput">用户名</label>
+            {% for err in form.username.errors %}
+                <span class="error">{{ err }}</span>
+            {% endfor %}
+        </div>
 
-    <div class="form-floating">
-      <input type="text" class="form-control" id="floatingTextarea" placeholder="username">
-      <label class="text-muted" for="floatingInput">用户名</label>
-    </div>
+        <div class="form-floating">
+            {{ form.password }}
+            <label class="text-muted" for="floatingPassword">密码</label>
+        </div>
 
-        {% for err in form.username.errors %}
-            <span class="error">{{ err }}</span>
-        {% endfor %}
+        <div class="row">
+            <div class="form-floating col-8">
+                {{ form.verifyCode }}
+                <label class="text-muted" for="floatingTextarea">&nbsp;&nbsp;&nbsp;验证码</label>
+            </div>
+            <div class="col-4">
+                <img class=".img-circle img-responsive" alt="Cinque Terre" src="{{ url_for('home.getCode') }}"
+                     width="118"
+                     height="43" onclick="this.src='{{ url_for('home.getCode') }}'+'?'+ Math.random()">
+            </div>
+            <br>
+        </div>
 
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="密码">
-      <label class="text-muted" for="floatingPassword">密码</label>
-    </div>
-    <div class="form-floating">
-      <input type="text" class="form-control" id="floatingTextarea" placeholder="验证码">
-      <label class="text-muted" for="floatingTextarea">验证码</label><br>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">登录</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 金融科技部-交易系统研发中心</p>
-  </form>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            {{ form.csrf_token }}
+            {{ form.submit }}
+        </button>
+        <div class="form-group"
+             style="border-top: 1px solid #D9D9D9; margin: 20px;">
+            <label style="float: right; color: #858585; margin-right: 40px; margin-top: 10px; font-size: 14px;">
+                没有账户？<a href="{{ url_for('home.register') }}">立即注册</a></label>
+        </div>
+        <p class="mt-5 mb-3 text-muted">&copy; 金融科技部-交易系统研发中心</p>
+    </form>
 </main>
-
-
-
-  </body>
+</body>
 </html>

@@ -101,11 +101,11 @@ class LoginForm(FlaskForm):
             DataRequired('用户名不能为空'),
             Length(min=3, max=40, message='用户名长度在3到40之间')
         ],
-        description='用户名',
+        description='username',
         render_kw={
             'type': 'text',
             'placeholder': '请输入用户名',
-            'class': 'validata-username',
+            'class': 'form-control',
             'size': 38,
         }
     )
@@ -114,10 +114,11 @@ class LoginForm(FlaskForm):
         validators=[
             DataRequired("密码不能为空！")
         ],
-        description="第一次密码",
+        description="password",
         render_kw={
             "placeholder": "请输入密码！",
             "size": 38,
+            'class': 'form-control',
         }
     )
     verifyCode = StringField(
@@ -127,14 +128,14 @@ class LoginForm(FlaskForm):
         ],
         description="验证码",
         render_kw={
-            "class": "validate-code",
             "placeholder": "请输入验证码",
             "size": 19,
             "maxlength": 4,
+            'class': 'form-control',
         }
     )
     submit = SubmitField(
-        '登录',
+        '用户登录',
         render_kw={
             'class': 'btn btn-primary login',
         }

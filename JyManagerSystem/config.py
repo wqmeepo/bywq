@@ -8,7 +8,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:321@localhost:3306/jyxtyf'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123@localhost:3306/jyxtyf'
     DEBUG = True
 
 
