@@ -29,18 +29,19 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static',filename='home/css/signin.css') }}" rel="stylesheet">
-</head>
-<body class="text-center">
+    <link href="{{ url_for('static',filename='home/css/footers.css') }}" rel="stylesheet">
 
-<main class="form-signin">
+</head>
+<body class="container-fluid text-center row clearfix">
+
+<main class="form-signin col-3">
     <form>
         <div class="mb-4" style="max-width: 360px; margin: 0 auto;">
             <a href="{{ url_for('home.index') }}" title="点击返回首页"><img class="img-rounded img-responsive"
                                                                       src="{{ url_for('static',filename='home/images/JYLOGO.png') }}"></a>
         </div>
 
-        <h2 class="h4 mb-4 fw-normal">请登录</h2>
-        <p>
+        <p class="bg-danger">
             {% for msg in get_flashed_messages(category_filter=["err"]) %}
                 <div style="color:red;text-align:center;font-size:16px">
                     {{ msg }}
@@ -48,28 +49,28 @@
             {% endfor %}
         </p>
 
-        <div class="form-floating">
+        <div class="form-floating mb-4">
             {{ form.username }}
             <label class="text-muted" for="floatingInput">用户名</label>
             {% for err in form.username.errors %}
-                <span class="error">{{ err }}</span>
+                <span class="bg-danger">{{ err }}</span>
             {% endfor %}
         </div>
 
-        <div class="form-floating">
+        <div class="form-floating mb-4">
             {{ form.password }}
             <label class="text-muted" for="floatingPassword">密码</label>
         </div>
 
-        <div class="row">
+        <div class="row mb-4">
             <div class="form-floating col-8">
                 {{ form.verifyCode }}
                 <label class="text-muted" for="floatingTextarea">&nbsp;&nbsp;&nbsp;验证码</label>
             </div>
             <div class="col-4">
                 <img class=".img-circle img-responsive" alt="Cinque Terre" src="{{ url_for('home.getCode') }}"
-                     width="118"
-                     height="43" onclick="this.src='{{ url_for('home.getCode') }}'+'?'+ Math.random()">
+                     width="93"
+                     height="56" onclick="this.src='{{ url_for('home.getCode') }}'+'?'+ Math.random()">
             </div>
             <br>
         </div>
@@ -83,8 +84,9 @@
             <label style="float: right; color: #858585; margin-right: 40px; margin-top: 10px; font-size: 14px;">
                 没有账户？<a href="{{ url_for('home.register') }}">立即注册</a></label>
         </div>
-        <p class="mt-5 mb-3 text-muted">&copy; 金融科技部-交易系统研发中心</p>
     </form>
 </main>
+<script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
 </body>
+{% include "home/footer.html" %}
 </html>

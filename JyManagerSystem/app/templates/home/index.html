@@ -1,106 +1,239 @@
 {% extends "home/common.html" %}
 {% block content %}
-	<!-- 轮播重要通知及展示热门文章 -->
-	<div class="container mr-sl mr-sl-1">
-		<div class="mr-spotlight mr-spotlight-1  row">
-			<!-- 轮播重要通知 -->
-			<div
-				class=" col-lg-9 col-md-12  col-sm-3 hidden-sm   col-xs-6 hidden-xs ">
-				<div class="mr-module module " id="Mod159">
-					<div class="module-inner">
-						<div class="module-ct">
-							<div class="mijoshop">
-								<div class="container_oc">
-									<div class="slideshow">
-										<div id="slidershow" class="nivoSlider">
-											<a href="#" class="nivo-imageLink" style="display: block;cursor:default">
-												<img src="{{url_for('static',filename='images/banner/img1.png')}}" class="img-responsive"
-												style="display: none;">
-											</a>
-											<a href="#"
-												class="nivo-imageLink" style="display: none;cursor:default">
-											<img src="{{url_for('static',filename='images/banner/img2.png')}}" class="img-responsive"
-												style="display: none;">
-											</a>
-											<a href="#" class="nivo-imageLink" style="display: none;cursor:default">
-												<img src="{{url_for('static',filename='images/banner/img3.png')}}" class="img-responsive"
-												style="display: none;">
-											</a>
-										</div>
-									</div>
-									<script type="text/javascript">
-										//实现调用幻灯片插件轮播广告
-										jQuery(document).ready(function() {
-											jQuery('#slidershow').nivoSlider();
-										});
-									</script>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 展示热门文章 -->
-			<div class="col-lg-3  col-md-6 hidden-md   col-sm-3 hidden-sm   col-xs-6 hidden-xs ">
-				<div class="mr-module module highlight " id="Mod160">
-					<div class="module-inner">
-						<h3 class="module-title ">
-							<span>热门文章</span>
-						</h3>
-						<div class="module-ct">
-							<div class="mijoshop">
-								<div class="container_oc">
-									<div class="box_oc">
-										<!-- 循环显示热门内容 ：添加两条商品信息-->
+    <head>
+        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+    </head>
+    <body>
+    <main>
 
-										<div class="box-product product-grid">
-											<div>
-												<div class="image">
-													<a href="#">
-														<img src="{{url_for('static',filename='home/images/np.png')}}" width="250px">
-													</a>
-												</div>
-												<div class="name">
-													<a href="#">文章</a>
-												</div>
-												<!-- 星级评分条 -->
-												<div class="rating">
-													<span class="fa fa-stack"><i
-														class="fa fa-star fa-stack-2x"></i><i
-														class="fa fa-star-o fa-stack-2x"></i> </span> <span
-														class="fa fa-stack"><i
-														class="fa fa-star fa-stack-2x"></i><i
-														class="fa fa-star-o fa-stack-2x"></i> </span> <span
-														class="fa fa-stack"><i
-														class="fa fa-star fa-stack-2x"></i><i
-														class="fa fa-star-o fa-stack-2x"></i> </span> <span
-														class="fa fa-stack"><i
-														class="fa fa-star fa-stack-2x"></i><i
-														class="fa fa-star-o fa-stack-2x"></i> </span> <span
-														class="fa fa-stack"><i
-														class="fa fa-star fa-stack-2x"></i><i
-														class="fa fa-star-o fa-stack-2x"></i> </span>
-												</div>
-												<!-- // 星级评分条 -->
-												<!-- 作者 -->
-												<div class="price">
-													<span class="price-new">作者：tianling </span>
-												</div>
-												<!-- // 作者 -->
-											</div>
-										</div>
+        <section class="py-2 text-center container">
+            <div class="row py-lg-2">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">公告</h1>
+                    <p class="lead text-muted">本站为金融科技部-交易系统研发中心对外信息提供出口，提供如下且不限于：各系统表结构、数据接口
+                        、测试环境信息、客户端、专用工具、交易所文档等.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary my-2">了解详情</a>
+                    </p>
+                </div>
+            </div>
+        </section>
 
-										<!-- // 循环显示热门商品 ：添加两条商品信息-->
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- // 显示热门文章 -->
-		</div>
-	</div>
-	<!-- //轮播重要通知及展示热门文章  -->
-<!-- //版权栏 -->
+        <div class="album py-3 bg-light">
+            <div class="container">
+                <div class="col-4 pb-1">
+                <h3>各系统入口：</h3>
+                </div>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="" role="img" aria-label="Placeholder: UF20集中交易系统"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>UF20集中交易系统</title>
+                                <img src="{{url_for('static',filename='images/banner/img1.png')}}">>
+                            </svg>
+
+                            <div class="card-img-overlay">
+                                <b><p class="card-title">UF20集中交易系统</p></b>
+                                <p class="card-text">UF20集中交易系统：经纪客户账户管理、交易管理、清算管理，覆盖股基债交易与非交易，
+                                    融资融券、转融通、个股期权、产品销售等功能.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    </body>
+
+
 {% endblock %}

@@ -31,9 +31,9 @@ def draw_line(draw, num, width, height):
 
 def getVerifyCode():
     code = geneText()
-    width, height = 120, 50
+    width, height = 93, 56
     im = Image.new('RGB', (width, height), color='white')
-    font = ImageFont.truetype('app/static/fonts/arial.ttf', 40)
+    font = ImageFont.truetype('app/static/fonts/arial.ttf', 32)
     draw = ImageDraw.Draw(im)
     for item in range(4):
         draw.text((5 + random.randint(-3, 3) + 23 * item, 5 + random.randint(-3, 3)), code[item], rndColor(), font)
