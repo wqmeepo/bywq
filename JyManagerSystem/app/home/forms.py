@@ -18,7 +18,7 @@ class RegisterForm(FlaskForm):
         render_kw={
             'type': 'text',
             'placeholder': '请输入用户名',
-            'class': 'validata-username',
+            'class': 'form-control',
             'size': 38,
         }
     )
@@ -33,6 +33,7 @@ class RegisterForm(FlaskForm):
             'type': 'text',
             'placeholder': '请输入您所在部门',
             'size': 38,
+            'class': 'form-control',
         }
     )
     realname = StringField(
@@ -46,6 +47,7 @@ class RegisterForm(FlaskForm):
             'type': 'text',
             'placeholder': '请输入真实姓名',
             'size': 38,
+            'class': 'form-control',
         }
     )
     password = PasswordField(
@@ -57,6 +59,7 @@ class RegisterForm(FlaskForm):
         render_kw={
             "placeholder": "请输入密码",
             "size": 38,
+            'class': 'form-control',
         }
     )
     repassword = PasswordField(
@@ -69,26 +72,27 @@ class RegisterForm(FlaskForm):
         render_kw={
             "placeholder": "请确认密码",
             "size": 38,
+            'class': 'form-control',
         }
     )
     submit = SubmitField(
         '注册',
         render_kw={
-            'class': 'btn btn-primary login',
+            'class': "w-100 btn btn-lg btn-primary",
         }
     )
 
     @staticmethod
     def validate_username(self, filed):
         '''
-        if eamil is exist
-        :param filed: email
+        if username is exist
+        :param filed: username
         :return: None
         '''
         username = filed.data
         user = User.query.filter_by(username=username).count()
-        if user == 1:
-            raise ValidationError('用户名已存在')
+        if user >= 1:
+            raise ValidationError('该用户名已存在，请设置其他用户名')
 
 
 class LoginForm(FlaskForm):
@@ -137,7 +141,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField(
         '用户登录',
         render_kw={
-            'class': 'btn btn-primary login',
+            'class': "w-100 btn btn-lg btn-primary",
         }
     )
 
@@ -146,32 +150,6 @@ class ModifyForm(FlaskForm):
     '''
     修改用户功能
     '''
-    department = StringField(
-        label='部门 ：',
-        validators=[
-            DataRequired('部门不能为空'),
-            Length(min=3, max=40, message='请输入您所在部门')
-        ],
-        description='部门名称',
-        render_kw={
-            'type': 'text',
-            'placeholder': '请输入您所在部门',
-            'size': 38,
-        }
-    )
-    realname = StringField(
-        label='姓名 ：',
-        validators=[
-            DataRequired('请输入真实姓名'),
-            Length(min=1, max=40, message='长度校验失败')
-        ],
-        description='真实姓名',
-        render_kw={
-            'type': 'text',
-            'placeholder': '请输入真实姓名',
-            'size': 38,
-        }
-    )
     oldpassword = PasswordField(
         label="原始密码 ：",
         validators=[
@@ -181,6 +159,7 @@ class ModifyForm(FlaskForm):
         render_kw={
             "placeholder": "请输入原始密码",
             "size": 38,
+            'class': 'form-control',
         }
     )
     newpassword = PasswordField(
@@ -192,6 +171,7 @@ class ModifyForm(FlaskForm):
         render_kw={
             "placeholder": "请输入新密码",
             "size": 38,
+            'class': 'form-control',
         }
     )
     renewpassword = PasswordField(
@@ -204,12 +184,13 @@ class ModifyForm(FlaskForm):
         render_kw={
             "placeholder": "请确认新密码",
             "size": 38,
+            'class': 'form-control',
         }
     )
     submit = SubmitField(
         '修改',
         render_kw={
-            'class': 'btn btn-primary login',
+            'class': "w-100 btn btn-lg btn-primary",
         }
     )
 

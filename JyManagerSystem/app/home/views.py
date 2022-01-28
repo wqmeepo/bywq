@@ -1,9 +1,9 @@
 from app.home import home
 from app import db
-from app.home.forms import RegisterForm, LoginForm
+from app.home.forms import RegisterForm, LoginForm, ModifyForm
 from app.models import User, Admin, TableInfo, InterfaceInfo, InterfaceFieldInfo, ErrorInfo, InterfaceFieldDic
 from app.models import HardwareInfo, SystemInfo, InterfaceDic
-from flask import render_template, url_for, redirect, flash, session, request, make_response
+from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
 import random
@@ -68,14 +68,20 @@ def register():
     form = RegisterForm()  # 实例化注册表单
     if form.validate_on_submit():
         data = form.data
+        realuser = User.query.filter_by(realname=data['realname'], department=data['department']).count()
+        if realuser >= 1:
+            flash('存在同一部门下同名员工，请注册时区分！', 'err_register')
+            return render_template('home/register.html', form=form)
         user = User(
             username=data['username'],
             password=generate_password_hash(data['password']),
             realname=data['realname'],
             department=data['department'],
         )
+
         db.session.add(user)
         db.session.commit()
+        flash('注册完成，请登录！', 'success_register')
         return redirect(url_for('home.login'))
     return render_template('home/register.html', form=form)
 
@@ -89,14 +95,14 @@ def login():
     if form.validate_on_submit():
         data = form.data
         if session.get('image').lower() != form.verifyCode.data.lower():  # 检查验证码
-            flash('验证码输入错误！', 'err')
+            flash('验证码输入错误！', 'err_login')
             return render_template('home/login.html', form=form)
         user = User.query.filter_by(username=data['username']).first()  # 获取人员信息
         if not user:  # 校验人员
-            flash('该用户不存在！', 'err')
+            flash('该用户不存在！', 'err_login')
             return render_template('home/login.html', form=form)
         if not user.check_password(data['password']):  # 校验密码
-            flash('密码错误！', 'err')
+            flash('密码错误！', 'err_login')
             return render_template('home/login.html', form=form)
         session['user_id'] = user.id
         session['username'] = user.username
@@ -109,7 +115,7 @@ def login():
 def logout():
     session.pop('user_id', None)
     session.pop('username', None)
-    return redirect(url_for('home.login'))
+    return redirect(url_for('home.index'))
 
 
 # 登录装饰器
@@ -125,6 +131,17 @@ def userLogin(f):
 
 # 在线用户修改密码
 @userLogin
-@home.route('/usermodify/<username>', methods=['GET', 'POST'])
-def userModify(username):
-    return f'<h1>{username} is modifying</he>'
+@home.route('/usermodify/', methods=['GET', 'POST'])
+def userModify():
+    form = ModifyForm()
+    if form.validate_on_submit():
+        data = form.data
+        user = User.query.filter_by(username=session.get('username')).first()
+        if not user:
+            flash('已经注销', 'err_modify')
+            return redirect(url_for('home.login'))
+        user.password = generate_password_hash(data['newpassword'])
+        db.session.commit()
+        flash('修改完成！', 'info_modify')
+        return redirect(url_for('home.userModify'))
+    return render_template('home/modify_password.html', form=form)
