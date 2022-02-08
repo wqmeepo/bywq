@@ -21,25 +21,24 @@
 
         <div class="album py-3 bg-light">
             <div class="container">
-                <div class="col-4 pb-1">
-                <h3>各系统入口：</h3>
+                <div class="col-4 pb-3">
+                    <h4>系统入口：</h4>
                 </div>
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5">
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="" role="img" aria-label="Placeholder: UF20集中交易系统"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>UF20集中交易系统</title>
-                                <img src="{{url_for('static',filename='images/banner/img1.png')}}">>
-                            </svg>
-
-                            <div class="card-img-overlay">
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 src="{{ url_for('static',filename='images/index/UF20.png') }}"
+                                 alt="UF20集中交易系统">
+                            <div class="card-body">
                                 <b><p class="card-title">UF20集中交易系统</p></b>
-                                <p class="card-text">UF20集中交易系统：经纪客户账户管理、交易管理、清算管理，覆盖股基债交易与非交易，
-                                    融资融券、转融通、个股期权、产品销售等功能.</p>
+                                <p class="card-text">UF20集中交易系统：用于经纪客户账户、交易、清算管理，覆盖股基债交易与非交易，
+                                    融资融券、转融通、个股期权、产品销售等功能</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">详情</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -47,44 +46,39 @@
                     </div>
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/index/BOP.png') }}"
+                                 alt="BOP集中业务运营管理平台">
                             <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <b><p class="card-title">BOP集中业务运营管理平台</p></b>
+                                <p class="card-text">BOP集中业务运营管理平台：主要用于开户、权限变更等经纪业务的集中受理、审核</p><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/index/O32.png') }}"
+                                 alt="O32投资交易系统">
                             <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <b><p class="card-title">O32投资交易系统</p></b>
+                                <p class="card-text">O32投资交易系统：主要用于自营与资管部门的资产管理、交易管理、清算管理、
+                                    报表查询，覆盖股基债交易与非交易，个股期权、大宗交易等功能</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
@@ -92,133 +86,61 @@
 
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/index/HSPB.png') }}"
+                                 alt="恒生PB系统">
                             <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <b><p class="card-title">恒生PB系统</p></b>
+                                <p class="card-text">恒生PB系统：本系统主要为机构投资者提供二级市场各类业务交易、风控、清算功能</p><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 法人清算系统"
+                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>法人清算系统</title>
                                 <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">法人清算系统</text>
                             </svg>
 
                             <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <b><p class="card-title">法人清算系统</p></b>
+                                <p class="card-text">法人清算系统：支持各业务的法人清算、交收、资金管理和股份管理等功能</p><br>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/index/TA.png') }}"
+                                 alt="基金登记过户系统">
                             <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
+                                <b><p class="card-title">基金登记过户系统</p></b>
+                                <p class="card-text">基金登记过户系统：包含资管、场外与外包TA系统（含分TA），主要为资管、场外、外包产
+                                    品提供账户登记产品管理功能</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="#"
+                                                                                                          class="text-muted">了解详情</a>
+                                        </button>
                                     </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-
-                            <div class="card-body">
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small class="text-muted">9 mins</small>
                                 </div>
                             </div>
                         </div>
