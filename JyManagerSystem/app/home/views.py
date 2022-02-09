@@ -1,8 +1,7 @@
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm
-from app.models import User, Admin, TableInfo, InterfaceInfo, InterfaceFieldInfo, ErrorInfo, InterfaceFieldDic
-from app.models import HardwareInfo, SystemInfo, InterfaceDic
+from app.models import User, Admin
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
