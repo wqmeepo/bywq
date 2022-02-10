@@ -1,0 +1,18 @@
+{% extends "home/common.html" %}
+{% block content %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+    </head>
+    <body>
+    <div><p><a href="#">数据库字段查询</a></p></div>
+    <div><p><a href="#">接口查询</a></p></div>
+    <div><p><a href="#">环境信息查询</a></p></div>
+
+
+    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
+
+    </body>
+
+
+{% endblock %}

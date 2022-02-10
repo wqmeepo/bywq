@@ -13,7 +13,7 @@ class User(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
     def __repr__(self):
-        return f'<user : {self.department} - {self.real_name}>'
+        return f'<user : {self.department} - {self.realname}>'
 
     def check_password(self, password):
         from werkzeug.security import check_password_hash

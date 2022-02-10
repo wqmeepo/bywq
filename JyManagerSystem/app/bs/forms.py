@@ -45,6 +45,13 @@ class BusinSysInfoForm(FlaskForm):
         }
     )
 
+    submit = SubmitField(
+        '提交',
+        render_kw={
+            'class': "w-100 btn btn-lg btn-primary",
+        }
+    )
+
     @staticmethod
     def validate_sysno(self, field):
         sysno = field.data
