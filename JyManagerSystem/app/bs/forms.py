@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, RadioField, SelectField, FileField
 from wtforms.validators import DataRequired, Regexp, EqualTo, ValidationError, Length
 from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
+from flask import g
+from app import bs
 
 
 class BusinSysInfoForm(FlaskForm):
@@ -71,15 +73,4 @@ class InterfaceFileForm(FlaskForm):
     '''
     维护接口文件信息，例如文件名称、保存路径，上传时间等
     '''
-    sysno = SelectField(
-        label='系统编号 ： ',
-        validators=[
-            DataRequired('请维护系统编号')
-        ],
-        description='系统编号',
-        render_kw={
-            "placeholder": "请输入系统编号",
-            "size": 38,
-            'class': 'form-control',
-        }
-    )
+

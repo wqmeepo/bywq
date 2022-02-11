@@ -1,0 +1,41 @@
+{% extends "home/common.html" %}
+{% block content %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+    </head>
+    <body>
+
+    <div class="container col-3 lead">
+        <p>业务系统对应关系新增</p>
+        <form method="post">
+        <span>
+            <label>系统编号： </label>
+            {{ form.sysno }}
+        </span>
+            {% for err in form.sysno.errors %}
+                <span class="alert-danger">{{ err }}</span><br>
+            {% endfor %}
+            <span>
+            <label>系统名称： </label>
+            {{ form.sysname }}
+        </span>
+            {% for err in form.sysname.errors %}
+                <span class="alert-danger">{{ err }}</span><br>
+            {% endfor %}
+            <span>
+            <label>系统负责人：</label>
+            {{ form.manager }}
+        </span><br>
+            {{ form.csrf_token }}
+            {{ form.submit }}
+        </form>
+    </div>
+
+    <br>
+    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
+
+    </body>
+
+
+{% endblock %}

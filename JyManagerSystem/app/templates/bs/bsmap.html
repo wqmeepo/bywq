@@ -2,40 +2,32 @@
 {% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+
     </head>
     <body>
 
     <div class="container">
-        <p>业务系统对应关系维护</p>
-        <form method="post">
-        <span>
-            <label>系统编号： </label>
-            {{ form.sysno }}
-        </span>
-        <span>
-            <label>系统名称： </label>
-            {{ form.sysname }}
-        </span>
-        <span>
-            <label>系统负责人：</label>
-            {{ form.manager }}
-        </span>
-
-        {{form.csrf_token}}
-        {{ form.submit }}
-    </form>
+        <b><h5>当前业务系统对应关系如下：</h5></b>
+        <a href="{{ url_for('bs.bsmapset') }}">创建业务系统对应关系</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">系统编号</th>
+                <th scope="col">系统名称</th>
+                <th scope="col">系统负责人</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in g.bs_query_data %}
+                <tr>
+                    <th scope="row">{{ item.sys_no }}</th>
+                    <td>{{ item.sys_name }}</td>
+                    <td>{{ item.manager }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <br>
-
-    <div class="container">
-        <p>当前业务系统对应关系如下：</p>
-        {% for item in bs_query_data %}
-        <div class="card card-body">
-            {{ item.sys_no, item.sys_name, item.manager }}
-        </div>
-        {% endfor %}
-    </div>
-
 
 
     <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
