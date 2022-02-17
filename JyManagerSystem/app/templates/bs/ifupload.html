@@ -6,56 +6,41 @@
 
     <body>
 
-    <div class="bd-cheatsheet container bg-body d-grid col-3">
-        <section id="forms">
+    <div class="container bg-body d-grid col-3 p-3">
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <h3>接口文件上传</h3>
+                <a class="d-flex align-items-center" href="{{ url_for('bs.ifmng') }}">查看已上传接口</a>
+            </div>
 
-            <article class="my-3" id="sizing">
-                <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-                    <h3>接口上传</h3>
-                    <a class="d-flex align-items-center" href="{{ url_for('bs.ifmng') }}">查看已上传接口</a>
-                </div>
-
-                <div>
-                    <div class="mb-3">
-                        <select class="form-select form-select mb-3" aria-label=".form-select-lg example">
-                            <option selected="">选择系统</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <input class="form-control form-control" type="text" placeholder="备注"
-                               aria-label="备注">
-                    </div>
-                    <div class="mb-3">
-                        <input type="file" class="form-control form-control"
-                               aria-label="Large file input example">
-                    </div>
-                </div>
-            </article>
-
-
-            <span>
-            <label>系统编号： </label>
-            {{ form.sysno }}
-        </span>
+            <div class="mb-3">
+                <select id='select' name="select" class="form-select form-select mb-3"
+                        aria-label=".form-select-lg" required>
+                    <option selected="">选择系统</option>
+                    {% for sys in g.bs %}
+                        <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                {{ form.version }}
+                {% for err in form.version.errors %}
+                    <span class="alert-danger">{{ err }}</span>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.file }}
+                {% for err in form.file.errors %}
+                    <span class="alert-danger">{{ err }}</span>
+                {% endfor %}
+            </div>
             {{ form.csrf_token }}
             {{ form.submit }}
-        </section>
+        </form>
     </div>
-    <div>
-        {% for item in bs_query_data %}
-            <div>
-                {{ item.sys_no, item.sys_name, item.manager }}
-            </div>
-        {% endfor %}
-    </div>
-
 
     <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='home/js/cheatsheet.js') }}"></script>
     </body>
 
 

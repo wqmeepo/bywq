@@ -2,21 +2,26 @@
 {% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
-
+        <style>
+            th[scope] {
+                font-weight: normal;
+            }
+        </style>
     </head>
     <body>
 
     <div class="container">
         <p class="lead">当前业务系统对应关系如下：</p>
+        <p><button><a href="{{ url_for('bs.ifupload') }}">新建上传</a></button></p>
         {% for sys in g.bs %}
-            <b><p>所属系统 ： {{ sys.sys_name }}</p></b><a href="{{ url_for('bs.ifupload') }}">新建上传</a>
+            <p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">接口文件</th>
-                    <th scope="col">版本</th>
-                    <th scope="col">上传时间</th>
-                    <th scope="col">文件下载</th>
+                    <th scope="col" class="fst-italic">接口文件</th>
+                    <th scope="col" class="fst-italic">版本</th>
+                    <th scope="col" class="fst-italic">上传时间</th>
+                    <th scope="col" class="fst-italic">文件下载</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,7 +35,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <hr>
+            <hr><br>
         {% endfor %}
     </div>
 

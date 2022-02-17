@@ -5,6 +5,8 @@ from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, Hardw
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.utils import secure_filename
 from functools import wraps
+from datetime import datetime
+import os, stat
 
 
 @bs.route('/')
@@ -73,13 +75,28 @@ def ifmng():
 
 @bs.route('/ifupload', methods=['GET', 'POST'])
 def ifupload():
-    bs_q_data = BusinSysInfo.query.all()
-    choices = []
-    for i in bs_q_data:
-        choices.append((i.sys_no, i.sys_name))
-    g.choices = choices
+    g.bs = BusinSysInfo.query.all()
     form = InterfaceFileForm()
     if form.validate_on_submit():
         data = form.data
-        print(data['sysno'])
+        f = form.file.data
+        sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
+        save_path = os.path.join(bs.root_path, sys_select, str(datetime.now().year))
+        print(save_path)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+            os.chmod(save_path, stat.S_IWRITE)
+        f.save(save_path, f.filename)
+        f.close()
+        interface_file = InterfaceFile(
+            sys_no=data['select'],
+            file_name=f.filename,
+            file_path=save_path,
+            version=data['version'],
+        )
+        db.session.add(interface_file)
+        db.session.commit()
+        print('db done')
+        flash('接口文件上传完成', 'success_upload_interface')
+        return redirect(url_for('bs.ifmng'))
     return render_template('bs/ifupload.html', form=form)

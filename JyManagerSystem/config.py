@@ -1,6 +1,7 @@
 class Config:
     SECRET_KEY = 'JYXTYFZX'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    MAX_CONTENT_LENGTH = 3 * 1024 * 1024
 
     @staticmethod
     def init_app(app):
