@@ -115,10 +115,3 @@ class InterfaceFileForm(FlaskForm):
             'class': "w-100 btn btn-lg btn-primary",
         }
     )
-
-    @staticmethod
-    def validate_version(self, field):
-        version = field.data
-        version_query = InterfaceFile.query.filter_by(version=version).count()
-        if version_query >= 1:
-            raise ValidationError('不允许上传同版本的接口文件，请先删除后上传')

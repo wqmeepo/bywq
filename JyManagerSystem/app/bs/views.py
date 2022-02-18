@@ -2,16 +2,14 @@ from app.bs import bs
 from app import db
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm
 from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
-from flask import render_template, url_for, redirect, flash, session, request, make_response, g
-from werkzeug.utils import secure_filename
-from functools import wraps
+from flask import render_template, url_for, redirect, flash, g, send_file
 from datetime import datetime
-import os, stat
+import os
 
 
 @bs.route('/')
 def index():
-    return render_template('bs/bsset.html')
+    return render_template('bs/bs_set.html')
 
 
 @bs.route('/uf20')
@@ -45,13 +43,13 @@ def hspb():
 
 
 @bs.route('/bsmap')
-def bsmap():
+def bsMap():
     g.bs_query_data = BusinSysInfo.query.all()
-    return render_template('bs/bsmap.html')
+    return render_template('bs/bs_map.html')
 
 
 @bs.route('/bsmapset', methods=['GET', 'POST'])
-def bsmapset():
+def bsMapSet():
     form = BusinSysInfoForm()
     if form.validate_on_submit():
         data = form.data
@@ -62,41 +60,68 @@ def bsmapset():
         )
         db.session.add(bsdata)
         db.session.commit()
-        return redirect(url_for('bs.bsmap'))
-    return render_template('bs/bsmapset.html', form=form)
+        return redirect(url_for('bs.bsMap'))
+    return render_template('bs/bs_map_set.html', form=form)
 
 
 @bs.route('/ifmng', methods=['GET', 'POST'])
-def ifmng():
+def ifMng():
     g.bs = BusinSysInfo.query.all()
     g.interface = InterfaceFile.query.all()
-    return render_template('bs/ifmng.html')
+    return render_template('bs/if_mng.html')
+
+
+@bs.route('/iffetch', methods=['GET', 'POST'])
+def ifFetch():
+    g.bs = BusinSysInfo.query.all()
+    g.interface = InterfaceFile.query.all()
+    return render_template('bs/if_fetch.html')
 
 
 @bs.route('/ifupload', methods=['GET', 'POST'])
-def ifupload():
+def ifUpload():
     g.bs = BusinSysInfo.query.all()
     form = InterfaceFileForm()
     if form.validate_on_submit():
         data = form.data
         f = form.file.data
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
-        save_path = os.path.join(bs.root_path, sys_select, str(datetime.now().year))
-        print(save_path)
+        save_path = os.path.join(bs.root_path, sys_select, str(datetime.now().year), f.filename, data['version'])
+        save_path_file = os.path.join(save_path, f.filename)
+        if InterfaceFile.query.filter_by(sys_no=data['select'], version=data['version'],
+                                         file_path=save_path_file).count() >= 1:
+            flash('不允许上传同版本的接口文件，请先删除后上传', 'ifupload_error')
+            return render_template('bs/if_upload.html', form=form)
         if not os.path.exists(save_path):
-            os.makedirs(save_path)
-            os.chmod(save_path, stat.S_IWRITE)
-        f.save(save_path, f.filename)
-        f.close()
+            os.makedirs(save_path, mode=0o777)  # 文件夹权限
+        f.save(save_path_file)
         interface_file = InterfaceFile(
             sys_no=data['select'],
             file_name=f.filename,
-            file_path=save_path,
+            file_path=save_path_file,
             version=data['version'],
         )
         db.session.add(interface_file)
         db.session.commit()
-        print('db done')
-        flash('接口文件上传完成', 'success_upload_interface')
-        return redirect(url_for('bs.ifmng'))
-    return render_template('bs/ifupload.html', form=form)
+        flash('接口文件上传完成', 'ifupload_success')
+        return redirect(url_for('bs.ifMng'))
+    return render_template('bs/if_upload.html', form=form)
+
+
+@bs.route('/ifdownload/<file_path>')
+def ifDownload(file_path):
+    file_name = file_path.rsplit('\\')[-1]
+    return send_file(file_path, as_attachment=True, attachment_filename=file_name)
+
+
+@bs.route('/ifdelete/<id>')
+def ifDelete(id):
+    file_path = InterfaceFile.query.get(id).file_path
+    try:
+        file_db = InterfaceFile.query.get(id)
+        db.session.delete(file_db)
+        db.session.commit()
+        os.remove(file_path)
+    except:
+        flash('删除失败，请联系田凌看看', 'ifdelete_failed')
+    return redirect(url_for('bs.ifMng'))

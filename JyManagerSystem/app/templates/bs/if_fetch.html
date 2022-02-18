@@ -11,10 +11,19 @@
     <body>
 
     <div class="container">
+        <p class="alert-success">
+            {% for msg in get_flashed_messages(category_filter=["ifupload_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+        </p>
         <p class="lead">当前业务系统对应关系如下：</p>
-        <p><button><a href="{{ url_for('bs.ifupload') }}">新建上传</a></button></p>
+        <p>
+            <button><a href="{{ url_for('bs.ifUpload') }}">新建上传</a></button>
+        </p>
         {% for sys in g.bs %}
-            <p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
+            <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -26,16 +35,18 @@
                 </thead>
                 <tbody>
                 {% for item in g.interface %}
-                    <tr>
-                        <th scope="row">{{ item.file_name }}</th>
-                        <td>{{ item.version }}</td>
-                        <td>{{ item.upload_time }}</td>
-                        <td><a href="{{ url_for(item.file_path) }}">点击下载</a></td>
-                    </tr>
+                    {% if item.sys_no == sys.sys_no %}
+                        <tr>
+                            <th scope="row">{{ item.file_name }}</th>
+                            <td>{{ item.version }}</td>
+                            <td>{{ item.upload_time }}</td>
+                            <td><a href="{{ url_for('bs.ifDownload', file_path=item.file_path) }}">点击下载</a></td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
             </table>
-            <hr><br>
+            <br>
         {% endfor %}
     </div>
 

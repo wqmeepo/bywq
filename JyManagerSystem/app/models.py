@@ -65,11 +65,11 @@ class BusinSysInfo(db.Model):
 class InterfaceFile(db.Model):
     __tablename__ = "interfacefile"
     id = db.Column(db.Integer, primary_key=True)
-    sys_no = db.Column(db.String(5), index=True)
-    file_name = db.Column(db.String(100))
-    file_path = db.Column(db.String(100), unique=True)
+    sys_no = db.Column(db.String(10), index=True)
+    file_name = db.Column(db.String(100), index=True)
+    file_path = db.Column(db.String(400))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
-    version = db.Column(db.String(100), unique=True, default='')
+    version = db.Column(db.String(100), default='')
 
 
 #  服务器硬件信息表
