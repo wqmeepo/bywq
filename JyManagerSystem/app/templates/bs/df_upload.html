@@ -1,0 +1,54 @@
+{% extends "home/common.html" %}
+{% block content %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+    </head>
+
+    <body>
+
+    <div class="container bg-body d-grid col-3 p-3">
+        <form method="post" enctype="multipart/form-data">
+            <p class="alert-danger">
+                {% for msg in get_flashed_messages(category_filter=["ifupload_error"]) %}
+
+                    {{ msg }}
+
+                {% endfor %}
+            </p>
+            <div class="mb-3">
+                <h3>接口文件上传</h3>
+                <a class="d-flex align-items-center" href="{{ url_for('bs.ifMng') }}">查看已上传接口</a>
+            </div>
+
+            <div class="mb-3">
+                <select id='select' name="select" class="form-select form-select mb-3"
+                        aria-label=".form-select-lg" required>
+                    <option selected="">选择系统</option>
+                    {% for sys in g.bs %}
+                        <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                {{ form.version }}
+                {% for err in form.version.errors %}
+                    <span class="alert-danger">{{ err }}</span>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{ form.file }}
+                {% for err in form.file.errors %}
+                    <span class="alert-danger">{{ err }}</span>
+                {% endfor %}
+            </div>
+            {{ form.csrf_token }}
+            {{ form.submit }}
+        </form>
+    </div>
+
+    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
+    </body>
+
+
+{% endblock %}

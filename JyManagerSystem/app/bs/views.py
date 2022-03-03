@@ -1,10 +1,11 @@
 from app.bs import bs
 from app import db
-from app.bs.forms import BusinSysInfoForm, InterfaceFileForm
+from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm
 from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
 from datetime import datetime
 import os
+import xlrd
 
 
 @bs.route('/')
@@ -94,15 +95,18 @@ def ifUpload():
             return render_template('bs/if_upload.html', form=form)
         if not os.path.exists(save_path):
             os.makedirs(save_path, mode=0o777)  # 文件夹权限
-        f.save(save_path_file)
-        interface_file = InterfaceFile(
-            sys_no=data['select'],
-            file_name=f.filename,
-            file_path=save_path_file,
-            version=data['version'],
-        )
-        db.session.add(interface_file)
-        db.session.commit()
+        try:
+            f.save(save_path_file)
+            interface_file = InterfaceFile(
+                sys_no=data['select'],
+                file_name=f.filename,
+                file_path=save_path_file,
+                version=data['version'],
+            )
+            db.session.add(interface_file)
+            db.session.commit()
+        except:
+            flash('接口文件上传失败', 'ifupload_error')
         flash('接口文件上传完成', 'ifupload_success')
         return redirect(url_for('bs.ifMng'))
     return render_template('bs/if_upload.html', form=form)
@@ -125,3 +129,107 @@ def ifDelete(id):
     except:
         flash('删除失败，请联系田凌看看', 'ifdelete_failed')
     return redirect(url_for('bs.ifMng'))
+
+
+def dfDelete(sys_no):
+    try:
+        file_db = TableInfo.query.filter(sys_no=sys_no).all()
+        db.session.delete(file_db)
+        db.session.commit()
+    except:
+        flash('删除失败，请联系田凌看看', 'dfdelete_failed')
+
+
+def ufDbExcelParse(sys_no, file_path):
+    df = xlrd.open_workbook(file_path)
+    total_list = []
+    num = 0
+    for sheet in df.sheets():
+        column_list = []
+        for i in range(sheet.nrows):
+            cursor = 1
+            sheet.row_values(i)
+            if '表名' in sheet.row_values(i):
+                column_list.append('MEEPOK')
+                column_list.append(sheet.name)
+                column_list.append(sheet.row_values(i)[2])
+                column_list.append(sheet.row_values(i)[6])
+            elif '中文名' in sheet.row_values(i):
+                column_list.append(sheet.row_values(i)[2])
+            elif '字段' in sheet.row_values(i):
+                while '索引字段' not in sheet.row_values(i + cursor):
+                    if '索引字段' in sheet.row_values(i + cursor):
+                        break
+                    column_list.append(sheet.row_values(i + cursor)[2])
+                    column_list.append(sheet.row_values(i + cursor)[5])
+                    cursor += 1
+        total_list.append(column_list)
+        num += 1
+    for list_sheet in total_list:
+        i = 0
+        while i < len(list_sheet):
+            print(f'i is {i}')
+            if list_sheet[i] == 'MEEPOK':
+                count = 1
+                while list_sheet[i + count] != 'MEEPOK':
+                    count += 1
+                    if i + count == len(list_sheet) or list_sheet[i + count] == 'MEEPOK':
+                        break
+                j = i + 5
+                while j <= i + count:
+                    if j + 1 > i + count:
+                        break
+                    table_info = TableInfo(
+                        sys_no=sys_no,
+                        file_path=file_path,
+                        sheet_name=list_sheet[i + 1],
+                        table_name=list_sheet[i + 2],
+                        db_name=list_sheet[i + 3],
+                        table_describe=list_sheet[i + 4],
+                        field_name=list_sheet[j],
+                        field_describe=list_sheet[j + 1],
+                    )
+                    db.session.add(table_info)
+                    j += 2
+                i += count
+            db.session.commit()
+
+
+@bs.route('/dfmng', methods=['GET', 'POST'])
+def dfMng():
+    g.bs = BusinSysInfo.query.all()
+    g.df = TableInfo.query.all()
+    return render_template('bs/df_mng.html')
+
+
+@bs.route('/dfupload', methods=['GET', 'POST'])
+def dfUpload():
+    g.bs = BusinSysInfo.query.all()
+    form = DbFileForm()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = data['select']
+        f = form.file.data
+        sys_select = BusinSysInfo.query.filter_by(sys_no=sys_no).first().sys_name
+        save_path = os.path.join(bs.root_path, sys_select)
+        save_path_file = os.path.join(save_path, f.filename)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, mode=0o777)  # 文件夹权限
+        try:
+            if os.path.exists(save_path_file):
+                os.remove(save_path_file)
+            f.save(save_path_file)
+            flash('文件上传完成，开始解析数据库文件', 'dfupload_success')
+        except:
+            flash('接口文件上传失败,请重新上传', 'dfupload_error')
+            return render_template('bs/df_upload.html', form=form)
+        try:
+            dfDelete(sys_no)
+            ufDbExcelParse(sys_no, save_path_file)
+        except:
+            flash('数据库新增失败，请重试', 'dfupload_error')
+            return render_template('bs/df_upload.html', form=form)
+        db.session.commit()
+        flash('接口文件解析完成', 'dfupload_success')
+        return redirect(url_for('bs.dfMng'))
+    return render_template('bs/df_upload.html', form=form)

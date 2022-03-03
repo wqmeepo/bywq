@@ -12,19 +12,20 @@
 
     <div class="container">
         <p class="alert-success">
-            {% for msg in get_flashed_messages(category_filter=["ifupload_success"]) %}
+            {% for msg in get_flashed_messages(category_filter=["dfupload_success"]) %}
 
                 {{ msg }}
 
             {% endfor %}
         </p>
         <p class="alert-success">
-            {% for msg in get_flashed_messages(category_filter=["ifdelete_failed"]) %}
+            {% for msg in get_flashed_messages(category_filter=["dfparse_success"]) %}
 
                 {{ msg }}
 
             {% endfor %}
         </p>
+
         <p class="lead">当前业务系统对应关系如下：</p>
         <p>
             <button><a href="{{ url_for('bs.ifUpload') }}">新建上传</a></button>
@@ -41,12 +42,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for item in g.interface %}
+                {% for item in g.df %}
                     {% if item.sys_no == sys.sys_no %}
                         <tr>
-                            <th scope="row">{{ item.file_name }}</th>
-                            <td>{{ item.version }}</td>
-                            <td>{{ item.upload_time }}</td>
+                            <th scope="row">{{ item.table_name }}</th>
+                            <td>{{ item.table_describe }}</td>
+                            <td>{{ item.sheet_name }}</td>
+                            <td>{{ item.db_name }}</td>
+                            <td>{{ item.field_name }}</td>
+                            <td>{{ item.field_describe }}</td>
                             <td><a href="{{ url_for('bs.ifDelete', id=item.id) }}">点击删除</a></td>
                         </tr>
                     {% endif %}

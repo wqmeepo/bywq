@@ -115,3 +115,40 @@ class InterfaceFileForm(FlaskForm):
             'class': "w-100 btn btn-lg btn-primary",
         }
     )
+
+
+class DbFileForm(FlaskForm):
+    '''
+    维护接口文件信息，例如文件名称、保存路径，上传时间等
+    '''
+    select = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'form-control',
+        },
+        choices=[(1, 'x'), (2, 'y')],
+        default=2,
+        coerce=int
+    )
+
+    file = FileField(
+        '上传文件',
+        validators=[
+            FileRequired('文件不能为空'),
+            FileAllowed(['xls', 'xlsx', 'pdf', 'doc', 'docx'])
+        ],
+        render_kw={
+            'class': 'form-control',
+            'accept': '.xls, .xlsx, .pdf, .doc, .docx',
+        }
+    )
+
+    submit = SubmitField(
+        '上传',
+        render_kw={
+            'class': "w-100 btn btn-lg btn-primary",
+        }
+    )
