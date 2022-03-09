@@ -83,11 +83,14 @@ def ifFetch():
 def ifUpload():
     g.bs = BusinSysInfo.query.all()
     form = InterfaceFileForm()
+    print('1')
     if form.validate_on_submit():
+        print('2')
         data = form.data
         f = form.file.data
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
-        save_path = os.path.join(bs.root_path, sys_select, str(datetime.now().year), f.filename, data['version'])
+        print(sys_select)
+        save_path = os.path.join(bs.root_path, sys_select, str(datetime.now().year), f.filename.split('.')[0], data['version'])
         save_path_file = os.path.join(save_path, f.filename)
         if InterfaceFile.query.filter_by(sys_no=data['select'], version=data['version'],
                                          file_path=save_path_file).count() >= 1:

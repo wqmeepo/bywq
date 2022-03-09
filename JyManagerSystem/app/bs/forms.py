@@ -72,6 +72,8 @@ class InterfaceFileForm(FlaskForm):
     '''
     维护接口文件信息，例如文件名称、保存路径，上传时间等
     '''
+    chioce_list = [(x, y) for x in range(20)
+                   for y in range(20) if x == y]
     select = SelectField(
         '选择',
         validators=[
@@ -80,9 +82,9 @@ class InterfaceFileForm(FlaskForm):
         render_kw={
             'class': 'form-control',
         },
-        choices=[(1, 'x'), (2, 'y')],
+        choices=chioce_list,
         default=2,
-        coerce=int
+        coerce=int,
     )
 
     file = FileField(
@@ -121,6 +123,8 @@ class DbFileForm(FlaskForm):
     '''
     维护接口文件信息，例如文件名称、保存路径，上传时间等
     '''
+    chioce_list = [(x, y) for x in range(20)
+                   for y in range(20) if x == y]
     select = SelectField(
         '选择',
         validators=[
@@ -129,7 +133,7 @@ class DbFileForm(FlaskForm):
         render_kw={
             'class': 'form-control',
         },
-        choices=[(1, 'x'), (2, 'y')],
+        choices=chioce_list,
         default=2,
         coerce=int
     )

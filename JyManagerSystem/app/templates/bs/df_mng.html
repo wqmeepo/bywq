@@ -18,17 +18,10 @@
 
             {% endfor %}
         </p>
-        <p class="alert-success">
-            {% for msg in get_flashed_messages(category_filter=["dfparse_success"]) %}
-
-                {{ msg }}
-
-            {% endfor %}
-        </p>
 
         <p class="lead">当前业务系统对应关系如下：</p>
         <p>
-            <button><a href="{{ url_for('bs.ifUpload') }}">新建上传</a></button>
+            <button><a href="{{ url_for('bs.dfUpload') }}">新建上传</a></button>
         </p>
         {% for sys in g.bs %}
             <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
@@ -51,7 +44,6 @@
                             <td>{{ item.db_name }}</td>
                             <td>{{ item.field_name }}</td>
                             <td>{{ item.field_describe }}</td>
-                            <td><a href="{{ url_for('bs.ifDelete', id=item.id) }}">点击删除</a></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
