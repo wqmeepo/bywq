@@ -21,17 +21,18 @@
 
         <p class="lead">当前业务系统对应关系如下：</p>
         <p>
-            <button><a href="{{ url_for('bs.dfUpload') }}">新建上传</a></button>
+            <button><a href="{{ url_for('bs.dfUpload') }}">数据库源文件上传</a></button>
         </p>
         {% for sys in g.bs %}
             <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col" class="fst-italic">接口文件</th>
-                    <th scope="col" class="fst-italic">版本</th>
-                    <th scope="col" class="fst-italic">上传时间</th>
-                    <th scope="col" class="fst-italic">文件下载</th>
+                    <th scope="col" class="fst-italic">表</th>
+                    <th scope="col" class="fst-italic">表名</th>
+                    <th scope="col" class="fst-italic">所属子系统</th>
+                    <th scope="col" class="fst-italic">字段名</th>
+                    <th scope="col" class="fst-italic">字段含义</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,7 +42,6 @@
                             <th scope="row">{{ item.table_name }}</th>
                             <td>{{ item.table_describe }}</td>
                             <td>{{ item.sheet_name }}</td>
-                            <td>{{ item.db_name }}</td>
                             <td>{{ item.field_name }}</td>
                             <td>{{ item.field_describe }}</td>
                         </tr>

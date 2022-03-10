@@ -16,8 +16,8 @@
                 {% endfor %}
             </p>
             <div class="mb-3">
-                <h3>接口文件上传</h3>
-                <a class="d-flex align-items-center" href="{{ url_for('bs.ifMng') }}">查看已上传接口</a>
+                <h3>数据库文件上传</h3>
+                <a class="d-flex align-items-center" href="{{ url_for('bs.dfMng') }}">查看已上传内容</a>
             </div>
 
             <div class="mb-3">
@@ -28,12 +28,6 @@
                         <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <div class="mb-3">
-                {{ form.version }}
-                {% for err in form.version.errors %}
-                    <span class="alert-danger">{{ err }}</span>
-                {% endfor %}
             </div>
             <div class="mb-3">
                 {{ form.file }}

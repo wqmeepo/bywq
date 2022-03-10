@@ -39,13 +39,14 @@ class Admin(db.Model):
 class TableInfo(db.Model):
     __tablename__ = "tableinfo"
     id = db.Column(db.Integer, primary_key=True)
-    table_name = db.Column(db.String(20), index=True)
-    table_describe = db.Column(db.String(100), index=True)
+    table_name = db.Column(db.String(100), index=True)
+    table_describe = db.Column(db.String(200), index=True)
     sys_no = db.Column(db.String(5), default='')
     db_name = db.Column(db.String(40), default='')
-    field_name = db.Column(db.String(20), index=True)
-    field_describe = db.Column(db.String(100), index=True)
-    field_describe_detail = db.Column(db.Text, nullable=True, default='')
+    field_name = db.Column(db.String(100), index=True)
+    field_describe = db.Column(db.String(200), index=True)
+    sheet_name = db.Column(db.String(40), nullable=True, default='')
+    file_path = db.Column(db.String(400), default='')
     db.Index('idx_search_tableinfo', 'table_name', 'table_describe', 'field_name', 'field_describe')
 
     def __repr__(self):

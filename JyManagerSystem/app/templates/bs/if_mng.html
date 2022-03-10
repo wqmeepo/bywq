@@ -27,7 +27,7 @@
         </p>
         <p class="lead">当前业务系统对应关系如下：</p>
         <p>
-            <button><a href="{{ url_for('bs.ifUpload') }}">新建上传</a></button>
+            <button><a href="{{ url_for('bs.ifUpload') }}">接口文件上传</a></button>
         </p>
         {% for sys in g.bs %}
             <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
