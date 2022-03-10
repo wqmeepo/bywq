@@ -153,7 +153,6 @@ def dfMng():
 
 @bs.route('/dfupload', methods=['GET', 'POST'])
 def dfUpload():
-
     def uf20Parse(sys_no, save_path_file):
         df = xlrd.open_workbook(save_path_file)
         total_list = []
@@ -189,13 +188,20 @@ def dfUpload():
                         if i + count == len(list_sheet) or list_sheet[i + count] == 'MEEPOK':
                             break
                     j = i + 5
-                    while j <= i + count:
-                        if j + 1 > i + count:
+                    k = i + 5
+
+                    while k <= i + count:
+                        if k + 1 > i + count:
                             break
                         table_delete = TableInfo.query.filter_by(sys_no=sys_no, table_name=list_sheet[i + 2]).all()
                         for each in table_delete:
                             db.session.delete(each)
-                        db.session.commit()
+                        k += 2
+                    db.session.commit()
+
+                    while j <= i + count:
+                        if j + 1 > i + count:
+                            break
                         table_info = TableInfo(
                             sys_no=sys_no,
                             file_path=save_path_file,
@@ -232,7 +238,7 @@ def dfUpload():
             return render_template('bs/df_upload.html', form=form)
 
         if sys_select == 'UF20':
-            #dfDelete(sys_no)
+            # dfDelete(sys_no)
             uf20Parse(sys_no, save_path_file)
         else:
             flash('当前只支持UF20数据库解析', 'dfupload_error')
