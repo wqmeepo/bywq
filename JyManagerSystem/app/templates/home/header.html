@@ -31,42 +31,45 @@
 </head>
 <body>
 
-<main class="total-header">
+<div class="total-header">
     <header class="p-3 bg-dark text-white row clearfix">
-        <div class="container-fluid" >
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <svg xmlns="" width="18" height="18" fill="currentColor"
-                     class="bi bi-infinity" viewBox="0 0 16 16"><img src="{{url_for('static',filename='home/images/JYLOGO_svg.png')}}">
-                </svg>&nbsp;
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><b><a href="{{ url_for('home.index') }}" class="nav-link px-2 text-secondary">首页</a></b></li>
-                    <li><a href="#" class="nav-link px-2 text-white">工作空间</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">功能大全</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">交易研发专用</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">关于</a></li>
-                </ul>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <svg xmlns="" width="18" height="18" fill="currentColor"
+                 class="bi bi-infinity" viewBox="0 0 16 16"><img
+                    src="{{ url_for('static',filename='home/images/JYLOGO_svg.png') }}">
+            </svg>&nbsp;
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><b><a href="{{ url_for('home.index') }}" class="nav-link px-2 text-secondary">首页</a></b></li>
+                <li><a href="#" class="nav-link px-2 text-white">工作空间</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">功能大全</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">交易研发专用</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">关于</a></li>
+            </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="全站搜索（未完成）"
-                           aria-label="搜索">
-                </form>
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" class="form-control form-control-dark" placeholder="全站搜索（未完成）"
+                       aria-label="搜索">
+            </form>
 
-                <div class="text-muted" style="font-size: small">
+            <div class="text-muted" style="font-size: small">
 
-					{% if "user_id" in session %}
-						{{session.get('username')}}您好，欢迎使用本系统
-						&nbsp; &nbsp;<a href="{{url_for('home.userModify')}}">修改密码</a>&nbsp;&nbsp;
-						|&nbsp;&nbsp;<a href="{{url_for('home.logout')}}">退出登录</a>
-					{% else %}
-                        <button type="button" class="btn btn-outline-light me-2"><a class="text-muted" href="{{url_for('home.login')}}">登录</a></button>
-                        <button type="button" class="btn btn-outline-light me-2"><a class="text-muted" href="{{url_for('home.register')}}">注册</a></button>
-					{% endif %}
+                {% if "user_id" in session %}
+                    {{ session.get('username') }}您好，欢迎使用本系统
+                    &nbsp; &nbsp;<a href="{{ url_for('home.userModify') }}">修改密码</a>&nbsp;&nbsp;
+                    |&nbsp;&nbsp;<a href="{{ url_for('home.logout') }}">退出登录</a>
+                {% else %}
+                    <button type="button" class="btn btn-outline-light me-2"><a class="text-muted"
+                                                                                href="{{ url_for('home.login') }}">登录</a>
+                    </button>
+                    <button type="button" class="btn btn-outline-light me-2"><a class="text-muted"
+                                                                                href="{{ url_for('home.register') }}">注册</a>
+                    </button>
+                {% endif %}
 
-                </div>
             </div>
         </div>
     </header>
-</main>
+</div>
 <br>
 </body>
 

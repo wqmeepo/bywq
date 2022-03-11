@@ -16,7 +16,7 @@ class BusinSysInfoForm(FlaskForm):
         ],
         description='系统编号',
         render_kw={
-            "placeholder": "请输入系统编号",
+            "placeholder": "系统编号",
             "size": 38,
             'class': 'form-control',
         }
@@ -28,7 +28,7 @@ class BusinSysInfoForm(FlaskForm):
         ],
         description='系统名称',
         render_kw={
-            "placeholder": "请输入系统名称",
+            "placeholder": "系统名称",
             "size": 38,
             'class': 'form-control',
         }
@@ -40,7 +40,7 @@ class BusinSysInfoForm(FlaskForm):
         ],
         description='系统管理员',
         render_kw={
-            "placeholder": "请输入系统管理员",
+            "placeholder": "系统管理员",
             "size": 38,
             'class': 'form-control',
         }

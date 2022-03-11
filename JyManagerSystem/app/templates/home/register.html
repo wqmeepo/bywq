@@ -49,7 +49,6 @@
 
         <div class="form-floating mb-4">
             {{ form.username }}
-            <label class="text-muted" for="floatingInput">用户名</label>
             {% for err in form.username.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}
@@ -57,7 +56,6 @@
 
         <div class="form-floating mb-4">
             {{ form.password }}
-            <label class="text-muted" for="floatingPassword">密码</label>
             {% for err in form.password.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}
@@ -65,7 +63,6 @@
 
         <div class="form-floating mb-4">
             {{ form.repassword }}
-            <label class="text-muted" for="floatingPassword">确认密码</label>
             {% for err in form.repassword.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}
@@ -73,7 +70,6 @@
 
         <div class="form-floating mb-4">
             {{ form.realname }}
-            <label class="text-muted" for="floatingPassword">姓名</label>
             {% for err in form.realname.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}
@@ -81,7 +77,6 @@
 
         <div class="form-floating mb-4">
             {{ form.department }}
-            <label class="text-muted" for="floatingPassword">所在部门</label>
             {% for err in form.department.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}

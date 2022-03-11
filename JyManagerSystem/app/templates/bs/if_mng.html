@@ -24,13 +24,15 @@
                 {{ msg }}
 
             {% endfor %}
-        </p>
-        <p class="lead">当前业务系统对应关系如下：</p>
-        <p>
-            <button><a href="{{ url_for('bs.ifUpload') }}">接口文件上传</a></button>
+
+        <p class="lead container col-3">接口文件管理</p>
+        <div class="text-right mb-4">
+            <button class="btn btn-primary"><a class="text-white" href="{{ url_for('bs.ifUpload') }}">接口文件上传</a>
+            </button>
+        </div>
         </p>
         {% for sys in g.bs %}
-            <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
+            <p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
             <table class="table table-striped">
                 <thead>
                 <tr>

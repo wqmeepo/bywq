@@ -58,7 +58,6 @@
 
         <div class="form-floating mb-4">
             {{ form.username }}
-            <label class="text-muted" for="floatingInput">用户名</label>
             {% for err in form.username.errors %}
                 <span class="alert-danger">{{ err }}</span>
             {% endfor %}
@@ -66,13 +65,11 @@
 
         <div class="form-floating mb-4">
             {{ form.password }}
-            <label class="text-muted" for="floatingPassword">密码</label>
         </div>
 
         <div class="row mb-4">
             <div class="form-floating col-8">
                 {{ form.verifyCode }}
-                <label class="text-muted" for="floatingTextarea">&nbsp;&nbsp;&nbsp;验证码</label>
             </div>
             <div class="col-4">
                 <img class=".img-circle img-responsive" alt="Cinque Terre" src="{{ url_for('home.getCode') }}"

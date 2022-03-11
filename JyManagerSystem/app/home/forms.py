@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
         description='用户名',
         render_kw={
             'type': 'text',
-            'placeholder': '请输入用户名',
+            'placeholder': '用户名',
             'class': 'form-control',
             'size': 38,
         }
@@ -31,7 +31,7 @@ class RegisterForm(FlaskForm):
         description='部门名称',
         render_kw={
             'type': 'text',
-            'placeholder': '请输入您所在部门',
+            'placeholder': '所在部门',
             'size': 38,
             'class': 'form-control',
         }
@@ -45,7 +45,7 @@ class RegisterForm(FlaskForm):
         description='真实姓名',
         render_kw={
             'type': 'text',
-            'placeholder': '请输入真实姓名',
+            'placeholder': '真实姓名',
             'size': 38,
             'class': 'form-control',
         }
@@ -57,7 +57,7 @@ class RegisterForm(FlaskForm):
         ],
         description="首次密码",
         render_kw={
-            "placeholder": "请输入密码",
+            "placeholder": "密码",
             "size": 38,
             'class': 'form-control',
         }
@@ -70,7 +70,7 @@ class RegisterForm(FlaskForm):
         ],
         description="确认密码",
         render_kw={
-            "placeholder": "请确认密码",
+            "placeholder": "确认密码",
             "size": 38,
             'class': 'form-control',
         }
@@ -108,7 +108,7 @@ class LoginForm(FlaskForm):
         description='username',
         render_kw={
             'type': 'text',
-            'placeholder': '请输入用户名',
+            'placeholder': '用户名',
             'class': 'form-control',
             'size': 38,
         }
@@ -120,7 +120,7 @@ class LoginForm(FlaskForm):
         ],
         description="password",
         render_kw={
-            "placeholder": "请输入密码！",
+            "placeholder": "密码！",
             "size": 38,
             'class': 'form-control',
         }
@@ -132,7 +132,7 @@ class LoginForm(FlaskForm):
         ],
         description="验证码",
         render_kw={
-            "placeholder": "请输入验证码",
+            "placeholder": "验证码",
             "size": 19,
             "maxlength": 4,
             'class': 'form-control',
@@ -157,7 +157,7 @@ class ModifyForm(FlaskForm):
         ],
         description="原始密码",
         render_kw={
-            "placeholder": "请输入原始密码",
+            "placeholder": "原始密码",
             "size": 38,
             'class': 'form-control',
         }
@@ -169,7 +169,7 @@ class ModifyForm(FlaskForm):
         ],
         description="新密码",
         render_kw={
-            "placeholder": "请输入新密码",
+            "placeholder": "新密码",
             "size": 38,
             'class': 'form-control',
         }
@@ -182,7 +182,7 @@ class ModifyForm(FlaskForm):
         ],
         description="确认密码",
         render_kw={
-            "placeholder": "请确认新密码",
+            "placeholder": "确认新密码",
             "size": 38,
             'class': 'form-control',
         }

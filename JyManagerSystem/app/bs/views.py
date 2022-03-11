@@ -8,6 +8,7 @@ import os
 import xlrd
 
 
+#   bs=Business system，业务系统，该view管理所有业务系统相关页面
 @bs.route('/')
 def index():
     return render_template('bs/bs_set.html')
@@ -49,6 +50,7 @@ def bsMap():
     return render_template('bs/bs_map.html')
 
 
+#   系统对应映射关系设置界面
 @bs.route('/bsmapset', methods=['GET', 'POST'])
 def bsMapSet():
     form = BusinSysInfoForm()
@@ -65,6 +67,7 @@ def bsMapSet():
     return render_template('bs/bs_map_set.html', form=form)
 
 
+#   if=interface，mng=manage，接口上传后的管理界面
 @bs.route('/ifmng', methods=['GET', 'POST'])
 def ifMng():
     g.bs = BusinSysInfo.query.all()
@@ -72,35 +75,41 @@ def ifMng():
     return render_template('bs/if_mng.html')
 
 
+#   if=interface，接口上传后各个系统的查询界面
 @bs.route('/iffetch', methods=['GET', 'POST'])
 def ifFetch():
-    g.bs = BusinSysInfo.query.all()
-    g.interface = InterfaceFile.query.all()
+    g.bs = BusinSysInfo.query.all()  # 传到前端
+    g.interface = InterfaceFile.query.all()  # 传到前端
     return render_template('bs/if_fetch.html')
 
 
+#   if=interface，接口文件上传界面
 @bs.route('/ifupload', methods=['GET', 'POST'])
 def ifUpload():
-    g.bs = BusinSysInfo.query.all()
+    g.bs = BusinSysInfo.query.all()  # 用于传到前端进行展示
     form = InterfaceFileForm()
-    print('1')
     if form.validate_on_submit():
-        print('2')
         data = form.data
-        f = form.file.data
+        f = form.file.data  # 上传的文件
+        #   获取映射系统名称
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
-        print(sys_select)
+        #   文件夹
         save_path = os.path.join(bs.root_path, sys_select, 'interfacefile', f.filename.split('.')[0],
                                  data['version'])
+        #   文件绝对路径
         save_path_file = os.path.join(save_path, f.filename)
+        #   检测数据库是否有同一个sys_no下相同版本的，同目录文件
         if InterfaceFile.query.filter_by(sys_no=data['select'], version=data['version'],
                                          file_path=save_path_file).count() >= 1:
             flash('不允许上传同版本的接口文件，请先删除后上传', 'ifupload_error')
             return render_template('bs/if_upload.html', form=form)
+        #   保存文件到服务器，没有目录创建目录
         if not os.path.exists(save_path):
             os.makedirs(save_path, mode=0o777)  # 文件夹权限
         try:
+            #   保存文件
             f.save(save_path_file)
+            #   数据库写入
             interface_file = InterfaceFile(
                 sys_no=data['select'],
                 file_name=f.filename,
@@ -116,25 +125,31 @@ def ifUpload():
     return render_template('bs/if_upload.html', form=form)
 
 
+#   下载接口文件
 @bs.route('/ifdownload/<file_path>')
 def ifDownload(file_path):
+    #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
 
 
+#   删除接口文件与数据库信息
 @bs.route('/ifdelete/<id>')
 def ifDelete(id):
     file_path = InterfaceFile.query.get(id).file_path
     try:
+        #   删除数据库信息
         file_db = InterfaceFile.query.get(id)
         db.session.delete(file_db)
         db.session.commit()
+        #   删除服务器文件
         os.remove(file_path)
     except:
         flash('删除失败，请联系田凌看看', 'ifdelete_failed')
     return redirect(url_for('bs.ifMng'))
 
 
+# df=Database File，删除TableInfo表的数据库文件存放信息，暂时用不到
 def dfDelete(sys_no):
     try:
         file_db = TableInfo.query.filter(sys_no=sys_no)
@@ -144,6 +159,7 @@ def dfDelete(sys_no):
         flash('删除失败，请联系田凌看看', 'dfdelete_failed')
 
 
+# df=Database File，数据库文件上传解析后管理页面
 @bs.route('/dfmng', methods=['GET', 'POST'])
 def dfMng():
     g.bs = BusinSysInfo.query.all()
@@ -151,8 +167,10 @@ def dfMng():
     return render_template('bs/df_mng.html')
 
 
+# df=Database File，数据库文件上传，解析的页面
 @bs.route('/dfupload', methods=['GET', 'POST'])
 def dfUpload():
+    #   针对UF20数据库excel文件的解析方法，支持覆盖导入（先删除，后插入）
     def uf20Parse(sys_no, save_path_file):
         df = xlrd.open_workbook(save_path_file)
         total_list = []
@@ -229,23 +247,26 @@ def dfUpload():
         if not os.path.exists(save_path):
             os.makedirs(save_path, mode=0o777)  # 文件夹权限
         try:
+            #   判断是否存在同名文件，如果存在则删除
             if os.path.exists(save_path_file):
                 os.remove(save_path_file)
+            #   保存文件
             f.save(save_path_file)
             flash('文件上传完成，开始解析数据库文件', 'dfupload_success')
         except:
             flash('接口文件上传失败,请重新上传', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
-
-        if sys_select == 'UF20':
-            # dfDelete(sys_no)
-            uf20Parse(sys_no, save_path_file)
-        else:
-            flash('当前只支持UF20数据库解析', 'dfupload_error')
+        try:
+            #   目前版本只支持UF20的数据库解析
+            if sys_select == 'UF20':
+                #   执行数据库解析，并导入数据库（如果数据库存在相关信息，先删除，后插入）
+                uf20Parse(sys_no, save_path_file)
+            else:
+                flash('当前只支持UF20数据库解析', 'dfupload_error')
+                return render_template('bs/df_upload.html', form=form)
+        except:
+            flash('数据库新增失败，请重试', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
-        # except:
-        #     flash('数据库新增失败，请重试', 'dfupload_error')
-        #     return render_template('bs/df_upload.html', form=form)
         flash('接口文件解析完成', 'dfupload_success')
         return redirect(url_for('bs.dfMng'))
     return render_template('bs/df_upload.html', form=form)
