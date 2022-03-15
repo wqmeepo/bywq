@@ -1,9 +1,9 @@
 from app.bs import bs
 from app import db
-from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm
+from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm
 from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
-from datetime import datetime
+from sqlalchemy import or_
 import os
 import xlrd
 
@@ -71,7 +71,7 @@ def bsMapSet():
 @bs.route('/ifmng', methods=['GET', 'POST'])
 def ifMng():
     g.bs = BusinSysInfo.query.all()
-    g.interface = InterfaceFile.query.all()
+    g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
     return render_template('bs/if_mng.html')
 
 
@@ -163,8 +163,25 @@ def dfDelete(sys_no):
 @bs.route('/dfmng', methods=['GET', 'POST'])
 def dfMng():
     g.bs = BusinSysInfo.query.all()
-    g.df = TableInfo.query.all()
-    return render_template('bs/df_mng.html')
+    #   group_by一下TableInfo表，因为这个表是按字段导入
+    g.df = TableInfo.query.with_entities(TableInfo.sys_no, TableInfo.file_path).group_by(TableInfo.sys_no,
+                                                                                         TableInfo.file_path).all()
+    form = DfFieldSearchForm()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = data['select_sys']
+        print(sys_no)
+        g.select_type = data['select_type']
+        key_word = data['keyword']
+        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if g.select_type == 1:
+            g.query_result_table = TableInfo.query.filter(
+                or_(TableInfo.table_name.like(f"%{key_word}%"), TableInfo.table_describe.like(f"%{key_word}%"))).all()
+        elif g.select_type == 2:
+            g.query_result_field = TableInfo.query.filter(
+                or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
+        return render_template('bs/df_mng.html', form=form)
+    return render_template('bs/df_mng.html', form=form)
 
 
 # df=Database File，数据库文件上传，解析的页面
@@ -270,3 +287,11 @@ def dfUpload():
         flash('接口文件解析完成', 'dfupload_success')
         return redirect(url_for('bs.dfMng'))
     return render_template('bs/df_upload.html', form=form)
+
+
+#   下载数据库文件
+@bs.route('/dfdownload/<file_path>')
+def dfDownload(file_path):
+    #   接口文件下载 send_file方法
+    file_name = file_path.rsplit('\\')[-1]
+    return send_file(file_path, as_attachment=True, attachment_filename=file_name)

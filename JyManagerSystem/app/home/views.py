@@ -128,6 +128,18 @@ def userLogin(f):
     return decorated_function
 
 
+# 登录装饰器
+def jyLogin(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('home.login'))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # 在线用户修改密码
 @userLogin
 @home.route('/usermodify/', methods=['GET', 'POST'])

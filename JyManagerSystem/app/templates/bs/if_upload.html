@@ -2,6 +2,7 @@
 {% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
     </head>
 
     <body>
@@ -15,13 +16,13 @@
 
                 {% endfor %}
             </p>
-            <div class="mb-3">
+            <div class="mb-3 mt-2">
                 <h3>接口文件上传</h3>
                 <a class="d-flex align-items-center" href="{{ url_for('bs.ifMng') }}">查看已上传接口</a>
             </div>
 
-            <div class="mb-3">
-                <select id='select' name="select" class="form-select form-select mb-3"
+            <div class="mb-3 mt-2">
+                <select id='select' name="select" class="custom-select"
                         aria-label=".form-select-lg" required>
                     <option selected="">选择系统</option>
                     {% for sys in g.bs %}
@@ -29,13 +30,13 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 mt-2">
                 {{ form.version }}
                 {% for err in form.version.errors %}
                     <span class="alert-danger">{{ err }}</span>
                 {% endfor %}
             </div>
-            <div class="mb-3">
+            <div class="mb-3 mt-2">
                 {{ form.file }}
                 {% for err in form.file.errors %}
                     <span class="alert-danger">{{ err }}</span>
@@ -45,7 +46,6 @@
             {{ form.submit }}
         </form>
     </div>
-
     <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
     </body>
