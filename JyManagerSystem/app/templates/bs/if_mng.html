@@ -1,13 +1,6 @@
 {% extends "home/common.html" %}
 {% block content %}
-    <head>
-        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
-        <style>
-            th[scope] {
-                font-weight: normal;
-            }
-        </style>
-    </head>
+
     <body>
 
     <div class="container">
@@ -46,10 +39,10 @@
                 {% for item in g.interface %}
                     {% if item.sys_no == sys.sys_no %}
                         <tr>
-                            <th scope="row">{{ item.file_name }}</th>
+                            <td>{{ item.file_name }}</td>
                             <td>{{ item.version }}</td>
                             <td>{{ item.upload_time }}</td>
-                            <td><a href="{{ url_for('bs.ifDelete', id=item.id) }}">点击删除</a></td>
+                            <td><a href="{{ url_for('bs.ifDelete', sys_id=item.id) }}">点击删除</a></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -58,10 +51,6 @@
             <br>
         {% endfor %}
     </div>
-
-
-    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
 
     </body>
 

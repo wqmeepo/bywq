@@ -1,14 +1,11 @@
 {% extends "home/common.html" %}
 {% block content %}
-    <head>
-        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
-    </head>
     <body>
 
     <div class="container bg-body d-grid col-3 p-3">
         <div class="mb-3">
             <h3>新建业务系统关系</h3>
-            <a class="d-flex align-items-center" href="{{ url_for('bs.dfMng') }}">查看已有系统关系</a>
+            <a class="d-flex align-items-center" href="{{ url_for('bs.bsMap') }}">查看已有系统关系</a>
         </div>
         <form method="post">
             <div class="mb-3 mt-2">
@@ -33,9 +30,6 @@
         </form>
     </div>
     <br>
-    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
-
     </body>
 
 

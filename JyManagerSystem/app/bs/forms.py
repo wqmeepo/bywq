@@ -152,6 +152,7 @@ class DbFileForm(FlaskForm):
         '上传',
         render_kw={
             'class': "w-100 btn btn-lg btn-primary",
+            'id': 'submit'
         }
     )
 

@@ -1,0 +1,42 @@
+<!-- 头部开始 -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='home/css/headers.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='home/css/footers.css') }}" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            object-fit: cover;
+            border-style: solid;
+            border-color: dimgrey;
+            border-width: 1px;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
+</head>
+<!-- 底部结束 -->
+
+<!-- 内容开始 -->
+{% block content %}{% endblock %}
+<!-- 内容结束 -->
+
+<!--底部开始-->
+</html>
+<!--底部结束-->

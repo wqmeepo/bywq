@@ -134,12 +134,12 @@ def ifDownload(file_path):
 
 
 #   删除接口文件与数据库信息
-@bs.route('/ifdelete/<id>')
-def ifDelete(id):
-    file_path = InterfaceFile.query.get(id).file_path
+@bs.route('/ifdelete/<sys_id>')
+def ifDelete(sys_id):
+    file_path = InterfaceFile.query.get(sys_id).file_path
     try:
         #   删除数据库信息
-        file_db = InterfaceFile.query.get(id)
+        file_db = InterfaceFile.query.get(sys_id)
         db.session.delete(file_db)
         db.session.commit()
         #   删除服务器文件

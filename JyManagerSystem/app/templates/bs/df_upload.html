@@ -1,7 +1,6 @@
 {% extends "home/common.html" %}
 {% block content %}
     <head>
-        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
     </head>
 
@@ -40,9 +39,16 @@
             {{ form.submit }}
         </form>
     </div>
-    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                if($(".roll")){
+                    $(".roll").remove();
+                }
+                $(this).after('<div class="text-center roll"><div class="spinner-border text-primary" role="status"></div></div>');
+            });
+        });
+    </script>
     </body>
-
 
 {% endblock %}
