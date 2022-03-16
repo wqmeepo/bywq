@@ -1,8 +1,7 @@
-{% extends "home/common.html" %}
-{% block content %}
-    <body>
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
 
-    <div class="container">
+    <div class="container-fluid mt-3">
         <p class="lead container col-3">业务系统关系维护</p>
         <div class="text-right mb-4">
             <button class="btn btn-primary"><a class="text-white" href="{{ url_for('bs.bsMapSet') }}">新建业务系统关系</a>
@@ -27,7 +26,5 @@
             </tbody>
         </table>
     </div>
-    </body>
-
 
 {% endblock %}

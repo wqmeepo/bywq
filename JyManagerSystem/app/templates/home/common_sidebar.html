@@ -1,0 +1,102 @@
+{% extends "home/common.html" %}
+{% block content %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/sidebar.css') }}" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-1">
+                <nav id="sidebarMenu" class="col-1 d-md-block bg-light sidebar collapse">
+                    <div class="sidebar-sticky pt-3">
+
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ url_for('bs.index') }}">
+                                    <span data-feather="home"></span>
+                                    后台管理 <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                                <span>系统维护</span>
+                            </h5>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('bs.bsMap') }}">
+                                    系统对应关系维护
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('bs.ifMng') }}">
+                                    系统接口维护
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('bs.dfMng') }}">
+                                    数据库信息维护
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    软硬件信息维护
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    人员维护
+                                </a>
+                            </li>
+                        </ul>
+
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>工作空间</span>
+                        </h5>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    项目管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    申请审批
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    知识共享
+                                </a>
+                            </li>
+                        </ul>
+
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>研发中心管理</span>
+                        </h5>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    公告管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    公共知识管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    监管信息
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="col-11 text-center">
+                {% block content_sidebar %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    </body>
+
+{% endblock %}

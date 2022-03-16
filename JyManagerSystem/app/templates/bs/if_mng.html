@@ -1,9 +1,7 @@
-{% extends "home/common.html" %}
-{% block content %}
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
 
-    <body>
-
-    <div class="container">
+    <div class="container-fluid">
         <p class="alert-success">
             {% for msg in get_flashed_messages(category_filter=["ifupload_success"]) %}
 
@@ -51,8 +49,5 @@
             <br>
         {% endfor %}
     </div>
-
-    </body>
-
 
 {% endblock %}

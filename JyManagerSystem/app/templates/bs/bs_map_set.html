@@ -1,23 +1,20 @@
-{% extends "home/common.html" %}
-{% block content %}
-    <body>
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
 
-    <div class="container bg-body d-grid col-3 p-3">
+    <div class="container-fluid bg-body d-grid col-3 mt-3">
         <div class="mb-3">
-            <h3>新建业务系统关系</h3>
+            <p class="lead container col-5">新建业务系统关系</p>
             <a class="d-flex align-items-center" href="{{ url_for('bs.bsMap') }}">查看已有系统关系</a>
         </div>
         <form method="post">
             <div class="mb-3 mt-2">
                 {{ form.sysno }}
-
                 {% for err in form.sysno.errors %}
                     <span class="alert-danger">{{ err }}</span><br>
                 {% endfor %}
             </div>
             <div class="mb-3 mt-2">
                 {{ form.sysname }}
-
                 {% for err in form.sysname.errors %}
                     <span class="alert-danger">{{ err }}</span><br>
                 {% endfor %}
@@ -29,8 +26,5 @@
             {{ form.submit }}
         </form>
     </div>
-    <br>
-    </body>
-
 
 {% endblock %}

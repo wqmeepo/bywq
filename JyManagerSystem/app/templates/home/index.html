@@ -1,10 +1,7 @@
 {% extends "home/common.html" %}
 {% block content %}
-    <head>
-        <link href="{{ url_for('static',filename='home/css/bootstrap.min.css') }}" rel="stylesheet">
-    </head>
     <body>
-    <main>
+    <div class="container-fluid">
 
         <section class="py-2 text-center container">
             <div class="row py-lg-2">
@@ -154,11 +151,7 @@
             </div>
         </div>
 
-    </main>
-
-    <script src="{{ url_for('static',filename='home/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='home/js/bootstrap.bundle.min.js') }}"></script>
-
+    </div>
 
     </body>
 

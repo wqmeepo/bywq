@@ -1,12 +1,10 @@
-{% extends "home/common.html" %}
-{% block content %}
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
     </head>
 
-    <body>
-
-    <div class="container bg-body d-grid col-3 p-3">
+    <div class="container-fluid bg-body d-grid col-3 mt-3">
         <form method="post" enctype="multipart/form-data">
             <p class="alert-danger">
                 {% for msg in get_flashed_messages(category_filter=["dfupload_error"]) %}
@@ -16,11 +14,11 @@
                 {% endfor %}
             </p>
             <div class="mb-3">
-                <h3>数据库文件上传</h3>
+                <p class="lead container col-5">新建业务系统关系</p>
                 <a class="d-flex align-items-center" href="{{ url_for('bs.dfMng') }}">查看已上传内容</a>
             </div>
 
-            <div class="mb-3">
+            <div class="mt-2 mb-3">
                 <select id='select' name="select" class="custom-select"
                         aria-label=".form-select-lg" required>
                     <option selected="">选择系统</option>
@@ -29,7 +27,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="mb-3">
+            <div class="mt-2 mb-3">
                 {{ form.file }}
                 {% for err in form.file.errors %}
                     <span class="alert-danger">{{ err }}</span>
@@ -42,13 +40,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit").click(function () {
-                if($(".roll")){
+                if ($(".roll")) {
                     $(".roll").remove();
                 }
                 $(this).after('<div class="text-center roll"><div class="spinner-border text-primary" role="status"></div></div>');
             });
         });
     </script>
-    </body>
+
 
 {% endblock %}

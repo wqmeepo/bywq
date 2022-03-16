@@ -1,11 +1,11 @@
-{% extends "home/common.html" %}
-{% block content %}
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
     </head>
     <body>
 
-    <div class="container">
+    <div class="container-fluid">
         <p class="alert-success">
             {% for msg in get_flashed_messages(category_filter=["dfupload_success"]) %}
 

@@ -1,12 +1,10 @@
-{% extends "home/common.html" %}
-{% block content %}
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
     </head>
 
-    <body>
-
-    <div class="container bg-body d-grid col-3 p-3">
+    <div class="container bg-body d-grid col-3 mt-3">
         <form method="post" enctype="multipart/form-data">
             <p class="alert-danger">
                 {% for msg in get_flashed_messages(category_filter=["ifupload_error"]) %}
@@ -16,7 +14,7 @@
                 {% endfor %}
             </p>
             <div class="mb-3 mt-2">
-                <h3>接口文件上传</h3>
+                <p class="lead container col-5">接口文件上传</p>
                 <a class="d-flex align-items-center" href="{{ url_for('bs.ifMng') }}">查看已上传接口</a>
             </div>
 
@@ -45,8 +43,5 @@
             {{ form.submit }}
         </form>
     </div>
-
-    </body>
-
 
 {% endblock %}
