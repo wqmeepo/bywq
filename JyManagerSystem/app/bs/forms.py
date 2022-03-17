@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, RadioField, SelectField
-from wtforms.validators import DataRequired, Regexp, EqualTo, ValidationError, Length
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
+from wtforms import StringField, SubmitField, SelectField
+from wtforms.validators import DataRequired, ValidationError
+from app.models import BusinSysInfo
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 
@@ -205,5 +205,54 @@ class DfFieldSearchForm(FlaskForm):
         '搜索',
         render_kw={
             'class': "w-100 btn  btn-primary col-2 height-control",
+        }
+    )
+
+
+class SiUploadForm(FlaskForm):
+    '''
+    维护接口文件信息，例如文件名称、保存路径，上传时间等
+    '''
+    chioce_list = [(1, 1), (2, 2)]
+    select = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'form-control',
+        },
+        choices=chioce_list,
+        coerce=int,
+    )
+
+    file = FileField(
+        '上传文件',
+        validators=[
+            FileRequired('文件不能为空'),
+            FileAllowed(['xls', 'xlsx', 'pdf', 'doc', 'docx'])
+        ],
+        render_kw={
+            'class': 'form-control',
+            'accept': '.xls, .xlsx, .pdf, .doc, .docx',
+        }
+    )
+    version = StringField(
+        label='接口版本 ： ',
+        validators=[
+            DataRequired('请输入接口版本')
+        ],
+        description='接口版本',
+        render_kw={
+            "placeholder": "请输入接口版本",
+            "size": 38,
+            'class': 'form-control',
+        }
+    )
+
+    submit = SubmitField(
+        '上传',
+        render_kw={
+            'class': "w-100 btn btn-lg btn-primary",
         }
     )

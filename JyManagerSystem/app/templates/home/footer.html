@@ -2,22 +2,11 @@
 
 <head>
     <link href="{{ url_for('static',filename='home/css/footers.css') }}" rel="stylesheet">
-    <style>
-        .ff{
-            position: fixed;
-            right: 0;
-            left: 0;
-            z-index: 1030;
-            bottom: 0;
-            margin-bottom: 0;
-            border-width: 1px 0 0;
-        }
-    </style>
 </head>
 
 
 <div class="container-fluid">
-  <footer class="py-3 my-4 fixed-bottom ff">
+  <footer class="py-3 my-4">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
       <li class="nav-item"><a href="{{ url_for('home.index') }}" class="nav-link px-2 text-muted">首页</a></li>
       <li class="nav-item"><a href="https://www.swsc.com.cn/" target="_blank"  class="nav-link px-2 text-muted">西证官网</a></li>

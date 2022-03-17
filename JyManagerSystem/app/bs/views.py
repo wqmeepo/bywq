@@ -1,7 +1,8 @@
 from app.bs import bs
 from app import db
-from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, SystemInfo, HardwareInfo
+from manage import app
+from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm
+from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
 from sqlalchemy import or_
 import os
@@ -94,8 +95,7 @@ def ifUpload():
         #   获取映射系统名称
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
         #   文件夹
-        save_path = os.path.join(bs.root_path, sys_select, 'interfacefile', f.filename.split('.')[0],
-                                 data['version'])
+        save_path = os.path.join(app.root_path, 'storages', 'InterfaceFile', sys_select, data['version'])
         #   文件绝对路径
         save_path_file = os.path.join(save_path, f.filename)
         #   检测数据库是否有同一个sys_no下相同版本的，同目录文件
@@ -149,16 +149,6 @@ def ifDelete(sys_id):
     return redirect(url_for('bs.ifMng'))
 
 
-# df=Database File，删除TableInfo表的数据库文件存放信息，暂时用不到
-def dfDelete(sys_no):
-    try:
-        file_db = TableInfo.query.filter(sys_no=sys_no)
-        db.session.delete(file_db)
-        db.session.commit()
-    except:
-        flash('删除失败，请联系田凌看看', 'dfdelete_failed')
-
-
 # df=Database File，数据库文件上传解析后管理页面
 @bs.route('/dfmng', methods=['GET', 'POST'])
 def dfMng():
@@ -197,7 +187,7 @@ def dfUpload():
             for i in range(sheet.nrows):
                 cursor = 1
                 sheet.row_values(i)
-                if '表名' in sheet.row_values(i):
+                if '表名' in sheet.row_values(i) and '中文名' in sheet.row_values(i + 1):
                     column_list.append('MEEPOK')
                     column_list.append(sheet.name)
                     column_list.append(sheet.row_values(i)[2])
@@ -259,7 +249,7 @@ def dfUpload():
         sys_no = data['select']
         f = form.file.data
         sys_select = BusinSysInfo.query.filter_by(sys_no=sys_no).first().sys_name
-        save_path = os.path.join(bs.root_path, sys_select, 'databasefile')
+        save_path = os.path.join(app.root_path, 'storages', 'DatabaseFile', sys_select)
         save_path_file = os.path.join(save_path, f.filename)
         if not os.path.exists(save_path):
             os.makedirs(save_path, mode=0o777)  # 文件夹权限
@@ -269,7 +259,7 @@ def dfUpload():
                 os.remove(save_path_file)
             #   保存文件
             f.save(save_path_file)
-            flash('文件上传完成，开始解析数据库文件', 'dfupload_success')
+            flash('文件上传完成', 'dfupload_success')
         except:
             flash('接口文件上传失败,请重新上传', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
@@ -284,7 +274,7 @@ def dfUpload():
         except:
             flash('数据库新增失败，请重试', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
-        flash('接口文件解析完成', 'dfupload_success')
+        flash(',接口文件解析完成', 'dfupload_success')
         return redirect(url_for('bs.dfMng'))
     return render_template('bs/df_upload.html', form=form)
 
@@ -295,3 +285,51 @@ def dfDownload(file_path):
     #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
+
+
+#   si=sericeinfo，系统信息文件上传后的查看管理界面
+@bs.route('/simng', methods=['GET', 'POST'])
+def siMng():
+    g.si = ServiceInfo.query.order_by(ServiceInfo.upload_time.desc()).all()
+    return render_template('bs/si_mng.html')
+
+
+#   si=sericeinfo，系统信息文件上传界面
+@bs.route('/siupload', methods=['GET', 'POST'])
+def siUpload():
+    form = SiUploadForm()
+    print('1')
+    if form.validate_on_submit():
+        print('2')
+        data = form.data
+        f = form.file.data  # 上传的文件
+        #   文件夹
+        save_path = os.path.join(app.root_path, 'storages', 'ServiceInfo', ('硬件信息', '系统信息')[data['select'] == 1],
+                                 'version-' + data['version'])
+        #   文件绝对路径
+        save_path_file = os.path.join(save_path, f.filename)
+        #   检测数据库是否有同一个版本相同目录文件
+        if ServiceInfo.query.filter_by(service_type=data['select'], version=data['version'],
+                                         file_path=save_path_file).count() >= 1:
+            flash('不允许上传同版本文件，请先删除后上传,或者修改版本', 'siupload_error')
+            return render_template('bs/if_upload.html', form=form)
+        #   保存文件到服务器，没有目录创建目录
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, mode=0o777)  # 文件夹权限
+        try:
+            #   保存文件
+            f.save(save_path_file)
+            #   数据库写入
+            service_info = ServiceInfo(
+                service_type=data['select'],
+                file_name=f.filename,
+                file_path=save_path_file,
+                version=data['version'],
+            )
+            db.session.add(service_info)
+            db.session.commit()
+        except:
+            flash('接口文件上传失败', 'siupload_error')
+        flash('接口文件上传完成', 'siupload_success')
+        return redirect(url_for('bs.siMng'))
+    return render_template('bs/si_upload.html', form=form)

@@ -1,0 +1,41 @@
+{% extends "home/common_sidebar.html" %}
+{% block content_sidebar %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
+    </head>
+    <body>
+
+    <div class="container-fluid">
+        <p class="alert-success">
+            {% for msg in get_flashed_messages(category_filter=["siupload_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+        </p>
+        <p class="lead container col-3">软硬件信息管理</p>
+        <div class="text-right mb-4">
+            <button class="btn btn-primary"><a class="text-white"
+                                               href="{{ url_for('bs.siUpload') }}">软硬件信息文件上传</a></button>
+        </div>
+
+        <!-- 表格展示 -->
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">文件名</th>
+                <th scope="col">上传时间</th>
+                <th scope="col">文件版本</th>
+                <th scope="col">文件下载</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <br>
+    </div>
+
+    </body>
+
+{% endblock %}

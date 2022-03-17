@@ -14,14 +14,14 @@
                 {% endfor %}
             </p>
             <div class="mb-3">
-                <p class="lead container col-5">新建业务系统关系</p>
+                <p class="lead container col-12">数据库文件上传</p>
                 <a class="d-flex align-items-center" href="{{ url_for('bs.dfMng') }}">查看已上传内容</a>
             </div>
 
             <div class="mt-2 mb-3">
                 <select id='select' name="select" class="custom-select"
                         aria-label=".form-select-lg" required>
-                    <option selected="">选择系统</option>
+                    <option selected="">请选择</option>
                     {% for sys in g.bs %}
                         <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
                     {% endfor %}

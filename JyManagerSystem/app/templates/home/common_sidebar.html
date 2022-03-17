@@ -6,8 +6,8 @@
     <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-1">
-                <nav id="sidebarMenu" class="col-1 d-md-block bg-light sidebar collapse">
+            <div class="col-md-2 col-lg-2">
+                <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="sidebar-sticky pt-3">
 
                         <ul class="nav flex-column">
@@ -36,7 +36,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ url_for('bs.siMng') }}">
                                     软硬件信息维护
                                 </a>
                             </li>
@@ -54,6 +54,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     项目管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    我的代办
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -92,7 +97,7 @@
                 </nav>
             </div>
 
-            <div class="col-11 text-center">
+            <div class="col-md-10 col-lg-10 text-center">
                 {% block content_sidebar %}{% endblock %}
             </div>
         </div>

@@ -74,46 +74,14 @@ class InterfaceFile(db.Model):
 
 
 #  服务器硬件信息表
-class HardwareInfo(db.Model):
-    __tablename__ = "hardwareinfo"
+class ServiceInfo(db.Model):
+    __tablename__ = "serviceinfo"
     id = db.Column(db.Integer, primary_key=True)
-    env_type = db.Column(db.String(2), default='')  # 设备类型 0-服务器 1-虚拟机
-    brand = db.Column(db.String(40), default='')
-    model = db.Column(db.String(40), default='')
-    hardware_height = db.Column(db.String(40), default='')
-    os_version = db.Column(db.String(40), default='')
-    serial_no = db.Column(db.String(40), default='')
-    system_name = db.Column(db.String(40), default='')
-    system_describe = db.Column(db.String(400), default='')
-    contact_name = db.Column(db.String(100), default='')
-    hardware_status = db.Column(db.String(2), default='')  # 设备状态 0-已入库上架 1-已入库闲置 2-已上架使用 3-已上架闲置
-    hardware_location = db.Column(db.String(40), default='')
-    IP = db.Column(db.String(40), default='')
-    if_storage = db.Column(db.String(40), default='')
-    use_status = db.Column(db.String(40), default='')
+    service_type = db.Column(db.String(2))
+    file_name = db.Column(db.String(100))
+    file_path = db.Column(db.String(400))
+    upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
+    version = db.Column(db.String(100), default='')
 
     def __repr__(self):
-        return f'<hardwareInfo : {self.brand}/{self.model}/{self.serial_no}/{self.contact_name}>'
-
-
-#  系统环境信息表
-class SystemInfo(db.Model):
-    __tablename__ = "systeminfo"
-    id = db.Column(db.Integer, primary_key=True)
-    sys_no = db.Column(db.String(5), default='')
-    sys_name = db.Column(db.String(40), default='')
-    env_type = db.Column(db.String(2), default='')  # 环境类型 0-测试 1-生产
-    env_name = db.Column(db.String(40), default='')  # 环境别名
-    db_ip = db.Column(db.String(200), default='')
-    db_info = db.Column(db.String(400), default='')
-    middleware_ip = db.Column(db.String(200), default='')
-    middleware_info = db.Column(db.String(400), default='')
-    win_ip = db.Column(db.String(200), default='')
-    win_info = db.Column(db.String(400), default='')
-    tns_info = db.Column(db.Text, default='')
-    client_info = db.Column(db.String(400), default='')
-    contact_name = db.Column(db.String(100), default='')
-    other_describe = db.Column(db.String(200), default='')
-
-    def __repr__(self):
-        return f'<systemInfo : {self.sys_name}/{self.env_name}/{self.env_type}/{self.contact_name}>'
+        return f'<ServiceInfo : {self.file_name}/{self.upload_time}/{self.version}>'
