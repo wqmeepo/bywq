@@ -298,13 +298,11 @@ def siMng():
 @bs.route('/siupload', methods=['GET', 'POST'])
 def siUpload():
     form = SiUploadForm()
-    print('1')
     if form.validate_on_submit():
-        print('2')
         data = form.data
         f = form.file.data  # 上传的文件
         #   文件夹
-        save_path = os.path.join(app.root_path, 'storages', 'ServiceInfo', ('硬件信息', '系统信息')[data['select'] == 1],
+        save_path = os.path.join(app.root_path, 'storages', 'ServiceInfo', ('硬件信息', '系统信息')[data['select'] == 2],
                                  'version-' + data['version'])
         #   文件绝对路径
         save_path_file = os.path.join(save_path, f.filename)
