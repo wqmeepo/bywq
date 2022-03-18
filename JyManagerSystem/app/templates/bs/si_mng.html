@@ -1,4 +1,4 @@
-{% extends "home/common_sidebar.html" %}
+{% extends "common/common_sidebar.html" %}
 {% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
@@ -8,6 +8,16 @@
     <div class="container-fluid">
         <p class="alert-success">
             {% for msg in get_flashed_messages(category_filter=["siupload_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=["sidelete_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=["sidelete_failed"]) %}
 
                 {{ msg }}
 
@@ -23,14 +33,29 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th scope="col">文件名</th>
-                <th scope="col">上传时间</th>
+                <th scope="col">文件名(点击预览)</th>
+                <th scope="col">文件类型</th>
                 <th scope="col">文件版本</th>
+                <th scope="col">上传时间</th>
                 <th scope="col">文件下载</th>
+                <th scope="col">文件删除</th>
             </tr>
             </thead>
             <tbody>
-
+            {% for item in g.si %}
+                <tr>
+                    <td><a href="{{ url_for('bs.siPreview', sys_id=item.id) }}">{{ item.file_name }}</a></td>
+                    {% if item.service_type == '1' %}
+                        <td>服务器/硬件信息</td>
+                    {% else %}
+                        <td>系统/软件信息</td>
+                    {% endif %}
+                    <td>{{ item.version }}</td>
+                    <td>{{ item.upload_time }}</td>
+                    <td><a href="{{ url_for('bs.siDownload', file_path=item.file_path) }}">文件下载</a></td>
+                    <td><a href="{{ url_for('bs.siDelete', sys_id=item.id) }}">点击删除</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
         <br>

@@ -1,7 +1,12 @@
-{% extends "home/common.html" %}
+{% extends "common/common.html" %}
 {% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/sidebar.css') }}" rel="stylesheet">
+        <style type="text/css">
+            .a:hover {
+                color: red;
+            }
+        </style>
     </head>
     <body>
     <div class="container-fluid">

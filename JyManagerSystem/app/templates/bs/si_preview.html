@@ -1,0 +1,48 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+
+    <div class="container-fluid">
+        {% if service_type == '1' %}
+            <p class="fw-normal mt-3">文件名称 ： {{ file_name }}</p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col" class="fst-italic">服务器类型</th>
+                    <th scope="col" class="fst-italic">品牌</th>
+                    <th scope="col" class="fst-italic">型号</th>
+                    <th scope="col" class="fst-italic">编号</th>
+                    <th scope="col" class="fst-italic">IP</th>
+                    <th scope="col" class="fst-italic">名称/用途</th>
+                    <th scope="col" class="fst-italic">负责人</th>
+                    <th scope="col" class="fst-italic">机架位置</th>
+                    <th scope="col" class="fst-italic">其他信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if service_type == '2' %}
+            <p class="fw-normal mt-3">文件名称 ： {{ file_name }}</p>
+            <table class="table table-striped">
+                <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for item in row %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+{% endblock %}

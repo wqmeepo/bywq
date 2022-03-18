@@ -1,4 +1,4 @@
-{% extends "home/common_sidebar.html" %}
+{% extends "common/common_sidebar.html" %}
 {% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
@@ -22,8 +22,8 @@
                 <select id='select' name="select" class="custom-select"
                         aria-label=".form-select-lg" required>
                     <option selected="">请选择</option>
-                    <option value=1>硬件信息</option>
-                    <option value=2>系统信息</option>
+                    <option value=1>服务器/硬件信息</option>
+                    <option value=2>系统/软件信息</option>
                 </select>
             </div>
             <div class="mb-3 mt-2">

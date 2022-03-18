@@ -7,6 +7,7 @@ from flask import render_template, url_for, redirect, flash, g, send_file
 from sqlalchemy import or_
 import os
 import xlrd
+from app.functions.iterExcel import siHardExcelPreview, siSoftExcelPreview
 
 
 #   bs=Business system，业务系统，该view管理所有业务系统相关页面
@@ -64,6 +65,7 @@ def bsMapSet():
         )
         db.session.add(bsdata)
         db.session.commit()
+        flash('系统关系新建完成', 'mapset_success')
         return redirect(url_for('bs.bsMap'))
     return render_template('bs/bs_map_set.html', form=form)
 
@@ -95,7 +97,7 @@ def ifUpload():
         #   获取映射系统名称
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
         #   文件夹
-        save_path = os.path.join(app.root_path, 'storages', 'InterfaceFile', sys_select, data['version'])
+        save_path = os.path.join(app.root_path, 'storages', 'InterfaceFile', sys_select, 'version-' + data['version'])
         #   文件绝对路径
         save_path_file = os.path.join(save_path, f.filename)
         #   检测数据库是否有同一个sys_no下相同版本的，同目录文件
@@ -308,7 +310,7 @@ def siUpload():
         save_path_file = os.path.join(save_path, f.filename)
         #   检测数据库是否有同一个版本相同目录文件
         if ServiceInfo.query.filter_by(service_type=data['select'], version=data['version'],
-                                         file_path=save_path_file).count() >= 1:
+                                       file_path=save_path_file).count() >= 1:
             flash('不允许上传同版本文件，请先删除后上传,或者修改版本', 'siupload_error')
             return render_template('bs/if_upload.html', form=form)
         #   保存文件到服务器，没有目录创建目录
@@ -331,3 +333,44 @@ def siUpload():
         flash('接口文件上传完成', 'siupload_success')
         return redirect(url_for('bs.siMng'))
     return render_template('bs/si_upload.html', form=form)
+
+
+#   下载接口文件
+@bs.route('/sidownload/<file_path>')
+def siDownload(file_path):
+    #   接口文件下载 send_file方法
+    file_name = file_path.rsplit('\\')[-1]
+    return send_file(file_path, as_attachment=True, attachment_filename=file_name)
+
+
+#   删除接口文件与数据库信息
+@bs.route('/sidelete/<sys_id>')
+def siDelete(sys_id):
+    file_path = ServiceInfo.query.get(sys_id).file_path
+    try:
+        #   删除数据库信息
+        file_db = ServiceInfo.query.get(sys_id)
+        db.session.delete(file_db)
+        db.session.commit()
+        #   删除服务器文件
+        os.remove(file_path)
+        flash('删除成功', 'sidelete_success')
+    except:
+        flash('删除失败，请联系田凌看看', 'sidelete_failed')
+    return redirect(url_for('bs.siMng'))
+
+
+#   删除接口文件与数据库信息
+@bs.route('/sipreview/<sys_id>')
+def siPreview(sys_id):
+    service_type = ServiceInfo.query.get(sys_id).service_type
+    if service_type == '1':
+        file_path = ServiceInfo.query.get(sys_id).file_path
+        file_name = file_path.rsplit('\\')[-1]
+        data = siHardExcelPreview(file_path)
+        return render_template('bs/si_preview.html', data=data, file_name=file_name, service_type=service_type)
+    elif service_type == '2':
+        file_path = ServiceInfo.query.get(sys_id).file_path
+        file_name = file_path.rsplit('\\')[-1]
+        data = siSoftExcelPreview(file_path)
+        return render_template('bs/si_preview.html', data=data, file_name=file_name, service_type=service_type)
