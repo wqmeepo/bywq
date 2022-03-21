@@ -4,9 +4,10 @@
     <div class="container-fluid">
         {% if service_type == '1' %}
             <p class="fw-normal mt-3">文件名称 ： {{ file_name }}</p>
-            <table class="table table-striped">
+            <table class="table table-striped table-hover table-bordered">
                 <thead>
                 <tr>
+                    <th scope="col" class="fst-italic">序号</th>
                     <th scope="col" class="fst-italic">服务器类型</th>
                     <th scope="col" class="fst-italic">品牌</th>
                     <th scope="col" class="fst-italic">型号</th>
@@ -21,6 +22,7 @@
                 <tbody>
                 {% for row in data %}
                     <tr>
+                        <td>{{ loop.index }}</td>
                         {% for item in row %}
                             <td>{{ item }}</td>
                         {% endfor %}
@@ -31,10 +33,11 @@
         {% endif %}
         {% if service_type == '2' %}
             <p class="fw-normal mt-3">文件名称 ： {{ file_name }}</p>
-            <table class="table table-striped">
+            <table class="table table-striped table-hover table-bordered table-sm">
                 <tbody>
                 {% for row in data %}
                     <tr>
+                        <td>{{ loop.index }}</td>
                         {% for item in row %}
                             <td>{{ item }}</td>
                         {% endfor %}

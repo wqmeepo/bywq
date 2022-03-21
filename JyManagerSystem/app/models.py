@@ -85,3 +85,13 @@ class ServiceInfo(db.Model):
 
     def __repr__(self):
         return f'<ServiceInfo : {self.file_name}/{self.upload_time}/{self.version}>'
+
+
+#  服务器硬件信息表
+class AnnounceInfo(db.Model):
+    __tablename__ = "announceinfo"
+    id = db.Column(db.Integer, primary_key=True)
+    announce_text = db.Column(db.Text)
+    publisher = db.Column(db.String(40))
+    upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
+    to_who = db.Column(db.String(2), default='1')
