@@ -16,5 +16,6 @@ def create_app(config_name):
     # from app.admin import admin as admin_blueprint
     app.register_blueprint(home_blueprint)
     app.register_blueprint(bs_blueprint, url_prefix='/bs')
+    app.register_blueprint(bs_blueprint, url_prefix='/workspace')
     # app.register_blueprint(admin_blueprint, url_prefix="/admin")
     return app

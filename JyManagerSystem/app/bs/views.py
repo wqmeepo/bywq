@@ -158,11 +158,17 @@ def dfMng():
     #   group_by一下TableInfo表，因为这个表是按字段导入
     g.df = TableInfo.query.with_entities(TableInfo.sys_no, TableInfo.file_path).group_by(TableInfo.sys_no,
                                                                                          TableInfo.file_path).all()
+    return render_template('bs/df_mng.html')
+
+
+# df=Database File，数据库信息检索
+@bs.route('/dfsearch', methods=['GET', 'POST'])
+def dfSearch():
+    g.bs = BusinSysInfo.query.all()
     form = DfFieldSearchForm()
     if form.validate_on_submit():
         data = form.data
         sys_no = data['select_sys']
-        print(sys_no)
         g.select_type = data['select_type']
         key_word = data['keyword']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
@@ -172,8 +178,8 @@ def dfMng():
         elif g.select_type == 2:
             g.query_result_field = TableInfo.query.filter(
                 or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
-        return render_template('bs/df_mng.html', form=form)
-    return render_template('bs/df_mng.html', form=form)
+        return render_template('bs/df_search.html', form=form)
+    return render_template('bs/df_search.html', form=form)
 
 
 # df=Database File，数据库文件上传，解析的页面

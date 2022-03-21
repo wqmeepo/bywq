@@ -31,6 +31,7 @@
                     <th scope="col" class="fst-italic">版本</th>
                     <th scope="col" class="fst-italic">上传时间</th>
                     <th scope="col" class="fst-italic">文件下载</th>
+                    <th scope="col" class="fst-italic">文件删除</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,7 @@
                             <td>{{ item.file_name }}</td>
                             <td>{{ item.version }}</td>
                             <td>{{ item.upload_time }}</td>
+                            <td><a href="{{ url_for('bs.ifDownload', file_path=item.file_path) }}">点击下载</a></td>
                             <td><a href="{{ url_for('bs.ifDelete', sys_id=item.id) }}">点击删除</a></td>
                         </tr>
                     {% endif %}

@@ -25,7 +25,7 @@
             <tr>
                 <th scope="col">系统</th>
                 <th scope="col">文件下载</th>
-                <th scope="col">是否可查询</th>
+                <th scope="col">数据库信息搜索</th>
             </tr>
             </thead>
             <tbody>
@@ -43,80 +43,18 @@
                     <tr class="table-success">
                         <th scope="row">{{ i.sys_name }}</th>
                         <td><a href="{{ url_for('bs.dfDownload', file_path=list_path[loop.index0]) }}">点击下载</a></td>
-                        <td>是</td>
+                        <td><a href="{{ url_for('bs.dfSearch') }}">点击搜索</a></td>
                     </tr>
 
                 {% else %}
                     <tr class="table-secondary">
                         <th scope="row">{{ i.sys_name }}</th>
-                        <td>否</td>
-                        <td>否</td>
+                        <td>不可下载</td>
+                        <td>不可搜索</td>
                     </tr>
                 {% endif %}
             {% endfor %}
             </tbody>
-        </table>
-        <br>
-        <p class="lead container col-3">数据库信息搜索</p>
-        <!-- 搜索 -->
-        <form method="post" class="col-auto form-inline my-2 my-lg-0 justify-content-center">
-            <select id='select_sys' name="select_sys" class="custom-select"
-                    aria-label=".form-select-lg" required>
-                <option selected="">选择系统</option>
-                {% for sys in g.bs %}
-                    <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
-                {% endfor %}
-            </select>
-            {{ form.select_type }}
-            {{ form.keyword }}
-            {{ form.csrf_token }}
-            {{ form.submit }}
-        </form>
-        <br>
-        <!-- 展示搜索表格结果 -->
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">系统名称</th>
-                <th scope="col">表名</th>
-                <th scope="col">表描述</th>
-                <th scope="col">字段名</th>
-                <th scope="col">字段描述</th>
-                <th scope="col">所属子系统</th>
-                <th scope="col">所属数据库</th>
-            </tr>
-            </thead>
-            {% if g.select_type == 1 %}
-                <tbody>
-                {% for item in g.query_result_table %}
-                    <tr>
-                        <td>{{ g.sys_name.sys_name }}</td>
-                        <td>{{ item.table_name }}</td>
-                        <td>{{ item.table_describe }}</td>
-                        <td>{{ item.field_name }}</td>
-                        <td>{{ item.field_describe }}</td>
-                        <td>{{ item.sheet_name }}</td>
-                        <td>{{ item.db_name }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            {% endif %}
-
-            {% if g.select_type == 2 %}
-                <tbody>
-                {% for item in g.query_result_field %}
-                    <tr>
-                        <td>{{ g.sys_name.sys_name }}</td>
-                        <td>{{ item.table_name }}</td>
-                        <td>{{ item.table_describe }}</td>
-                        <td>{{ item.field_name }}</td>
-                        <td>{{ item.field_describe }}</td>
-                        <td>{{ item.sheet_name }}</td>
-                        <td>{{ item.db_name }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            {% endif %}
         </table>
     </div>
 

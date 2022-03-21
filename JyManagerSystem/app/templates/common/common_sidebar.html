@@ -2,11 +2,7 @@
 {% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/sidebar.css') }}" rel="stylesheet">
-        <style type="text/css">
-            .a:hover {
-                color: red;
-            }
-        </style>
+
     </head>
     <body>
     <div class="container-fluid">
@@ -19,34 +15,34 @@
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ url_for('bs.index') }}">
                                     <span data-feather="home"></span>
-                                    后台管理 <span class="sr-only">(current)</span>
+                                    后台管理
                                 </a>
                             </li>
                             <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                                 <span>系统维护</span>
                             </h5>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('bs.bsMap') }}">
+                                <a class="nav-link" id="bsmap" href="{{ url_for('bs.bsMap') }}">
                                     系统对应关系维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('bs.ifMng') }}">
+                                <a class="nav-link" id="ifmng" href="{{ url_for('bs.ifMng') }}">
                                     系统接口维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('bs.dfMng') }}">
+                                <a class="nav-link" id="dfmng" href="{{ url_for('bs.dfMng') }}">
                                     数据库信息维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('bs.siMng') }}">
+                                <a class="nav-link" id="simng" href="{{ url_for('bs.siMng') }}">
                                     软硬件信息维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="usermng" href="#">
                                     人员维护
                                 </a>
                             </li>
@@ -57,22 +53,22 @@
                         </h5>
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="pjmng" href="#">
                                     项目管理
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="todo" href="#">
                                     我的代办
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    申请审批
+                                <a class="nav-link" id="workflow" href="#">
+                                    工作流
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="personalshare" href="#">
                                     知识共享
                                 </a>
                             </li>
@@ -83,17 +79,17 @@
                         </h5>
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="announcemng" href="#">
                                     公告管理
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="publicshare" href="#">
                                     公共知识管理
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" id="risknews" href="#">
                                     监管信息
                                 </a>
                             </li>
@@ -107,6 +103,12 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let link_name = window.location.href.split('/').slice(-1);
+            $("#" + link_name).addClass("list-group-item list-group-item-action");
+        });
+    </script>
     </body>
 
 {% endblock %}

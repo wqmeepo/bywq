@@ -1,0 +1,76 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
+    </head>
+    <body>
+
+    <div class="container-fluid mt-3">
+        <div class="mb-3">
+            <p class="lead container col-12">数据库信息搜索</p>
+        </div>
+        <!-- 搜索 -->
+        <form method="post" class="col-auto form-inline my-2 my-lg-0 justify-content-center">
+            <select id='select_sys' name="select_sys" class="custom-select"
+                    aria-label=".form-select-lg" required>
+                <option selected="">选择系统</option>
+                {% for sys in g.bs %}
+                    <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
+                {% endfor %}
+            </select>
+            {{ form.select_type }}
+            {{ form.keyword }}
+            {{ form.csrf_token }}
+            {{ form.submit }}
+        </form>
+        <br>
+        <!-- 展示搜索表格结果 -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">系统名称</th>
+                <th scope="col">表名</th>
+                <th scope="col">表描述</th>
+                <th scope="col">字段名</th>
+                <th scope="col">字段描述</th>
+                <th scope="col">所属子系统</th>
+                <th scope="col">所属数据库</th>
+            </tr>
+            </thead>
+            {% if g.select_type == 1 %}
+                <tbody>
+                {% for item in g.query_result_table %}
+                    <tr>
+                        <td>{{ g.sys_name.sys_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.table_describe }}</td>
+                        <td>{{ item.field_name }}</td>
+                        <td>{{ item.field_describe }}</td>
+                        <td>{{ item.sheet_name }}</td>
+                        <td>{{ item.db_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            {% endif %}
+
+            {% if g.select_type == 2 %}
+                <tbody>
+                {% for item in g.query_result_field %}
+                    <tr>
+                        <td>{{ g.sys_name.sys_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.table_describe }}</td>
+                        <td>{{ item.field_name }}</td>
+                        <td>{{ item.field_describe }}</td>
+                        <td>{{ item.sheet_name }}</td>
+                        <td>{{ item.db_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            {% endif %}
+        </table>
+    </div>
+
+    </body>
+
+{% endblock %}
