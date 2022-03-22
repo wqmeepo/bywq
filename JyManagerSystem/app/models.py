@@ -87,11 +87,21 @@ class ServiceInfo(db.Model):
         return f'<ServiceInfo : {self.file_name}/{self.upload_time}/{self.version}>'
 
 
-#  服务器硬件信息表
+#  公告信息表
 class AnnounceInfo(db.Model):
     __tablename__ = "announceinfo"
     id = db.Column(db.Integer, primary_key=True)
-    announce_text = db.Column(db.Text)
+    announce_type = db.Column(db.String(200))
+    announce_head = db.Column(db.String(200))
+    announce_body = db.Column(db.Text)
     publisher = db.Column(db.String(40))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
     to_who = db.Column(db.String(2), default='1')
+
+
+#  公告类别表
+class AnnounceType(db.Model):
+    __tablename__ = "announcetype"
+    id = db.Column(db.Integer, primary_key=True)
+    announce_type = db.Column(db.String(40))
+    announce_type_name = db.Column(db.String(400), nullable=True, default='')

@@ -1,0 +1,29 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+
+    <div class="container-fluid bg-body d-grid col-3 mt-3">
+        <p class="alert-success">
+            {% for msg in get_flashed_messages(category_filter=["announceTypeSet_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+        </p>
+
+        <div class="mb-3">
+            <p class="lead container col-12">新建公告类别</p>
+            <a class="d-flex align-items-center" href="{{ url_for('jymng.announceMng') }}">查看已有公告</a>
+        </div>
+        <form method="post">
+            <div class="mb-3 mt-2">
+                {{ form.announce_type }}
+            </div>
+            <div class="mb-3 mt-2">
+                {{ form.announce_type_name }}
+            </div>
+            {{ form.csrf_token }}
+            {{ form.submit }}
+        </form>
+    </div>
+
+{% endblock %}
