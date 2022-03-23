@@ -9,6 +9,16 @@
                 {{ msg }}
 
             {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=["anodelete_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=["anodelete_failed"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
         </p>
 
         <p class="lead container col-3">公告管理</p>
@@ -31,15 +41,13 @@
                 {{ list3.append(item) or '' }}
             {% endif %}
         {% endfor %}
-
-        {% if len(list1) > 0 %}
-            <p>全体公告</p>
+        {% if list1|length > 0 %}
+            <p>对内公告</p>
             <table class="table table-striped table-hover table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">公告类型</th>
                     <th scope="col">公告名称</th>
-                    <th scope="col">公告内容简略</th>
                     <th scope="col">公告发表人</th>
                     <th scope="col">公告发表时间</th>
                     <th scope="col">编辑</th>
@@ -51,11 +59,67 @@
                     <tr>
                         <td>{{ item.announce_type }}</td>
                         <td>{{ item.announce_head }}</td>
-                        <td>{{ item.announce_body }}</td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
                         <td><a href="#">编辑</a></td>
-                        <td><a href="#">删除</a></td>
+                        <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if list2|length > 0 %}
+            <hr>
+            <p>对外公告</p>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">公告类型</th>
+                    <th scope="col">公告名称</th>
+                    <th scope="col">公告发表人</th>
+                    <th scope="col">公告发表时间</th>
+                    <th scope="col">编辑</th>
+                    <th scope="col">删除</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in list2 %}
+                    <tr>
+                        <td>{{ item.announce_type }}</td>
+                        <td>{{ item.announce_head }}</td>
+                        <td>{{ item.publisher }}</td>
+                        <td>{{ item.upload_time }}</td>
+                        <td><a href="#">编辑</a></td>
+                        <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if list3|length > 0 %}
+            <hr>
+            <p>内外公告</p>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">公告类型</th>
+                    <th scope="col">公告名称</th>
+                    <th scope="col">公告发表人</th>
+                    <th scope="col">公告发表时间</th>
+                    <th scope="col">编辑</th>
+                    <th scope="col">删除</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in list3 %}
+                    <tr>
+                        <td>{{ item.announce_type }}</td>
+                        <td>{{ item.announce_head }}</td>
+                        <td>{{ item.publisher }}</td>
+                        <td>{{ item.upload_time }}</td>
+                        <td><a href="#">编辑</a></td>
+                        <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

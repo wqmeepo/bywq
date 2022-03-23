@@ -8,10 +8,12 @@ from sqlalchemy import or_
 import os
 import xlrd
 from app.functions.iterExcel import siHardExcelPreview, siSoftExcelPreview
+from app.jymng.views import userLogin
 
 
 #   bs=Business system，业务系统，该view管理所有业务系统相关页面
 @bs.route('/')
+@userLogin
 def index():
     return render_template('bs/bs_set.html')
 
@@ -47,6 +49,7 @@ def hspb():
 
 
 @bs.route('/bsmap')
+@userLogin
 def bsMap():
     g.bs_query_data = BusinSysInfo.query.all()
     return render_template('bs/bs_map.html')
@@ -54,6 +57,7 @@ def bsMap():
 
 #   系统对应映射关系设置界面
 @bs.route('/bsmapset', methods=['GET', 'POST'])
+@userLogin
 def bsMapSet():
     form = BusinSysInfoForm()
     if form.validate_on_submit():
@@ -72,6 +76,7 @@ def bsMapSet():
 
 #   if=interface，mng=manage，接口上传后的管理界面
 @bs.route('/ifmng', methods=['GET', 'POST'])
+@userLogin
 def ifMng():
     g.bs = BusinSysInfo.query.all()
     g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
@@ -80,6 +85,7 @@ def ifMng():
 
 #   if=interface，接口上传后各个系统的查询界面
 @bs.route('/iffetch', methods=['GET', 'POST'])
+@userLogin
 def ifFetch():
     g.bs = BusinSysInfo.query.all()  # 传到前端
     g.interface = InterfaceFile.query.all()  # 传到前端
@@ -88,6 +94,7 @@ def ifFetch():
 
 #   if=interface，接口文件上传界面
 @bs.route('/ifupload', methods=['GET', 'POST'])
+@userLogin
 def ifUpload():
     g.bs = BusinSysInfo.query.all()  # 用于传到前端进行展示
     form = InterfaceFileForm()
@@ -129,6 +136,7 @@ def ifUpload():
 
 #   下载接口文件
 @bs.route('/ifdownload/<file_path>')
+@userLogin
 def ifDownload(file_path):
     #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
@@ -137,6 +145,7 @@ def ifDownload(file_path):
 
 #   删除接口文件与数据库信息
 @bs.route('/ifdelete/<sys_id>')
+@userLogin
 def ifDelete(sys_id):
     file_path = InterfaceFile.query.get(sys_id).file_path
     try:
@@ -153,6 +162,7 @@ def ifDelete(sys_id):
 
 # df=Database File，数据库文件上传解析后管理页面
 @bs.route('/dfmng', methods=['GET', 'POST'])
+@userLogin
 def dfMng():
     g.bs = BusinSysInfo.query.all()
     #   group_by一下TableInfo表，因为这个表是按字段导入
@@ -163,6 +173,7 @@ def dfMng():
 
 # df=Database File，数据库信息检索
 @bs.route('/dfsearch', methods=['GET', 'POST'])
+@userLogin
 def dfSearch():
     g.bs = BusinSysInfo.query.all()
     form = DfFieldSearchForm()
@@ -184,6 +195,7 @@ def dfSearch():
 
 # df=Database File，数据库文件上传，解析的页面
 @bs.route('/dfupload', methods=['GET', 'POST'])
+@userLogin
 def dfUpload():
     #   针对UF20数据库excel文件的解析方法，支持覆盖导入（先删除，后插入）
     def uf20Parse(sys_no, save_path_file):
@@ -289,6 +301,7 @@ def dfUpload():
 
 #   下载数据库文件
 @bs.route('/dfdownload/<file_path>')
+@userLogin
 def dfDownload(file_path):
     #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
@@ -297,6 +310,7 @@ def dfDownload(file_path):
 
 #   si=sericeinfo，系统信息文件上传后的查看管理界面
 @bs.route('/simng', methods=['GET', 'POST'])
+@userLogin
 def siMng():
     g.si = ServiceInfo.query.order_by(ServiceInfo.upload_time.desc()).all()
     return render_template('bs/si_mng.html')
@@ -304,6 +318,7 @@ def siMng():
 
 #   si=sericeinfo，系统信息文件上传界面
 @bs.route('/siupload', methods=['GET', 'POST'])
+@userLogin
 def siUpload():
     form = SiUploadForm()
     if form.validate_on_submit():
@@ -343,6 +358,7 @@ def siUpload():
 
 #   下载接口文件
 @bs.route('/sidownload/<file_path>')
+@userLogin
 def siDownload(file_path):
     #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
@@ -351,6 +367,7 @@ def siDownload(file_path):
 
 #   删除接口文件与数据库信息
 @bs.route('/sidelete/<sys_id>')
+@userLogin
 def siDelete(sys_id):
     file_path = ServiceInfo.query.get(sys_id).file_path
     try:
@@ -368,6 +385,7 @@ def siDelete(sys_id):
 
 #   删除接口文件与数据库信息
 @bs.route('/sipreview/<sys_id>')
+@userLogin
 def siPreview(sys_id):
     service_type = ServiceInfo.query.get(sys_id).service_type
     if service_type == '1':

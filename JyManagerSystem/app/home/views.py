@@ -105,6 +105,7 @@ def login():
             return render_template('home/login.html', form=form)
         session['user_id'] = user.id
         session['username'] = user.username
+        session['department'] = user.department
         return redirect(url_for('home.index'))
     return render_template('home/login.html', form=form)
 
@@ -121,6 +122,7 @@ def logout():
 def userLogin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        print('ahahahaha')
         if 'user_id' not in session:
             return redirect(url_for('home.login'))
         return f(*args, **kwargs)
