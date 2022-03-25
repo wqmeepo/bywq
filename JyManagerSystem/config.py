@@ -5,6 +5,7 @@ class Config:
     CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_HEIGHT = 400
     CKEDITOR_FILE_UPLOADER = 'jymng.upload'
+    CKEDITOR_ENABLE_CSRF = True
 
     @staticmethod
     def init_app(app):

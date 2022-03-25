@@ -61,7 +61,7 @@
                         <td>{{ item.announce_head }}</td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a href="#">编辑</a></td>
+                        <td><a href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
                     </tr>
                 {% endfor %}
@@ -89,7 +89,7 @@
                         <td>{{ item.announce_head }}</td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a href="#">编辑</a></td>
+                        <td><a href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
                     </tr>
                 {% endfor %}
@@ -118,7 +118,7 @@
                         <td>{{ item.announce_head }}</td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a href="#">编辑</a></td>
+                        <td><a href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
                     </tr>
                 {% endfor %}

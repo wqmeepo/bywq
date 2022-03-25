@@ -15,7 +15,8 @@ from app.jymng.views import userLogin
 @bs.route('/')
 @userLogin
 def index():
-    return render_template('bs/bs_set.html')
+
+    return render_template('bs/bs_index.html')
 
 
 @bs.route('/uf20')

@@ -41,8 +41,7 @@ def getVerifyCode():
 
 @home.route('/')
 def index():
-    return render_template('home/index.html')
-    # eturn render_template('home/index.html')
+    return render_template('home/index_new.html')
 
 
 @home.route('/code')

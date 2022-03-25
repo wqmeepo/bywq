@@ -1,0 +1,48 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+
+    <div class="container-fluid bg-body d-grid col-12 mt-3">
+        <div class="mb-3">
+            <p class="lead container col-12">编辑公告</p>
+            <a class="d-flex align-items-center col-2 text-center" href="{{ url_for('jymng.announceMng') }}">查看已有公告</a>
+        </div>
+        <form method="post">
+            <div class="container-fluid">
+                <div class="row justify-content-start">
+                    <div class="mb-3 mt-2 col-2">
+                        <select id='select' name="select" class="custom-select"
+                                aria-label=".form-select-lg" required>
+                            <option selected="">请选择公告方向</option>
+                            <option value=1>对内公告</option>
+                            <option value=2>对外公告</option>
+                            <option value=3>全员公告</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 mt-2 col-2">
+                        <select id='announce_type' name="announce_type" class="custom-select"
+                                aria-label=".form-select-lg" required>
+                            <option selected="">请选择公告类别</option>
+                            {% for item in g.ano_type %}
+                                <option value={{ loop.index }}>{{ loop.index }}-{{ item.announce_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 mt-2 col-4">
+                        {{ form.announce_head }}
+                    </div>
+                    <div class="mb-3 mt-2 col-2">
+                        <input class="custom-select text-info" id="publisher" name="publisher" placeholder="发布人"
+                               required=""
+                               size="38" type="text" value=创建人：{{ session.get('username') }} readonly>
+                    </div>
+                </div>
+                {{ form.announce_body }}
+                {{ form.csrf_token }}
+                {{ form.submit }}
+            </div>
+        </form>
+        <script src="{{ url_for('static', filename='home/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
+        {{ ckeditor.config(name='announce_body') }}
+    </div>
+
+{% endblock %}

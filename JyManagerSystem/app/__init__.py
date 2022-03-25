@@ -2,6 +2,7 @@ from flask import Flask
 from config import config
 from flask_sqlalchemy import SQLAlchemy
 from flask_ckeditor import CKEditor
+from flask_wtf.csrf import CSRFProtect
 
 db = SQLAlchemy()
 
@@ -13,6 +14,8 @@ def create_app(config_name):
     db.init_app(app)
     ckeditor = CKEditor()
     ckeditor.init_app(app)
+    csrf = CSRFProtect()
+    csrf.init_app(app)
     # 注册蓝图
     from app.home import home as home_blueprint
     from app.bs import bs as bs_blueprint

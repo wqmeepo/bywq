@@ -1,6 +1,6 @@
 from app.jymng import jymng
 from app.models import AnnounceInfo, AnnounceType
-from app.jymng.forms import AnnounceForm, AnnounceTypeForm
+from app.jymng.forms import AnnounceForm, AnnounceTypeForm, AnnounceEditForm
 from flask import g, render_template, url_for, redirect, flash, session, request, send_from_directory
 from app import db
 from flask_ckeditor import upload_fail, upload_success
@@ -12,7 +12,6 @@ from functools import wraps
 def userLogin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print('ahahahaha')
         if 'user_id' not in session:
             return redirect(url_for('home.login'))
         if session.get('department') != '交易系统研发中心':
@@ -38,10 +37,8 @@ def announceSet():
     form = AnnounceForm()
     if form.validate_on_submit():
         data = form.data
-        print(data['announce_body'])
-        print(request.form.get(1))
         announce_info = AnnounceInfo(
-            announce_type=data['announce_type'],
+            announce_type=AnnounceType.query.get(data['announce_type']).announce_type,
             announce_head=data['announce_head'],
             announce_body=data['announce_body'],
             publisher=session['username'],
@@ -51,7 +48,7 @@ def announceSet():
         db.session.commit()
         flash('公告新建成功', 'announceSet_success')
         return redirect(url_for('jymng.announceMng'))
-    return render_template('jymng/announce_set.html', form=form)
+    return render_template('jymng/announce_new.html', form=form)
 
 
 #   jy=交易系统研发中心，新建公告类别
@@ -103,7 +100,7 @@ def upload():
     return upload_success(url=url)  # 返回upload_success调用
 
 
-#   删除接口文件与数据库信息
+#   删除公告数据库信息
 @jymng.route('/announcedelete/<sys_id>')
 @userLogin
 def announceDelete(sys_id):
@@ -116,3 +113,30 @@ def announceDelete(sys_id):
     except:
         flash('删除失败，请联系田凌看看', 'anodelete_failed')
     return redirect(url_for('jymng.announceMng'))
+
+
+#   jy=交易系统研发中心，编辑公告类别
+@jymng.route('/announceedit/<sys_id>', methods=['GET', 'POST'])
+@userLogin
+def announceEdit(sys_id):
+    g.ano_type = AnnounceType.query.all()
+    ano_info = AnnounceInfo.query.get(sys_id)
+    form = AnnounceEditForm()
+    form.announce_head.data = ano_info.announce_head
+    form.announce_body.data = ano_info.announce_body
+    if form.validate_on_submit():
+        data = form.data
+        announce_info = AnnounceInfo(
+            announce_type=AnnounceType.query.get(data['announce_type']).announce_type,
+            announce_head=data['announce_head'],
+            announce_body=data['announce_body'],
+            publisher=session['username'],
+            to_who=data['select'],
+        )
+        db.session.add(announce_info)
+        db.session.commit()
+        db.session.delete(ano_info)
+        db.session.commit()
+        flash('公告修改成功', 'announceSet_success')
+        return redirect(url_for('jymng.announceMng'))
+    return render_template('jymng/announce_edit.html', form=form)
