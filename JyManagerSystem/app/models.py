@@ -105,3 +105,16 @@ class AnnounceType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     announce_type = db.Column(db.String(40))
     announce_type_name = db.Column(db.String(400), nullable=True, default='')
+
+
+#  数据字典表
+class Dictionary(db.Model):
+    __tablename__ = "dictionary"
+    id = db.Column(db.Integer, primary_key=True)
+    sys_no = db.Column(db.String(10))
+    branch_no = db.Column(db.String(10), default='')
+    field_name = db.Column(db.String(100), index=True)
+    field_describe = db.Column(db.String(200))
+    dic_no = db.Column(db.String(10), index=True)
+    dic_sub_id = db.Column(db.String(10))
+    dic_sub_name = db.Column(db.String(100))
