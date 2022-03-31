@@ -9,7 +9,7 @@
             }
 
             .modal-dialog {
-                max-width: 800px;
+                max-width: 100%;
             }
         </style>
     </head>
@@ -55,7 +55,8 @@
             {% for item in g.si %}
                 <tr>
                     <td><a id="modal-1" href="#modal-container-1" role="button"
-                           data-toggle="modal" onclick="alert(item.id)">{{ item.file_name }}</a></td>
+                           data-toggle="modal"
+                           onclick="getPreview({{ item.id }}, $(this).text())">{{ item.file_name }}</a></td>
                     {% if item.service_type == '1' %}
                         <td>服务器/硬件信息</td>
                     {% else %}
@@ -77,10 +78,10 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title" id="myModalLabel">
                             文件预览
                         </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
 
@@ -93,9 +94,9 @@
         </div>
     </div>
     <script type="text/javascript">
-        function getPreview(sys_id) {
-            alert(sys_id)
+        function getPreview(sys_id, file_name) {
             $(".modal-body").load("/bs/sipreview/" + sys_id)
+            $(".modal-title").text(file_name)
         }
     </script>
     </body>
