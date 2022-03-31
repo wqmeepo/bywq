@@ -1,3 +1,4 @@
+import datetime
 from app.jymng import jymng
 from app.models import AnnounceInfo, AnnounceType
 from app.jymng.forms import AnnounceForm, AnnounceTypeForm, AnnounceEditForm
@@ -37,8 +38,9 @@ def announceSet():
     form = AnnounceForm()
     if form.validate_on_submit():
         data = form.data
+        announce_type = AnnounceType.query.get(data['announce_type']).announce_type
         announce_info = AnnounceInfo(
-            announce_type=AnnounceType.query.get(data['announce_type']).announce_type,
+            announce_type=announce_type,
             announce_head=data['announce_head'],
             announce_body=data['announce_body'],
             publisher=session['username'],
@@ -125,18 +127,22 @@ def announceEdit(sys_id):
     form.announce_head.data = ano_info.announce_head
     form.announce_body.data = ano_info.announce_body
     if form.validate_on_submit():
-        data = form.data
-        announce_info = AnnounceInfo(
-            announce_type=AnnounceType.query.get(data['announce_type']).announce_type,
-            announce_head=data['announce_head'],
-            announce_body=data['announce_body'],
-            publisher=session['username'],
-            to_who=data['select'],
-        )
-        db.session.add(announce_info)
-        db.session.commit()
-        db.session.delete(ano_info)
+        announce_type = AnnounceType.query.get(request.form['announce_type']).announce_type
+        ano_info.announce_head = request.form['announce_head']
+        ano_info.announce_body = request.form['announce_body']
+        ano_info.to_who = request.form['select']
+        ano_info.announce_type = announce_type
         db.session.commit()
         flash('公告修改成功', 'announceSet_success')
         return redirect(url_for('jymng.announceMng'))
     return render_template('jymng/announce_edit.html', form=form)
+
+
+#   jy=交易系统研发中心，置顶功能
+@jymng.route('/announceclicktotop/<sys_id>', methods=['GET', 'POST'])
+@userLogin
+def announceClickToTop(sys_id):
+    time_now = datetime.datetime.now()
+    AnnounceInfo.query.get(sys_id).upload_time = time_now
+    db.session.commit()
+    return redirect(url_for('jymng.announceMng'))

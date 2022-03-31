@@ -1,0 +1,24 @@
+<table class="table table-striped table-bordered table-sm">
+    <thead>
+    <tr>
+        <th scope="col">所属系统</th>
+        <th scope="col">营业部号</th>
+        <th scope="col">字段名</th>
+        <th scope="col">字典编号</th>
+        <th scope="col">字典子项编号</th>
+        <th scope="col">字典子项描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in data %}
+        <tr>
+            <td>{{ item.sys_no }}</td>
+            <td>{{ item.branch_no }}</td>
+            <td>{{ item.field_name }}</td>
+            <td>{{ item.dic_no }}</td>
+            <td>{{ item.dic_sub_id }}</td>
+            <td>{{ item.dic_sub_name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -2,6 +2,16 @@
 {% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
+        <style>
+            .table > tbody > tr > td {
+                /*border: 0px;*/
+                vertical-align: middle;
+            }
+
+            .modal-dialog {
+                max-width: 800px;
+            }
+        </style>
     </head>
     <body>
 
@@ -44,7 +54,8 @@
             <tbody>
             {% for item in g.si %}
                 <tr>
-                    <td><a href="{{ url_for('bs.siPreview', sys_id=item.id) }}">{{ item.file_name }}</a></td>
+                    <td><a id="modal-1" href="#modal-container-1" role="button"
+                           data-toggle="modal" onclick="alert(item.id)">{{ item.file_name }}</a></td>
                     {% if item.service_type == '1' %}
                         <td>服务器/硬件信息</td>
                     {% else %}
@@ -52,15 +63,41 @@
                     {% endif %}
                     <td>{{ item.version }}</td>
                     <td>{{ item.upload_time }}</td>
-                    <td><a href="{{ url_for('bs.siDownload', file_path=item.file_path) }}">文件下载</a></td>
-                    <td><a href="{{ url_for('bs.siDelete', sys_id=item.id) }}">点击删除</a></td>
+                    <td><a class="btn btn-outline-primary btn-sm"
+                           href="{{ url_for('bs.siDownload', file_path=item.file_path) }}">点击下载</a></td>
+                    <td><a class="btn btn-danger btn-sm" href="{{ url_for('bs.siDelete', sys_id=item.id) }}">点击删除</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         <br>
-    </div>
+        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            文件预览
+                        </h4>
+                    </div>
+                    <div class="modal-body">
 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function getPreview(sys_id) {
+            alert(sys_id)
+            $(".modal-body").load("/bs/sipreview/" + sys_id)
+        }
+    </script>
     </body>
 
 {% endblock %}

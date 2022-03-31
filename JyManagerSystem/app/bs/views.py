@@ -2,8 +2,8 @@ from app.bs import bs
 from app import db
 from manage import app
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo
-from flask import render_template, url_for, redirect, flash, g, send_file
+from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary
+from flask import render_template, url_for, redirect, flash, g, send_file, request
 from sqlalchemy import or_
 import os
 import xlrd
@@ -15,38 +15,9 @@ from app.jymng.views import userLogin
 @bs.route('/')
 @userLogin
 def index():
-
+    pagination = TableInfo.query.paginate(1, 10)
+    item = pagination.items
     return render_template('bs/bs_index.html')
-
-
-@bs.route('/uf20')
-def uf20():
-    return render_template('bs/uf20.html')
-
-
-@bs.route('/o32')
-def o32():
-    return render_template('bs/o32.html')
-
-
-@bs.route('/bop')
-def bop():
-    return render_template('bs/bop.html')
-
-
-@bs.route('/ta')
-def ta():
-    return render_template('bs/ta.html')
-
-
-@bs.route('/frqs')
-def frqs():
-    return render_template('bs/frqs.html')
-
-
-@bs.route('/hspb')
-def hspb():
-    return render_template('bs/hspb.html')
 
 
 @bs.route('/bsmap')
@@ -82,15 +53,6 @@ def ifMng():
     g.bs = BusinSysInfo.query.all()
     g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
     return render_template('bs/if_mng.html')
-
-
-#   if=interface，接口上传后各个系统的查询界面
-@bs.route('/iffetch', methods=['GET', 'POST'])
-@userLogin
-def ifFetch():
-    g.bs = BusinSysInfo.query.all()  # 传到前端
-    g.interface = InterfaceFile.query.all()  # 传到前端
-    return render_template('bs/if_fetch.html')
 
 
 #   if=interface，接口文件上传界面
@@ -192,6 +154,16 @@ def dfSearch():
                 or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('bs/df_search.html', form=form)
     return render_template('bs/df_search.html', form=form)
+
+
+@bs.route('/querydictionary/<field_name>', methods=['GET', 'POST'])
+def queryDictionary(field_name):
+    print(field_name)
+    query_dictionary_data = Dictionary.query.filter_by(field_name=field_name).all()
+    if len(query_dictionary_data) == 0:
+        return '<p>该字段没有数据字典信息</p>'
+    else:
+        return render_template('bs/df_modal.html', data=query_dictionary_data)
 
 
 # df=Database File，数据库文件上传，解析的页面

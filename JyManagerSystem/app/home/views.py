@@ -1,7 +1,7 @@
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm
-from app.models import User
+from app.models import User, BusinSysInfo, InterfaceFile
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
@@ -41,7 +41,7 @@ def getVerifyCode():
 
 @home.route('/')
 def index():
-    return render_template('home/index_new.html')
+    return render_template('home/index.html')
 
 
 @home.route('/code')
@@ -121,7 +121,6 @@ def logout():
 def userLogin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print('ahahahaha')
         if 'user_id' not in session:
             return redirect(url_for('home.login'))
         return f(*args, **kwargs)
@@ -157,3 +156,42 @@ def userModify():
         flash('修改完成！', 'info_modify')
         return redirect(url_for('home.userModify'))
     return render_template('home/modify_password.html', form=form)
+
+
+@home.route('/uf20')
+def uf20():
+    return render_template('home/uf20.html')
+
+
+@home.route('/o32')
+def o32():
+    return render_template('home/o32.html')
+
+
+@home.route('/bop')
+def bop():
+    return render_template('home/bop.html')
+
+
+@home.route('/ta')
+def ta():
+    return render_template('home/ta.html')
+
+
+@home.route('/frqs')
+def frqs():
+    return render_template('home/frqs.html')
+
+
+@home.route('/hspb')
+def hspb():
+    return render_template('home/hspb.html')
+
+
+#   if=interface，接口上传后各个系统的查询界面
+@home.route('/iffetch', methods=['GET', 'POST'])
+@userLogin
+def ifFetch():
+    g.bs = BusinSysInfo.query.all()  # 传到前端
+    g.interface = InterfaceFile.query.all()  # 传到前端
+    return render_template('home/if_fetch.html')

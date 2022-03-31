@@ -1,154 +1,196 @@
 {% extends "common/common.html" %}
 {% block content %}
-    <body>
-    <div class="container-fluid">
+    <head>
+        <link href="{{ url_for('static',filename='home/css/blog.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='home/css/carousel.css') }}" rel="stylesheet">
+    </head>
 
-        <section class="py-2 text-center container">
-            <div class="row py-lg-2">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">公告</h1>
-                    <p class="lead text-muted">本站为金融科技部-交易系统研发中心对外信息提供出口，提供且不限于以下内容：各系统表结构、数据接口
-                        、测试环境信息、客户端、专用工具、交易所文档等.</p>
-                    <p>
-                        <a href="#" class="btn btn-primary my-2">了解详情</a>
-                    </p>
+    <body>
+
+    <div class="container col-10">
+
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class=""></li>
+                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+                <li data-target="#myCarousel" data-slide-to="2" class="active"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                         role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title></title>
+                        <rect width="100%" height="100%" fill="#777"></rect>
+                        <text x="50%" y="50%" fill="#777" dy=".3em"></text>
+                    </svg>
+
+                    <div class="container">
+                        <div class="carousel-caption text-left">
+                            <h1>公告1.</h1>
+                            <p>公告1.....</p>
+                            <p><a class="btn btn-lg btn-primary" href="#">更多内容</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                         role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title></title>
+                        <rect width="100%" height="100%" fill="#777"></rect>
+                        <text x="50%" y="50%" fill="#777" dy=".3em"></text>
+                    </svg>
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>公告2.</h1>
+                            <p>公告2......</p>
+                            <p><a class="btn btn-lg btn-primary" href="#">更多内容</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item active">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                         role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <title></title>
+                        <rect width="100%" height="100%" fill="#777"></rect>
+                        <text x="50%" y="50%" fill="#777" dy=".3em"></text>
+                    </svg>
+
+                    <div class="container">
+                        <div class="carousel-caption text-right">
+                            <h1>往期公告.</h1>
+                            <p>点此查看往期公告.</p>
+                            <p><a class="btn btn-lg btn-primary" href="#">更多内容</a></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+            <button class="carousel-control-prev" type="button" data-target="#myCarousel" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-target="#myCarousel" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </button>
+        </div>
 
-        <div class="album py-3 bg-light">
-            <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5">
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 src="{{ url_for('static',filename='images/index/UF20.png') }}"
-                                 alt="UF20集中交易系统">
-                            <div class="card-body">
-                                <b><p class="card-title">UF20集中交易系统</p></b>
-                                <p class="card-text">UF20集中交易系统：用于经纪客户账户、交易、清算管理，覆盖股基债交易与非交易，
-                                    融资融券、转融通、个股期权、产品销售等功能</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.uf20') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary">UF20</strong>
+                        <h3 class="mb-0">集中交易系统</h3>
+                        <div class="mb-1 text-muted">最新更新：20220202</div>
+                        <p class="card-text mb-auto">UF20集中交易系统：用于经纪客户账户、交易、清算管理，覆盖股基债交易与非交易，
+                            融资融券、转融通、个股期权、产品销售等功能</p>
+                        <a href="{{ url_for('home.uf20') }}" class="stretched-link">更多内容</a>
                     </div>
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 style="object-fit: cover"
-                                 src="{{ url_for('static',filename='images/index/BOP.png') }}"
-                                 alt="BOP集中业务运营管理平台">
-                            <div class="card-body">
-                                <b><p class="card-title">BOP集中业务运营管理平台</p></b>
-                                <p class="card-text">BOP集中业务运营管理平台：主要用于开户、权限变更等经纪业务的集中受理、审核</p><br><br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.bop') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img class="bd-placeholder-img card-img-bottom" width="200" height="250"
+                             src="{{ url_for('static',filename='images/index/UF20.png') }}"
+                             alt="UF20集中交易系统" style="border-style:none">
                     </div>
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 style="object-fit: cover"
-                                 src="{{ url_for('static',filename='images/index/O32.png') }}"
-                                 alt="O32投资交易系统">
-                            <div class="card-body">
-                                <b><p class="card-title">O32投资交易系统</p></b>
-                                <p class="card-text">O32投资交易系统：主要用于自营与资管部门的资产管理、交易管理、清算管理、
-                                    报表查询，覆盖股基债交易与非交易，个股期权、大宗交易等功能</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.o32') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Other</strong>
+                        <h3 class="mb-0">交易系统研发中心其他系统</h3>
+                        <div class="mb-1 text-muted">最新更新：20220304</div>
+                        <p class="mb-auto">交易系统研发中心其他系统：极速交易系统、O32包括投资系统、BOP集中业务运营管理平台、恒生PB系统、
+                            法人清算系统、基金登记过户系统等等.</p>
+                        <a href="#" class="stretched-link">更多内容</a>
                     </div>
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 style="object-fit: cover"
-                                 src="{{ url_for('static',filename='images/index/HSPB.png') }}"
-                                 alt="恒生PB系统">
-                            <div class="card-body">
-                                <b><p class="card-title">恒生PB系统</p></b>
-                                <p class="card-text">恒生PB系统：本系统主要为机构投资者提供二级市场各类业务交易、风控、清算功能</p><br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.hspb') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 法人清算系统"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>法人清算系统</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">法人清算系统</text>
-                            </svg>
+                    <div class="col-auto d-none d-lg-block">
+                        <img class="bd-placeholder-img card-img-bottom" width="200" height="250"
+                             src="{{ url_for('static',filename='images/index/other_sys.png') }}"
+                             alt="其他系统" style="border-style:none">
 
-                            <div class="card-body">
-                                <b><p class="card-title">法人清算系统</p></b>
-                                <p class="card-text">法人清算系统：支持各业务的法人清算、交收、资金管理和股份管理等功能</p><br>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.frqs') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-3 mt-2">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="220"
-                                 style="object-fit: cover"
-                                 src="{{ url_for('static',filename='images/index/TA.png') }}"
-                                 alt="基金登记过户系统">
-                            <div class="card-body">
-                                <b><p class="card-title">基金登记过户系统</p></b>
-                                <p class="card-text">基金登记过户系统：包含资管、场外与外包TA系统（含分TA），主要为资管、场外、外包产
-                                    品提供账户登记产品管理功能</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a
-                                                href="{{ url_for('bs.ta') }}"
-                                                class="text-muted">了解详情</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <main role="main" class="container col-10">
+        <div class="row">
+            <div class="col-md-8 blog-main">
+                <h3 class="pb-4 mb-4 font-italic border-bottom">
+                    功能大全
+                </h3>
+                <div class="row">
+                    <div class="col-lg-6 text-center mt-4">
+                        <img class="rounded-circle"
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                             alt="Generic placeholder image" width="240" height="140">
+                        <h2>监管更新汇总</h2>
+                        <p>本功能页监控各监管机构更新，集中展示最近半年内或者最新10条的更新内容.</p>
+                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                    </div>
+                    <div class="col-lg-6 text-center mt-4">
+                        <img class="rounded-circle"
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                             alt="Generic placeholder image" width="240" height="140">
+                        <h2>办公协作申请</h2>
+                        <p>本功能用于向交易系统研发中心特定人员发起小型、无邮件或者OA记录的办公协作申请，包括权限开通、数据提供、知识问答等.</p>
+                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                    </div>
+                    <div class="col-lg-6 text-center mt-4">
+                        <img class="rounded-circle"
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                             alt="Generic placeholder image" width="240" height="140">
+                        <h2>中心下载汇总</h2>
+                        <p>包括但不限于：各个系统测试环境安装包、使用手册、开发商提供的调试软件、交易系统研发中心自行开发的相关程序.</p>
+                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                    </div>
+                    <div class="col-lg-6 text-center mt-4">
+                        <img class="rounded-circle"
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                             alt="Generic placeholder image" width="240" height="140">
+                        <h2>其他信息查询</h2>
+                        <p>提供除系统强相关信息外的查询，包括但不限于：测试测试环境软硬件信息、各个系统负责人信息等.</p>
+                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                    </div>
+                </div>
+            </div><!-- main -->
+
+            <aside class="col-md-4 blog-sidebar">
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4 class="font-italic">关于本站</h4>
+                    <p class="mb-0">本站为金融科技部-交易系统研发中心对外信息提供出口，提供且不限于以下内容：各系统表结构、数据接口
+                        、测试环境信息、客户端、专用工具、交易所文档等.</p>
+                </div>
+
+                <div class="p-4">
+                    <h4 class="font-italic">文章时间汇总</h4>
+                    <ol class="list-unstyled mb-0">
+                        <li><a href="#">2022</a></li>
+                        <li><a href="#">2021</a></li>
+                    </ol>
+                </div>
+
+                <div class="p-4">
+                    <h4 class="font-italic">外部监管链接</h4>
+                    <ol class="list-unstyled">
+                        <li><a href="http://www.sse.com.cn/">上交所</a></li>
+                        <li><a href="http://www.szse.cn/">深交所</a></li>
+                        <li><a href="http://www.cffex.com.cn/">中金所</a></li>
+                        <li><a href="http://www.dce.com.cn/">大商所</a></li>
+                        <li><a href="http://www.czce.com.cn/">郑商所</a></li>
+                        <li><a href="http://www.shfe.com.cn/">上期所</a></li>
+                        <li><a href="https://www.chinabond.com.cn/">中债登</a></li>
+                        <li><a href="https://www.shclearing.com/">上清所</a></li>
+                        <li><a href="http://www.chinaclear.cn/">中国结算</a></li>
+                    </ol>
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
 
     </body>
 

@@ -1,6 +1,13 @@
 {% extends "common/common_sidebar.html" %}
 {% block content_sidebar %}
-
+    <head>
+        <style>
+            .table > tbody > tr > td {
+                /*border: 0px;*/
+                vertical-align: middle;
+            }
+        </style>
+    </head>
     <div class="container-fluid">
         <p class="alert-success">
             {% for msg in get_flashed_messages(category_filter=["ifupload_success"]) %}
@@ -24,13 +31,13 @@
         </p>
         {% for sys in g.bs %}
             <p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
-            <table class="table table-striped table-hover table-bordered">
-                <thead>
+            <table class="table table-hover ">
+                <thead class="thead-light">
                 <tr>
                     <th scope="col" class="fst-italic">接口文件</th>
                     <th scope="col" class="fst-italic">版本</th>
                     <th scope="col" class="fst-italic">上传时间</th>
-                    <th scope="col" class="fst-italic">文件下载</th>
+                    <th scope="col" class="fst-italic">接口文件下载</th>
                     <th scope="col" class="fst-italic">文件删除</th>
                 </tr>
                 </thead>
@@ -41,8 +48,10 @@
                             <td>{{ item.file_name }}</td>
                             <td>{{ item.version }}</td>
                             <td>{{ item.upload_time }}</td>
-                            <td><a href="{{ url_for('bs.ifDownload', file_path=item.file_path) }}">点击下载</a></td>
-                            <td><a href="{{ url_for('bs.ifDelete', sys_id=item.id) }}">点击删除</a></td>
+                            <td><a class="btn btn-outline-primary btn-sm"
+                                   href="{{ url_for('bs.ifDownload', file_path=item.file_path) }}">点击下载</a></td>
+                            <td><a class="btn btn-danger btn-sm" href="{{ url_for('bs.ifDelete', sys_id=item.id) }}">点击删除</a>
+                            </td>
                         </tr>
                     {% endif %}
                 {% endfor %}

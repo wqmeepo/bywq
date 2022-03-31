@@ -2,6 +2,14 @@
 {% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
+        <head>
+            <style>
+                .table > tbody > tr > td {
+                    /*border: 0px;*/
+                    vertical-align: middle;
+                }
+            </style>
+        </head>
     </head>
     <body>
 
@@ -20,12 +28,12 @@
         </div>
 
         <!-- 表格展示 -->
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
+        <table class="table table-hover">
+            <thead class="thead-light">
             <tr>
                 <th scope="col">系统</th>
-                <th scope="col">文件下载</th>
-                <th scope="col">数据库信息搜索</th>
+                <th scope="col">数据库文件下载</th>
+                <th scope="col">数据库搜索</th>
             </tr>
             </thead>
             <tbody>
@@ -40,16 +48,16 @@
 
             {% for i in g.bs %}
                 {% if i.sys_no in list_sys %}
-                    <tr class="table-success">
+                    <tr>
                         <td>{{ i.sys_name }}</td>
-                        <td><a href="{{ url_for('bs.dfDownload', file_path=list_path[loop.index0]) }}">点击下载</a></td>
-                        <td><a href="{{ url_for('bs.dfSearch') }}">点击搜索</a></td>
+                        <td><a class="btn btn-outline-primary btn-sm" href="{{ url_for('bs.dfDownload', file_path=list_path[loop.index0]) }}">点击下载</a></td>
+                        <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('bs.dfSearch') }}">数据库搜索</a></td>
                     </tr>
 
                 {% else %}
                     <tr>
                         <td>{{ i.sys_name }}</td>
-                        <td>不可下载</td>
+                        <td>无文件下载</td>
                         <td>不可搜索</td>
                     </tr>
                 {% endif %}
