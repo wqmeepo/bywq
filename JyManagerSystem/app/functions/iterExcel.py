@@ -1,5 +1,5 @@
 import xlrd
-from app.models import *
+from app.models import InterfaceFuncInfo
 
 
 def siHardExcelPreview(file_path):
@@ -24,3 +24,9 @@ def siSoftExcelPreview(file_path):
 
 def uf20InterfaceFileParse(file_path):
     df = xlrd.open_workbook(file_path)
+    df_func_list = df.sheet_by_name('功能列表')
+    for i in range(1, df_func_list.nrows):
+        data = df_func_list.row_values(i)
+        interface_func_Info = InterfaceFuncInfo(
+            
+        )
