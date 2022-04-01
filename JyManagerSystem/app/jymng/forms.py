@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, TextField
+from wtforms import StringField, SubmitField, SelectField
 from flask_ckeditor import CKEditorField
 from wtforms.validators import DataRequired, ValidationError
-from flask_wtf.file import FileField, FileRequired, FileAllowed
+from app.models import AnnounceInfo, AnnounceType
 
 
 class AnnounceForm(FlaskForm):
@@ -78,6 +78,16 @@ class AnnounceForm(FlaskForm):
             'class': "w-100 btn btn-lg btn-primary col-2 mt-3 mb-4",
         }
     )
+
+    @staticmethod
+    def validate_announce_head(self, filed):
+        '''
+        if announce_head is exist,raise exception
+        '''
+        announce_head = filed.data
+        user = AnnounceInfo.query.filter_by(announce_head=announce_head).count()
+        if user >= 1:
+            raise ValidationError('该用公告已存在')
 
 
 class AnnounceEditForm(FlaskForm):
@@ -188,3 +198,13 @@ class AnnounceTypeForm(FlaskForm):
             'class': "w-100 btn btn-lg btn-primary",
         }
     )
+
+    @staticmethod
+    def validate_announce_type(self, filed):
+        '''
+        if announce_head is exist,raise exception
+        '''
+        announce_type = filed.data
+        user = AnnounceType.query.filter_by(announce_type=announce_type).count()
+        if user >= 1:
+            raise ValidationError('该用公告类型已存在')

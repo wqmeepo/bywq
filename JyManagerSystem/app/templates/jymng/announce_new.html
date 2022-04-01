@@ -30,6 +30,9 @@
                     </div>
                     <div class="mb-3 mt-2 col-4">
                         {{ form.announce_head }}
+                        {% for err in form.announce_head.errors %}
+                            <span class="alert-danger">{{ err }}</span>
+                        {% endfor %}
                     </div>
                     <div class="mb-3 mt-2 col-2">
                         <input class="custom-select text-info" id="publisher" name="publisher" placeholder="发布人"

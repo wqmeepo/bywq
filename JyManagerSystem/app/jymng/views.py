@@ -146,3 +146,11 @@ def announceClickToTop(sys_id):
     AnnounceInfo.query.get(sys_id).upload_time = time_now
     db.session.commit()
     return redirect(url_for('jymng.announceMng'))
+
+
+#   jy=交易系统研发中心，公告预览
+@jymng.route('/announcepreview/<sys_id>', methods=['GET', 'POST'])
+@userLogin
+def announcePreview(sys_id):
+    announce_info = AnnounceInfo.query.get(sys_id).announce_body
+    return announce_info

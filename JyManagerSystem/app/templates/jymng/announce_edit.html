@@ -43,6 +43,11 @@
         </form>
         <script src="{{ url_for('static', filename='home/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
         {{ ckeditor.config(name='announce_body') }}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".announcemng").addClass("list-group-item list-group-item-action");
+            });
+        </script>
     </div>
 
 {% endblock %}

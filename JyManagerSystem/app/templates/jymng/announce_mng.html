@@ -6,6 +6,10 @@
                 /*border: 0px;*/
                 vertical-align: middle;
             }
+
+            .modal-dialog {
+                max-width: 100%;
+            }
         </style>
     </head>
 
@@ -50,12 +54,13 @@
             {% endif %}
         {% endfor %}
         {% if list1|length > 0 %}
+            <hr>
             <p>对内公告</p>
             <table class="table table-hover">
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">公告类型</th>
-                    <th scope="col">公告名称</th>
+                    <th scope="col">公告名称(点击预览)</th>
                     <th scope="col">公告发表人</th>
                     <th scope="col">公告发表时间</th>
                     <th scope="col">编辑</th>
@@ -67,12 +72,17 @@
                 {% for item in list1 %}
                     <tr>
                         <td>{{ item.announce_type }}</td>
-                        <td>{{ item.announce_head }}</td>
+                        <td><a id="modal-1" href="#modal-container-1" role="button"
+                               data-toggle="modal"
+                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a class="btn btn-outline-primary btn-sm" href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
-                        <td><a class="btn btn-danger btn-sm" href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
-                        <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
+                        <td><a class="btn btn-outline-primary btn-sm"
+                               href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
+                        <td><a class="btn btn-danger btn-sm"
+                               href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
+                        <td><a class="btn btn-outline-success btn-sm"
+                               href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -97,12 +107,17 @@
                 {% for item in list2 %}
                     <tr>
                         <td>{{ item.announce_type }}</td>
-                        <td>{{ item.announce_head }}</td>
+                        <td><a id="modal-1" href="#modal-container-1" role="button"
+                               data-toggle="modal"
+                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a class="btn btn-outline-primary btn-sm" href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
-                        <td><a class="btn btn-danger btn-sm" href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
-                        <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
+                        <td><a class="btn btn-outline-primary btn-sm"
+                               href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
+                        <td><a class="btn btn-danger btn-sm"
+                               href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
+                        <td><a class="btn btn-outline-success btn-sm"
+                               href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -128,17 +143,46 @@
                 {% for item in list3 %}
                     <tr>
                         <td>{{ item.announce_type }}</td>
-                        <td>{{ item.announce_head }}</td>
+                        <td><a id="modal-1" href="#modal-container-1" role="button"
+                               data-toggle="modal"
+                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
-                        <td><a class="btn btn-outline-primary btn-sm" href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
-                        <td><a class="btn btn-danger btn-sm" href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
-                        <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
+                        <td><a class="btn btn-outline-primary btn-sm"
+                               href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
+                        <td><a class="btn btn-danger btn-sm"
+                               href="{{ url_for('jymng.announceDelete', sys_id=item.id) }}">删除</a></td>
+                        <td><a class="btn btn-outline-success btn-sm"
+                               href="{{ url_for('jymng.announceClickToTop', sys_id=item.id) }}">置顶</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         {% endif %}
+        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            公告预览
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function getPreview(sys_id) {
+                $(".modal-body").load("/jymng/announcepreview/" + sys_id);
+            }
+        </script>
     </div>
 
 {% endblock %}

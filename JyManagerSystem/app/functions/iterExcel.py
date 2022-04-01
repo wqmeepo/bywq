@@ -1,5 +1,5 @@
-import os
 import xlrd
+from app.models import *
 
 
 def siHardExcelPreview(file_path):
@@ -20,3 +20,7 @@ def siSoftExcelPreview(file_path):
         if len(sheet_jyyf.row_values(i)) - sheet_jyyf.row_values(i).count('') > 1:
             list_soft.append(sheet_jyyf.row_values(i))
     return list_soft
+
+
+def uf20InterfaceFileParse(file_path):
+    df = xlrd.open_workbook(file_path)

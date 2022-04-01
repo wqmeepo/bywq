@@ -50,7 +50,9 @@ def bsMapSet():
 @bs.route('/ifmng', methods=['GET', 'POST'])
 @userLogin
 def ifMng():
-    g.bs = BusinSysInfo.query.all()
+    g.bs = db.session.query().filter(BusinSysInfo.sys_no == InterfaceFile.sys_no).with_entities(BusinSysInfo.sys_no,
+                                                                                                BusinSysInfo.sys_name,
+                                                                                                BusinSysInfo.manager).distinct().all()
     g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
     return render_template('bs/if_mng.html')
 
@@ -157,6 +159,7 @@ def dfSearch():
 
 
 @bs.route('/querydictionary/<field_name>', methods=['GET', 'POST'])
+@userLogin
 def queryDictionary(field_name):
     print(field_name)
     query_dictionary_data = Dictionary.query.filter_by(field_name=field_name).all()

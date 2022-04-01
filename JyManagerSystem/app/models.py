@@ -73,6 +73,22 @@ class InterfaceFile(db.Model):
     version = db.Column(db.String(100), default='')
 
 
+#  接口文件字段信息表
+class InterfaceFuncInfo(db.Model):
+    __tablename__ = "interfacefuncinfo"
+    id = db.Column(db.Integer, primary_key=True)
+    file_path = db.Column(db.String(400), unique=True)
+    func_no = db.Column(db.String(12))
+    func_name = db.Column(db.String(50))
+    func_describe = db.Column(db.String(200))
+    func_no_old = db.Column(db.String(12))
+    func_range = db.Column(db.String(50))
+    product_range = db.Column(db.String(50))
+    func_status = db.Column(db.String(12))
+    func_return = db.Column(db.String(5))
+    hyperlink_position = db.Column(db.String(12))
+
+
 #  服务器硬件信息表
 class ServiceInfo(db.Model):
     __tablename__ = "serviceinfo"
@@ -92,7 +108,7 @@ class AnnounceInfo(db.Model):
     __tablename__ = "announceinfo"
     id = db.Column(db.Integer, primary_key=True)
     announce_type = db.Column(db.String(200))
-    announce_head = db.Column(db.String(200))
+    announce_head = db.Column(db.String(200), unique=True)
     announce_body = db.Column(db.Text)
     publisher = db.Column(db.String(40))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
@@ -103,7 +119,7 @@ class AnnounceInfo(db.Model):
 class AnnounceType(db.Model):
     __tablename__ = "announcetype"
     id = db.Column(db.Integer, primary_key=True)
-    announce_type = db.Column(db.String(40))
+    announce_type = db.Column(db.String(40), unique=True)
     announce_type_name = db.Column(db.String(400), nullable=True, default='')
 
 

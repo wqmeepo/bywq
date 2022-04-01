@@ -17,6 +17,9 @@
         <form method="post">
             <div class="mb-3 mt-2">
                 {{ form.announce_type }}
+                {% for err in form.announce_type.errors %}
+                    <span class="alert-danger">{{ err }}</span>
+                {% endfor %}
             </div>
             <div class="mb-3 mt-2">
                 {{ form.announce_type_name }}

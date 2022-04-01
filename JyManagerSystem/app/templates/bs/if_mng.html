@@ -30,7 +30,14 @@
         </div>
         </p>
         {% for sys in g.bs %}
-            <p class="fw-normal">所属系统 ： {{ sys.sys_name }}</p>
+            {% if 'UF20' in  sys.sys_name %}
+                <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} | <a class="btn btn-outline-success btn-sm"
+                                                                    href="#">接口搜索</a></p>
+                <p>系统管理员 ： {{ sys.manager }}</p>
+            {% else %}
+                <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} </p>
+                <p>系统管理员 ： {{ sys.manager }}</p>
+            {% endif %}
             <table class="table table-hover ">
                 <thead class="thead-light">
                 <tr>

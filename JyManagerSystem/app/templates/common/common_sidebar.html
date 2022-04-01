@@ -22,27 +22,27 @@
                                 <span>系统维护</span>
                             </h5>
                             <li class="nav-item">
-                                <a class="nav-link" id="bsmap" href="{{ url_for('bs.bsMap') }}">
+                                <a class="nav-link bsmap bsmapset" href="{{ url_for('bs.bsMap') }}">
                                     系统对应关系维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="ifmng" href="{{ url_for('bs.ifMng') }}">
+                                <a class="nav-link ifmng ifupload" href="{{ url_for('bs.ifMng') }}">
                                     系统接口维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="dfmng" href="{{ url_for('bs.dfMng') }}">
+                                <a class="nav-link dfmng dfsearch dfupload" href="{{ url_for('bs.dfMng') }}">
                                     数据库信息维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="simng" href="{{ url_for('bs.siMng') }}">
+                                <a class="nav-link simng siupload sipreview" href="{{ url_for('bs.siMng') }}">
                                     软硬件信息维护
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="usermng" href="#">
+                                <a class="nav-link usermng" href="#">
                                     人员维护
                                 </a>
                             </li>
@@ -63,7 +63,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="announcemng" href="{{ url_for('jymng.announceMng') }}">
+                                <a class="nav-link announcemng announceset announcetypeset"
+                                   href="{{ url_for('jymng.announceMng') }}">
                                     公告管理
                                 </a>
                             </li>
@@ -90,7 +91,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             let link_name = window.location.href.split('/').slice(-1);
-            $("#" + link_name).addClass("list-group-item list-group-item-action");
+            $("." + link_name).addClass("list-group-item list-group-item-action");
         });
     </script>
     </body>
