@@ -3,7 +3,7 @@ from app import db
 from manage import app
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
     IfFieldSearchForm
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo
+from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, AnnounceInfo
 from flask import render_template, url_for, redirect, flash, g, send_file, request
 from sqlalchemy import or_
 import os
@@ -17,9 +17,9 @@ from app.jymng.views import userLogin
 @bs.route('/')
 @userLogin
 def index():
-    pagination = TableInfo.query.paginate(1, 10)
-    item = pagination.items
-    return render_template('bs/bs_index.html')
+    announce_info = AnnounceInfo.query.filter(or_(AnnounceInfo.to_who == "1", AnnounceInfo.to_who == "3")).order_by(
+        AnnounceInfo.upload_time.desc()).limit(5).all()
+    return render_template('bs/bs_index.html', announce_info=announce_info)
 
 
 @bs.route('/bsmap')

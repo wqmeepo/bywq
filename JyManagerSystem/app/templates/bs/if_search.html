@@ -39,6 +39,7 @@
                 <th scope="col">老功能号</th>
                 <th scope="col">功能名称</th>
                 <th scope="col">功能描述</th>
+                <th scope="col">所在文件</th>
                 <th scope="col">业务范围</th>
                 <th scope="col">产品范围</th>
                 <th scope="col">功能状态</th>
@@ -56,6 +57,7 @@
                     <td>{{ item.func_no_old }}</td>
                     <td>{{ item.func_name }}</td>
                     <td>{{ item.func_describe }}</td>
+                    <td>{{ item.file_path.split('\\') | last }}</td>
                     <td>{{ item.func_range }}</td>
                     <td>{{ item.product_range }}</td>
                     <td>{{ item.func_status }}</td>

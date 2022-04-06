@@ -2,9 +2,63 @@
 {% block content_sidebar %}
     <head>
         <link href="{{ url_for('static',filename='home/css/carousel.css') }}" rel="stylesheet">
+        <style>
+            .table > tbody > tr > td {
+                /*border: 0px;*/
+                vertical-align: middle;
+            }
+
+            .modal-dialog {
+                max-width: 100%;
+            }
+        </style>
     </head>
     <div class="container-fluid mt-5">
         <h2>欢迎使用</h2>
+        <br>
+        <p class="lead container-fluid justify-content-start text-left">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-soundwave"
+                 viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            交易系统研发中心对内公告
+        </p>
+        <ul class="table">
+            {% for item in announce_info %}
+                <li class="text-left"><a id="modal-1" href="#modal-container-1" role="button"
+                                         data-toggle="modal"
+                                         onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></li>
+            {% endfor %}
+            <li class="text-left"><a href="#">点此查看往期公告.</a></li>
+        </ul>
+        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            公告预览
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="lead container-fluid justify-content-start text-left">
+            其他待完善
+        </p>
+        <script type="text/javascript">
+            function getPreview(sys_id) {
+                $(".modal-body").load("/jymng/announcepreview/" + sys_id);
+            }
+        </script>
     </div>
 
 {% endblock %}

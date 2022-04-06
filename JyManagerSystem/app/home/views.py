@@ -1,7 +1,7 @@
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm
-from app.models import User, BusinSysInfo, InterfaceFile
+from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
@@ -9,6 +9,7 @@ import random
 import string
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
+from sqlalchemy import or_
 
 
 def rndColor():
@@ -41,7 +42,9 @@ def getVerifyCode():
 
 @home.route('/')
 def index():
-    return render_template('home/index.html')
+    announce_info = AnnounceInfo.query.filter(or_(AnnounceInfo.to_who == "2", AnnounceInfo.to_who == "3")).order_by(
+        AnnounceInfo.upload_time.desc()).limit(3).all()
+    return render_template('home/index.html', announce_info=announce_info)
 
 
 @home.route('/code')
@@ -149,6 +152,17 @@ def userModify():
 @home.route('/uf20')
 def uf20():
     return render_template('home/uf20.html')
+
+
+#   if=interface，mng=manage，接口上传后的管理界面
+@home.route('/ifmngout', methods=['GET', 'POST'])
+@userLogin
+def ifMngOut():
+    g.bs = db.session.query().filter(BusinSysInfo.sys_no == InterfaceFile.sys_no).with_entities(BusinSysInfo.sys_no,
+                                                                                                BusinSysInfo.sys_name,
+                                                                                                BusinSysInfo.manager).distinct().all()
+    g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
+    return render_template('home/if_mng_out.html')
 
 
 @home.route('/o32')
