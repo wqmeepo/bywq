@@ -256,3 +256,55 @@ class SiUploadForm(FlaskForm):
             'class': "w-100 btn btn-lg btn-primary",
         }
     )
+
+
+class IfFieldSearchForm(FlaskForm):
+    '''
+    维护接口文件信息，例如文件名称、保存路径，上传时间等
+    '''
+    chioce_list = [(x, y) for x in range(20)
+                   for y in range(20) if x == y]
+    select_sys = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'custom-select',
+        },
+        choices=chioce_list,
+        coerce=int
+    )
+
+    select_type = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'custom-select',
+            'aria-label': ".form-select-lg",
+        },
+        choices=[(1, '按功能号'), (2, '按功能号名')],
+        coerce=int
+    )
+
+    keyword = StringField(
+        label='搜索内容 ： ',
+        validators=[
+            DataRequired('请输入要搜索的内容')
+        ],
+        description='搜索内容',
+        render_kw={
+            "placeholder": "输入搜索内容",
+            "size": 38,
+            'class': 'custom-select',
+        }
+    )
+
+    submit = SubmitField(
+        '搜索',
+        render_kw={
+            'class': "w-100 btn  btn-primary col-2 height-control",
+        }
+    )

@@ -22,11 +22,13 @@ def siSoftExcelPreview(file_path):
     return list_soft
 
 
-def uf20InterfaceFileParse(file_path):
+def uf20InterfaceFileSearch(func_no, file_path):
+    list_interface_search = []
     df = xlrd.open_workbook(file_path)
-    df_func_list = df.sheet_by_name('功能列表')
-    for i in range(1, df_func_list.nrows):
-        data = df_func_list.row_values(i)
-        interface_func_Info = InterfaceFuncInfo(
-            
-        )
+    func_list = df.sheet_by_name('功能接口-全部')
+    func_position = int(InterfaceFuncInfo.query.filter_by(func_no=func_no).first().hyperlink_position)
+    for i in range(func_position, func_list.nrows):
+        if len(func_list.row_values(i)) == func_list.row_values(i).count(''):
+            break
+        list_interface_search.append(func_list.row_values(i)[1:])
+    return list_interface_search

@@ -1,13 +1,15 @@
 from app.bs import bs
 from app import db
 from manage import app
-from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary
+from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
+    IfFieldSearchForm
+from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo
 from flask import render_template, url_for, redirect, flash, g, send_file, request
 from sqlalchemy import or_
 import os
+import time
 import xlrd
-from app.functions.iterExcel import siHardExcelPreview, siSoftExcelPreview
+from app.functions.iterExcel import siHardExcelPreview, siSoftExcelPreview, uf20InterfaceFileSearch
 from app.jymng.views import userLogin
 
 
@@ -61,6 +63,28 @@ def ifMng():
 @bs.route('/ifupload', methods=['GET', 'POST'])
 @userLogin
 def ifUpload():
+    def uf20InterfaceFileParse(sys_no, file_path):
+        df = xlrd.open_workbook(file_path)
+        func_list = df.sheet_by_name('功能列表')
+        # hyperlink_map结果为所有有超链接的字段形成的字典{(x,y):'链接',}
+        for i, j in func_list.hyperlink_map.items():
+            data = func_list.row_values(i[0])
+            interface_func_Info = InterfaceFuncInfo(
+                sys_no=sys_no,
+                file_path=file_path,
+                func_no=data[1],
+                func_name=data[5],
+                func_describe=data[6],
+                func_no_old=data[2],
+                func_range=data[3],
+                product_range=data[4],
+                func_status=data[7],
+                func_return=data[8],
+                hyperlink_position=str(j.textmark.split('!C')[1])
+            )
+            db.session.add(interface_func_Info)
+            db.session.commit()
+
     g.bs = BusinSysInfo.query.all()  # 用于传到前端进行展示
     form = InterfaceFileForm()
     if form.validate_on_submit():
@@ -83,7 +107,7 @@ def ifUpload():
         try:
             #   保存文件
             f.save(save_path_file)
-            #   数据库写入
+            #   数据库写入(interfacefile表)
             interface_file = InterfaceFile(
                 sys_no=data['select'],
                 file_name=f.filename,
@@ -94,6 +118,10 @@ def ifUpload():
             db.session.commit()
         except:
             flash('接口文件上传失败', 'ifupload_error')
+        if 'uf2' in sys_select or 'UF2' in sys_select:
+            while not os.path.exists(save_path_file):
+                time.sleep(1)
+            uf20InterfaceFileParse(data['select'], save_path_file)
         flash('接口文件上传完成', 'ifupload_success')
         return redirect(url_for('bs.ifMng'))
     return render_template('bs/if_upload.html', form=form)
@@ -108,6 +136,39 @@ def ifDownload(file_path):
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
 
 
+# df=Database File，数据库信息检索
+@bs.route('/ifsearch', methods=['GET', 'POST'])
+@userLogin
+def ifSearch():
+    g.bs = BusinSysInfo.query.all()
+    form = IfFieldSearchForm()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = data['select_sys']
+        key_word = data['keyword']
+        select_type = data['select_type']
+        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if select_type == 1:
+            g.query_result_table = InterfaceFuncInfo.query.filter(
+                or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                    InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
+        elif select_type == 2:
+            g.query_result_field = InterfaceFuncInfo.query.filter(
+                or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                    InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
+        return render_template('bs/if_search.html', form=form)
+    return render_template('bs/if_search.html', form=form)
+
+
+#   ajax用，查询接口详细信息
+@bs.route('/if_func_query/<func_no>', methods=['GET', 'POST'])
+@userLogin
+def ifFuncQuery(func_no):
+    file_path = InterfaceFuncInfo.query.filter_by(func_no=func_no).first().file_path
+    data = uf20InterfaceFileSearch(func_no, file_path)
+    return render_template('bs/if_preview.html', data=data)
+
+
 #   删除接口文件与数据库信息
 @bs.route('/ifdelete/<sys_id>')
 @userLogin
@@ -116,6 +177,7 @@ def ifDelete(sys_id):
     try:
         #   删除数据库信息
         file_db = InterfaceFile.query.get(sys_id)
+        InterfaceFuncInfo.query.filter_by(file_path=file_path).delete()
         db.session.delete(file_db)
         db.session.commit()
         #   删除服务器文件
@@ -158,10 +220,10 @@ def dfSearch():
     return render_template('bs/df_search.html', form=form)
 
 
+# ajax用，查询字典字段信息
 @bs.route('/querydictionary/<field_name>', methods=['GET', 'POST'])
 @userLogin
 def queryDictionary(field_name):
-    print(field_name)
     query_dictionary_data = Dictionary.query.filter_by(field_name=field_name).all()
     if len(query_dictionary_data) == 0:
         return '<p>该字段没有数据字典信息</p>'

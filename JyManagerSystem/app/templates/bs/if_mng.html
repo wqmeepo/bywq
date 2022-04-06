@@ -32,7 +32,7 @@
         {% for sys in g.bs %}
             {% if 'UF20' in  sys.sys_name %}
                 <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} | <a class="btn btn-outline-success btn-sm"
-                                                                    href="#">接口搜索</a></p>
+                                                                        href="{{ url_for('bs.ifSearch') }}">接口搜索</a></p>
                 <p>系统管理员 ： {{ sys.manager }}</p>
             {% else %}
                 <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} </p>

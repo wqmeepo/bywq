@@ -77,9 +77,10 @@ class InterfaceFile(db.Model):
 class InterfaceFuncInfo(db.Model):
     __tablename__ = "interfacefuncinfo"
     id = db.Column(db.Integer, primary_key=True)
-    file_path = db.Column(db.String(400), unique=True)
-    func_no = db.Column(db.String(12))
-    func_name = db.Column(db.String(50))
+    sys_no = db.Column(db.String(10))
+    file_path = db.Column(db.String(400))
+    func_no = db.Column(db.String(12), index=True)
+    func_name = db.Column(db.String(50), index=True)
     func_describe = db.Column(db.String(200))
     func_no_old = db.Column(db.String(12))
     func_range = db.Column(db.String(50))

@@ -1,0 +1,12 @@
+<table class="table table-striped table-hover table-bordered table-responsive table-sm">
+    <tbody>
+    {% for row in data %}
+        <tr>
+            {% for item in row %}
+                <td>{{ item }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
