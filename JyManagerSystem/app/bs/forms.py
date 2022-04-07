@@ -260,7 +260,7 @@ class SiUploadForm(FlaskForm):
 
 class IfFieldSearchForm(FlaskForm):
     '''
-    维护接口文件信息，例如文件名称、保存路径，上传时间等
+    接口文件搜索
     '''
     chioce_list = [(x, y) for x in range(20)
                    for y in range(20) if x == y]

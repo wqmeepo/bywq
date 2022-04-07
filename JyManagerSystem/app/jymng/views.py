@@ -10,13 +10,13 @@ from functools import wraps
 
 
 # 登录验证装饰器
-def userLogin(f):
+def jyUserLogin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             return redirect(url_for('home.login'))
         if session.get('department') != '交易系统研发中心':
-            return '您无此权限'
+            return '您无此权限,请联系交易系统研发中心同事'
         return f(*args, **kwargs)
 
     return decorated_function
@@ -24,7 +24,7 @@ def userLogin(f):
 
 #   jy=交易系统研发中心，该view管理研发中心的公告、知识分享、监管信息等信息
 @jymng.route('/announcemng')
-@userLogin
+@jyUserLogin
 def announceMng():
     g.ano = AnnounceInfo.query.order_by(AnnounceInfo.upload_time.desc()).all()
     return render_template('jymng/announce_mng.html')
@@ -32,7 +32,7 @@ def announceMng():
 
 #   jy=交易系统研发中心，新建公告
 @jymng.route('/announceset', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def announceSet():
     g.ano_type = AnnounceType.query.all()
     form = AnnounceForm()
@@ -55,7 +55,7 @@ def announceSet():
 
 #   jy=交易系统研发中心，新建公告类别
 @jymng.route('/announcetypeset', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def announceTypeSet():
     form = AnnounceTypeForm()
     if form.validate_on_submit():
@@ -78,7 +78,7 @@ def announceTypeSet():
 
 
 @jymng.route('/files/<path:filename>')
-@userLogin
+@jyUserLogin
 def uploaded_files(filename):
     from manage import app
     path = os.path.join(app.root_path, 'storages', 'ckeditor_uploads')
@@ -86,7 +86,7 @@ def uploaded_files(filename):
 
 
 @jymng.route('/upload', methods=['POST'])
-@userLogin
+@jyUserLogin
 def upload():
     from manage import app
     f = request.files.get('upload')  # 获取上传图片文件对象
@@ -104,7 +104,7 @@ def upload():
 
 #   删除公告数据库信息
 @jymng.route('/announcedelete/<sys_id>')
-@userLogin
+@jyUserLogin
 def announceDelete(sys_id):
     try:
         #   删除数据库信息
@@ -119,7 +119,7 @@ def announceDelete(sys_id):
 
 #   jy=交易系统研发中心，编辑公告类别
 @jymng.route('/announceedit/<sys_id>', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def announceEdit(sys_id):
     g.ano_type = AnnounceType.query.all()
     ano_info = AnnounceInfo.query.get(sys_id)
@@ -140,7 +140,7 @@ def announceEdit(sys_id):
 
 #   jy=交易系统研发中心，置顶功能
 @jymng.route('/announceclicktotop/<sys_id>', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def announceClickToTop(sys_id):
     time_now = datetime.datetime.now()
     AnnounceInfo.query.get(sys_id).upload_time = time_now
@@ -150,7 +150,7 @@ def announceClickToTop(sys_id):
 
 #   jy=交易系统研发中心，公告预览
 @jymng.route('/announcepreview/<sys_id>', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def announcePreview(sys_id):
     announce_info = AnnounceInfo.query.get(sys_id).announce_body
     return announce_info

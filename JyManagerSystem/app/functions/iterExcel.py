@@ -28,7 +28,7 @@ def uf20InterfaceFileSearch(func_no, file_path):
     func_list = df.sheet_by_name('功能接口-全部')
     func_position = int(InterfaceFuncInfo.query.filter_by(func_no=func_no).first().hyperlink_position)
     for i in range(func_position, func_list.nrows):
-        if len(func_list.row_values(i)) == func_list.row_values(i).count(''):
+        if '修改记录' in func_list.row_values(i) or len(func_list.row_values(i)) == func_list.row_values(i).count(''):
             break
         list_interface_search.append(func_list.row_values(i)[1:])
     return list_interface_search

@@ -1,28 +1,26 @@
-{% extends "common/common_sidebar.html" %}
-{% block content_sidebar %}
+{% extends "common/common.html" %}
+{% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
         <style>
             .modal-dialog {
-                max-width: 800px;
+                max-width: 70%;
             }
         </style>
     </head>
     <body>
 
     <div class="container-fluid mt-3">
-        <div class="mb-3">
-            <p class="lead container col-12">数据库信息搜索</p>
+        <div class="position-relative overflow-hidden p-3 p-md-3 m-md-5 text-center bg-light">
+            <div class="col-md-5 p-lg-3 mx-auto my-5">
+                <h1 class="display-4 fw-normal">接口信息搜索</h1>
+                <p class="lead fw-normal">本界面提供UF20相关接口信息查询，支持模糊查询接口功能号与功能号名称，以及对应的功能号详细信息....</p>
+            </div>
+            <div class="product-device shadow-sm d-none d-md-block"></div>
+            <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
         </div>
         <!-- 搜索 -->
         <form method="post" class="col-auto form-inline my-2 my-lg-0 justify-content-center">
-            <select id='select_sys' name="select_sys" class="custom-select"
-                    aria-label=".form-select-lg" required>
-                <option selected="">选择系统</option>
-                {% for sys in g.bs %}
-                    <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
-                {% endfor %}
-            </select>
             {{ form.select_type }}
             {{ form.keyword }}
             {{ form.csrf_token }}
@@ -34,13 +32,16 @@
             <thead>
             <tr>
                 <th scope="col">序号</th>
-                <th scope="col">系统名称</th>
-                <th scope="col">表名</th>
-                <th scope="col">表描述</th>
-                <th scope="col">字段名</th>
-                <th scope="col">字段描述</th>
-                <th scope="col">所属子系统</th>
-                <th scope="col">所属数据库</th>
+                <th scope="col">系统名</th>
+                <th scope="col">功能号</th>
+                <th scope="col">老功能号</th>
+                <th scope="col">功能名称</th>
+                <th scope="col">功能描述</th>
+                <th scope="col">所在文件</th>
+                <th scope="col">业务范围</th>
+                <th scope="col">产品范围</th>
+                <th scope="col">功能状态</th>
+                <th scope="col">结果集返回</th>
             </tr>
             </thead>
             <tbody>
@@ -48,14 +49,17 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ g.sys_name.sys_name }}</td>
-                    <td>{{ item.table_name }}</td>
-                    <td>{{ item.table_describe }}</td>
                     <td><a id="modal-1" href="#modal-container-1" role="button"
-                           data-toggle="modal" onclick="getDictionary($(this).text())">{{ item.field_name }}</a>
+                           data-toggle="modal" onclick="getDictionary($(this).text())">{{ item.func_no }}</a>
                     </td>
-                    <td>{{ item.field_describe }}</td>
-                    <td>{{ item.sheet_name }}</td>
-                    <td>{{ item.db_name }}</td>
+                    <td>{{ item.func_no_old }}</td>
+                    <td>{{ item.func_name }}</td>
+                    <td>{{ item.func_describe }}</td>
+                    <td>{{ item.file_path.split('\\') | last }}</td>
+                    <td>{{ item.func_range }}</td>
+                    <td>{{ item.product_range }}</td>
+                    <td>{{ item.func_status }}</td>
+                    <td>{{ item.func_return }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -66,7 +70,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">
-                            字段数据字典信息
+                            功能号详细信息
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
@@ -81,8 +85,8 @@
         </div>
     </div>
     <script type="text/javascript">
-        function getDictionary(field_name) {
-            $(".modal-body").load("/bs/querydictionary/" + field_name)
+        function getDictionary(func_no) {
+            $(".modal-body").load("/bs/if_func_query/" + func_no)
         }
     </script>
     </body>

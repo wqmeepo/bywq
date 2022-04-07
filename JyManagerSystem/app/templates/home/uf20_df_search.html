@@ -1,5 +1,5 @@
-{% extends "common/common_sidebar.html" %}
-{% block content_sidebar %}
+{% extends "common/common.html" %}
+{% block content %}
     <head>
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
         <style>
@@ -11,18 +11,16 @@
     <body>
 
     <div class="container-fluid mt-3">
-        <div class="mb-3">
-            <p class="lead container col-12">数据库信息搜索</p>
+        <div class="position-relative overflow-hidden p-3 p-md-3 m-md-5 text-center bg-light">
+            <div class="col-md-5 p-lg-3 mx-auto my-5">
+                <h1 class="display-4 fw-normal">UF20数据库检索</h1>
+                <p class="lead fw-normal">本菜单提供UF20数据库表结构查询功能，支持模糊查询表名/表中文名/字段名/字段中文名，以及字段对应数据字典信息...</p>
+            </div>
+            <div class="product-device shadow-sm d-none d-md-block"></div>
+            <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
         </div>
         <!-- 搜索 -->
         <form method="post" class="col-auto form-inline my-2 my-lg-0 justify-content-center">
-            <select id='select_sys' name="select_sys" class="custom-select"
-                    aria-label=".form-select-lg" required>
-                <option selected="">选择系统</option>
-                {% for sys in g.bs %}
-                    <option value={{ sys.sys_no }}>{{ sys.sys_name }}</option>
-                {% endfor %}
-            </select>
             {{ form.select_type }}
             {{ form.keyword }}
             {{ form.csrf_token }}

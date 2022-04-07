@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Regexp, EqualTo, ValidationError, Length
+from wtforms import StringField, PasswordField, SubmitField, SelectField
+from wtforms.validators import DataRequired, EqualTo, ValidationError, Length
 from app.models import User
 
 
@@ -202,3 +202,79 @@ class ModifyForm(FlaskForm):
         user = User.query.get(int(user_id))
         if not user.check_password(old_password):
             raise ValidationError('原始密码错误！')
+
+
+class IfFieldSearchForm(FlaskForm):
+    '''
+    接口文件搜索
+    '''
+    select_type = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'custom-select',
+            'aria-label': ".form-select-lg",
+        },
+        choices=[(1, '按功能号'), (2, '按功能号名')],
+        coerce=int
+    )
+
+    keyword = StringField(
+        label='搜索内容 ： ',
+        validators=[
+            DataRequired('请输入要搜索的内容')
+        ],
+        description='搜索内容',
+        render_kw={
+            "placeholder": "输入搜索内容",
+            "size": 38,
+            'class': 'custom-select',
+        }
+    )
+
+    submit = SubmitField(
+        '搜索',
+        render_kw={
+            'class': "w-100 btn  btn-primary col-2 height-control",
+        }
+    )
+
+
+class DfFieldSearchForm(FlaskForm):
+    '''
+    数据库搜索
+    '''
+    select_type = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'custom-select',
+            'aria-label': ".form-select-lg",
+        },
+        choices=[(1, '搜表/表名'), (2, '搜字段/字段名')],
+        coerce=int
+    )
+
+    keyword = StringField(
+        label='搜索内容 ： ',
+        validators=[
+            DataRequired('请输入要搜索的内容')
+        ],
+        description='搜索内容',
+        render_kw={
+            "placeholder": "输入搜索内容",
+            "size": 38,
+            'class': 'custom-select',
+        }
+    )
+
+    submit = SubmitField(
+        '搜索',
+        render_kw={
+            'class': "w-100 btn  btn-primary col-2 height-control",
+        }
+    )

@@ -10,12 +10,13 @@ import os
 import time
 import xlrd
 from app.functions.iterExcel import siHardExcelPreview, siSoftExcelPreview, uf20InterfaceFileSearch
-from app.jymng.views import userLogin
+from app.jymng.views import jyUserLogin
+from app.home.views import userLogin
 
 
 #   bs=Business system，业务系统，该view管理所有业务系统相关页面
 @bs.route('/')
-@userLogin
+@jyUserLogin
 def index():
     announce_info = AnnounceInfo.query.filter(or_(AnnounceInfo.to_who == "1", AnnounceInfo.to_who == "3")).order_by(
         AnnounceInfo.upload_time.desc()).limit(5).all()
@@ -23,7 +24,7 @@ def index():
 
 
 @bs.route('/bsmap')
-@userLogin
+@jyUserLogin
 def bsMap():
     g.bs_query_data = BusinSysInfo.query.all()
     return render_template('bs/bs_map.html')
@@ -31,7 +32,7 @@ def bsMap():
 
 #   系统对应映射关系设置界面
 @bs.route('/bsmapset', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def bsMapSet():
     form = BusinSysInfoForm()
     if form.validate_on_submit():
@@ -50,7 +51,7 @@ def bsMapSet():
 
 #   if=interface，mng=manage，接口上传后的管理界面
 @bs.route('/ifmng', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def ifMng():
     g.bs = db.session.query().filter(BusinSysInfo.sys_no == InterfaceFile.sys_no).with_entities(BusinSysInfo.sys_no,
                                                                                                 BusinSysInfo.sys_name,
@@ -61,7 +62,7 @@ def ifMng():
 
 #   if=interface，接口文件上传界面
 @bs.route('/ifupload', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def ifUpload():
     def uf20InterfaceFileParse(sys_no, file_path):
         df = xlrd.open_workbook(file_path)
@@ -136,9 +137,9 @@ def ifDownload(file_path):
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
 
 
-# df=Database File，数据库信息检索
+# if=interface,接口信息搜索
 @bs.route('/ifsearch', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def ifSearch():
     g.bs = BusinSysInfo.query.all()
     form = IfFieldSearchForm()
@@ -149,11 +150,11 @@ def ifSearch():
         select_type = data['select_type']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if select_type == 1:
-            g.query_result_table = InterfaceFuncInfo.query.filter(
+            g.query_result = InterfaceFuncInfo.query.filter(
                 or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
                     InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
         elif select_type == 2:
-            g.query_result_field = InterfaceFuncInfo.query.filter(
+            g.query_result = InterfaceFuncInfo.query.filter(
                 or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
                     InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
         return render_template('bs/if_search.html', form=form)
@@ -171,7 +172,7 @@ def ifFuncQuery(func_no):
 
 #   删除接口文件与数据库信息
 @bs.route('/ifdelete/<sys_id>')
-@userLogin
+@jyUserLogin
 def ifDelete(sys_id):
     file_path = InterfaceFile.query.get(sys_id).file_path
     try:
@@ -189,7 +190,7 @@ def ifDelete(sys_id):
 
 # df=Database File，数据库文件上传解析后管理页面
 @bs.route('/dfmng', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def dfMng():
     g.bs = BusinSysInfo.query.all()
     #   group_by一下TableInfo表，因为这个表是按字段导入
@@ -200,7 +201,7 @@ def dfMng():
 
 # df=Database File，数据库信息检索
 @bs.route('/dfsearch', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def dfSearch():
     g.bs = BusinSysInfo.query.all()
     form = DfFieldSearchForm()
@@ -211,10 +212,10 @@ def dfSearch():
         key_word = data['keyword']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
-            g.query_result_table = TableInfo.query.filter(
+            g.query_result = TableInfo.query.filter(
                 or_(TableInfo.table_name.like(f"%{key_word}%"), TableInfo.table_describe.like(f"%{key_word}%"))).all()
         elif g.select_type == 2:
-            g.query_result_field = TableInfo.query.filter(
+            g.query_result = TableInfo.query.filter(
                 or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('bs/df_search.html', form=form)
     return render_template('bs/df_search.html', form=form)
@@ -233,7 +234,7 @@ def queryDictionary(field_name):
 
 # df=Database File，数据库文件上传，解析的页面
 @bs.route('/dfupload', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def dfUpload():
     #   针对UF20数据库excel文件的解析方法，支持覆盖导入（先删除，后插入）
     def uf20Parse(sys_no, save_path_file):
@@ -346,17 +347,17 @@ def dfDownload(file_path):
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
 
 
-#   si=sericeinfo，系统信息文件上传后的查看管理界面
+#   si=serviceinfo，系统信息文件上传后的查看管理界面
 @bs.route('/simng', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def siMng():
     g.si = ServiceInfo.query.order_by(ServiceInfo.upload_time.desc()).all()
     return render_template('bs/si_mng.html')
 
 
-#   si=sericeinfo，系统信息文件上传界面
+#   si=serviceinfo，系统信息文件上传界面
 @bs.route('/siupload', methods=['GET', 'POST'])
-@userLogin
+@jyUserLogin
 def siUpload():
     form = SiUploadForm()
     if form.validate_on_submit():
@@ -394,18 +395,18 @@ def siUpload():
     return render_template('bs/si_upload.html', form=form)
 
 
-#   下载接口文件
+#   si=serviceinfo，下载软硬件文件
 @bs.route('/sidownload/<file_path>')
-@userLogin
+@jyUserLogin
 def siDownload(file_path):
     #   接口文件下载 send_file方法
     file_name = file_path.rsplit('\\')[-1]
     return send_file(file_path, as_attachment=True, attachment_filename=file_name)
 
 
-#   删除接口文件与数据库信息
+#   si=serviceinfo，删除软硬件信息文件
 @bs.route('/sidelete/<sys_id>')
-@userLogin
+@jyUserLogin
 def siDelete(sys_id):
     file_path = ServiceInfo.query.get(sys_id).file_path
     try:
@@ -421,9 +422,9 @@ def siDelete(sys_id):
     return redirect(url_for('bs.siMng'))
 
 
-#   删除接口文件与数据库信息
+#   si=serviceinfo，解析excel并预览软硬件信息文件
 @bs.route('/sipreview/<sys_id>')
-@userLogin
+@jyUserLogin
 def siPreview(sys_id):
     service_type = ServiceInfo.query.get(sys_id).service_type
     if service_type == '1':

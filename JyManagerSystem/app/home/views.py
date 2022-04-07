@@ -1,7 +1,7 @@
 from app.home import home
 from app import db
-from app.home.forms import RegisterForm, LoginForm, ModifyForm
-from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo
+from app.home.forms import RegisterForm, LoginForm, ModifyForm, IfFieldSearchForm, DfFieldSearchForm
+from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo, InterfaceFuncInfo, TableInfo
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
@@ -38,6 +38,17 @@ def getVerifyCode():
     for item in range(4):
         draw.text((5 + random.randint(-3, 3) + 23 * item, 5 + random.randint(-3, 3)), code[item], rndColor(), font)
     return im, code
+
+
+# 登录装饰器
+def userLogin(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('home.login'))
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 
 @home.route('/')
@@ -120,20 +131,9 @@ def logout():
     return redirect(url_for('home.index'))
 
 
-# 登录装饰器
-def userLogin(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect(url_for('home.login'))
-        return f(*args, **kwargs)
-
-    return decorated_function
-
-
 # 在线用户修改密码
-@userLogin
 @home.route('/usermodify/', methods=['GET', 'POST'])
+@userLogin
 def userModify():
     form = ModifyForm()
     if form.validate_on_submit():
@@ -150,50 +150,73 @@ def userModify():
 
 
 @home.route('/uf20')
+@userLogin
 def uf20():
     return render_template('home/uf20.html')
 
 
 #   if=interface，mng=manage，接口上传后的管理界面
-@home.route('/ifmngout', methods=['GET', 'POST'])
+@home.route('/uf20iffetch', methods=['GET', 'POST'])
 @userLogin
-def ifMngOut():
+def uf20IfFetch():
     g.bs = db.session.query().filter(BusinSysInfo.sys_no == InterfaceFile.sys_no).with_entities(BusinSysInfo.sys_no,
                                                                                                 BusinSysInfo.sys_name,
                                                                                                 BusinSysInfo.manager).distinct().all()
     g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
-    return render_template('home/if_mng_out.html')
+    return render_template('home/uf20_if_fetch.html')
 
 
-@home.route('/o32')
-def o32():
-    return render_template('home/o32.html')
-
-
-@home.route('/bop')
-def bop():
-    return render_template('home/bop.html')
-
-
-@home.route('/ta')
-def ta():
-    return render_template('home/ta.html')
-
-
-@home.route('/frqs')
-def frqs():
-    return render_template('home/frqs.html')
-
-
-@home.route('/hspb')
-def hspb():
-    return render_template('home/hspb.html')
-
-
-#   if=interface，接口上传后各个系统的查询界面
-@home.route('/iffetch', methods=['GET', 'POST'])
+# if=interface,接口信息搜索
+@home.route('/uf20ifsearch', methods=['GET', 'POST'])
 @userLogin
-def ifFetch():
-    g.bs = BusinSysInfo.query.all()  # 传到前端
-    g.interface = InterfaceFile.query.all()  # 传到前端
-    return render_template('home/if_fetch.html')
+def uf20IfSearch():
+    g.bs = BusinSysInfo.query.all()
+    form = IfFieldSearchForm()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = BusinSysInfo.query.filter(
+            or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
+                BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
+        key_word = data['keyword']
+        select_type = data['select_type']
+        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if select_type == 1:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                    InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
+        else:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                    InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
+        return render_template('home/uf20_if_search.html', form=form)
+    return render_template('home/uf20_if_search.html', form=form)
+
+
+# df=Database File，数据库信息检索
+@home.route('/uf20dfsearch', methods=['GET', 'POST'])
+@userLogin
+def uf20DfSearch():
+    g.bs = BusinSysInfo.query.all()
+    form = DfFieldSearchForm()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = BusinSysInfo.query.filter(
+            or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
+                BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
+        g.select_type = data['select_type']
+        key_word = data['keyword']
+        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if g.select_type == 1:
+            g.query_result = TableInfo.query.filter(
+                or_(TableInfo.table_name.like(f"%{key_word}%"), TableInfo.table_describe.like(f"%{key_word}%"))).all()
+        elif g.select_type == 2:
+            g.query_result = TableInfo.query.filter(
+                or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
+        return render_template('home/uf20_df_search.html', form=form)
+    return render_template('home/uf20_df_search.html', form=form)
+
+
+@home.route('/othersystem')
+@userLogin
+def otherSystem():
+    return render_template('home/other_system.html')
