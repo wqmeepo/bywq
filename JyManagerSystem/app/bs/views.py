@@ -1,10 +1,9 @@
 from app.bs import bs
 from app import db
-from manage import app
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
     IfFieldSearchForm
 from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, AnnounceInfo
-from flask import render_template, url_for, redirect, flash, g, send_file, request
+from flask import render_template, url_for, redirect, flash, g, send_file
 from sqlalchemy import or_
 import os
 import time
@@ -94,6 +93,7 @@ def ifUpload():
         #   获取映射系统名称
         sys_select = BusinSysInfo.query.filter_by(sys_no=data['select']).first().sys_name
         #   文件夹
+        from manage import app
         save_path = os.path.join(app.root_path, 'storages', 'InterfaceFile', sys_select, 'version-' + data['version'])
         #   文件绝对路径
         save_path_file = os.path.join(save_path, f.filename)
@@ -308,6 +308,7 @@ def dfUpload():
         sys_no = data['select']
         f = form.file.data
         sys_select = BusinSysInfo.query.filter_by(sys_no=sys_no).first().sys_name
+        from manage import app
         save_path = os.path.join(app.root_path, 'storages', 'DatabaseFile', sys_select)
         save_path_file = os.path.join(save_path, f.filename)
         if not os.path.exists(save_path):
@@ -364,6 +365,7 @@ def siUpload():
         data = form.data
         f = form.file.data  # 上传的文件
         #   文件夹
+        from manage import app
         save_path = os.path.join(app.root_path, 'storages', 'ServiceInfo', ('硬件信息', '系统信息')[data['select'] == 2],
                                  'version-' + data['version'])
         #   文件绝对路径
