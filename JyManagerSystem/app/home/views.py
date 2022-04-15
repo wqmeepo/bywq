@@ -1,7 +1,7 @@
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm, IfFieldSearchForm, DfFieldSearchForm
-from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo, InterfaceFuncInfo, TableInfo
+from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo, InterfaceFuncInfo, UF20TableInfo
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
@@ -117,8 +117,8 @@ def login():
             flash('密码错误！', 'err_login')
             return render_template('home/login.html', form=form)
         session['user_id'] = user.id
-        session['username'] = user.username
         session['department'] = user.department
+        session['realname'] = user.realname
         return redirect(url_for('home.index'))
     return render_template('home/login.html', form=form)
 
@@ -207,11 +207,11 @@ def uf20DfSearch():
         key_word = data['keyword']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
-            g.query_result = TableInfo.query.filter(
-                or_(TableInfo.table_name.like(f"%{key_word}%"), TableInfo.table_describe.like(f"%{key_word}%"))).all()
+            g.query_result = UF20TableInfo.query.filter(
+                or_(UF20TableInfo.table_name.like(f"%{key_word}%"), UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
         elif g.select_type == 2:
-            g.query_result = TableInfo.query.filter(
-                or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
+            g.query_result = UF20TableInfo.query.filter(
+                or_(UF20TableInfo.field_name.like(f"%{key_word}%"), UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('home/uf20_df_search.html', form=form)
     return render_template('home/uf20_df_search.html', form=form)
 

@@ -51,7 +51,7 @@
         <div class="col-auto text-muted" style="font-size: small">
 
             {% if "user_id" in session %}
-                {{ session.get('username') }}您好，欢迎使用本系统
+                {{ session.get('realname') }}您好，欢迎使用本系统
                 &nbsp; &nbsp;<a href="{{ url_for('home.userModify') }}">修改密码</a>&nbsp;&nbsp;
                 |&nbsp;&nbsp;<a href="{{ url_for('home.logout') }}">退出登录</a>
             {% else %}

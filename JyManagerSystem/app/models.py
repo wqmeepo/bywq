@@ -36,8 +36,8 @@ class Admin(db.Model):
 
 
 #  数据库字段表信息表
-class TableInfo(db.Model):
-    __tablename__ = "tableinfo"
+class UF20TableInfo(db.Model):
+    __tablename__ = "uf20tableinfo"
     id = db.Column(db.Integer, primary_key=True)
     table_name = db.Column(db.String(100), index=True)
     table_describe = db.Column(db.String(200), index=True)
@@ -81,10 +81,10 @@ class InterfaceFuncInfo(db.Model):
     file_path = db.Column(db.String(400))
     func_no = db.Column(db.String(12), index=True)
     func_name = db.Column(db.String(50), index=True)
-    func_describe = db.Column(db.String(200))
-    func_no_old = db.Column(db.String(12))
+    func_describe = db.Column(db.String(400))
+    func_no_old = db.Column(db.String(24))
     func_range = db.Column(db.String(50))
-    product_range = db.Column(db.String(50))
+    product_range = db.Column(db.String(100))
     func_status = db.Column(db.String(12))
     func_return = db.Column(db.String(5))
     hyperlink_position = db.Column(db.String(12))

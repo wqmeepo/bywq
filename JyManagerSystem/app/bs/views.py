@@ -2,7 +2,7 @@ from app.bs import bs
 from app import db
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
     IfFieldSearchForm
-from app.models import TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, AnnounceInfo
+from app.models import UF20TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, AnnounceInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
 from sqlalchemy import or_
 import os
@@ -194,8 +194,8 @@ def ifDelete(sys_id):
 def dfMng():
     g.bs = BusinSysInfo.query.all()
     #   group_by一下TableInfo表，因为这个表是按字段导入
-    g.df = TableInfo.query.with_entities(TableInfo.sys_no, TableInfo.file_path).group_by(TableInfo.sys_no,
-                                                                                         TableInfo.file_path).all()
+    g.df = UF20TableInfo.query.with_entities(UF20TableInfo.sys_no, UF20TableInfo.file_path).group_by(UF20TableInfo.sys_no,
+                                                                                                     UF20TableInfo.file_path).all()
     return render_template('bs/df_mng.html')
 
 
@@ -212,11 +212,11 @@ def dfSearch():
         key_word = data['keyword']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
-            g.query_result = TableInfo.query.filter(
-                or_(TableInfo.table_name.like(f"%{key_word}%"), TableInfo.table_describe.like(f"%{key_word}%"))).all()
+            g.query_result = UF20TableInfo.query.filter(
+                or_(UF20TableInfo.table_name.like(f"%{key_word}%"), UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
         elif g.select_type == 2:
-            g.query_result = TableInfo.query.filter(
-                or_(TableInfo.field_name.like(f"%{key_word}%"), TableInfo.field_describe.like(f"%{key_word}%"))).all()
+            g.query_result = UF20TableInfo.query.filter(
+                or_(UF20TableInfo.field_name.like(f"%{key_word}%"), UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('bs/df_search.html', form=form)
     return render_template('bs/df_search.html', form=form)
 
@@ -277,7 +277,7 @@ def dfUpload():
                     while k <= i + count:
                         if k + 1 > i + count:
                             break
-                        table_delete = TableInfo.query.filter_by(sys_no=sys_no, table_name=list_sheet[i + 2]).all()
+                        table_delete = UF20TableInfo.query.filter_by(sys_no=sys_no, table_name=list_sheet[i + 2]).all()
                         for each in table_delete:
                             db.session.delete(each)
                         k += 2
@@ -286,7 +286,7 @@ def dfUpload():
                     while j <= i + count:
                         if j + 1 > i + count:
                             break
-                        table_info = TableInfo(
+                        table_info = UF20TableInfo(
                             sys_no=sys_no,
                             file_path=save_path_file,
                             sheet_name=list_sheet[i + 1],
@@ -325,7 +325,7 @@ def dfUpload():
             return render_template('bs/df_upload.html', form=form)
         try:
             #   目前版本只支持UF20的数据库解析
-            if sys_select == 'UF20':
+            if 'UF20' in sys_select:
                 #   执行数据库解析，并导入数据库（如果数据库存在相关信息，先删除，后插入）
                 uf20Parse(sys_no, save_path_file)
             else:
