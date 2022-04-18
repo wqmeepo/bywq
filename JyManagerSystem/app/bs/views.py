@@ -2,7 +2,8 @@ from app.bs import bs
 from app import db
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
     IfFieldSearchForm
-from app.models import UF20TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, AnnounceInfo
+from app.models import UF20TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, \
+    AnnounceInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
 from sqlalchemy import or_
 import os
@@ -194,8 +195,9 @@ def ifDelete(sys_id):
 def dfMng():
     g.bs = BusinSysInfo.query.all()
     #   group_by一下TableInfo表，因为这个表是按字段导入
-    g.df = UF20TableInfo.query.with_entities(UF20TableInfo.sys_no, UF20TableInfo.file_path).group_by(UF20TableInfo.sys_no,
-                                                                                                     UF20TableInfo.file_path).all()
+    g.df = UF20TableInfo.query.with_entities(UF20TableInfo.sys_no, UF20TableInfo.file_path).group_by(
+        UF20TableInfo.sys_no,
+        UF20TableInfo.file_path).all()
     return render_template('bs/df_mng.html')
 
 
@@ -213,10 +215,12 @@ def dfSearch():
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
             g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.table_name.like(f"%{key_word}%"), UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
+                or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                    UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
         elif g.select_type == 2:
             g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.field_name.like(f"%{key_word}%"), UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
+                or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                    UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('bs/df_search.html', form=form)
     return render_template('bs/df_search.html', form=form)
 
@@ -439,3 +443,11 @@ def siPreview(sys_id):
         file_name = file_path.rsplit('\\')[-1]
         data = siSoftExcelPreview(file_path)
         return render_template('bs/si_preview.html', data=data, file_name=file_name, service_type=service_type)
+
+
+#   公告预览
+@bs.route('/announcepreview/<sys_id>', methods=['GET', 'POST'])
+@jyUserLogin
+def announcePreview(sys_id):
+    announce_info = AnnounceInfo.query.get(sys_id).announce_body
+    return announce_info

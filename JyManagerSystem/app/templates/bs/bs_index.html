@@ -9,7 +9,11 @@
             }
 
             .modal-dialog {
-                max-width: 100%;
+                max-width: max-content;
+            }
+
+            .modal-content {
+                width: auto;
             }
         </style>
     </head>
@@ -28,7 +32,8 @@
             {% for item in announce_info %}
                 <li class="text-left"><a id="modal-1" href="#modal-container-1" role="button"
                                          data-toggle="modal"
-                                         onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></li>
+                                         onclick="getPreview({{ item.id }},$(this).text())">{{ item.announce_head }}</a>
+                </li>
             {% endfor %}
             <li class="text-left"><a href="#">点此查看往期公告.</a></li>
         </ul>
@@ -55,8 +60,9 @@
             其他待完善
         </p>
         <script type="text/javascript">
-            function getPreview(sys_id) {
-                $(".modal-body").load("/jymng/announcepreview/" + sys_id);
+            function getPreview(sys_id, text) {
+                $(".modal-body").load("/bs/announcepreview/" + sys_id);
+                $(".modal-title").text(text);
             }
         </script>
     </div>

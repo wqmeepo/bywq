@@ -1,0 +1,66 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+    <head>
+        <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
+        <head>
+            <style>
+                .table > tbody > tr > td {
+                    /*border: 0px;*/
+                    vertical-align: middle;
+                }
+            </style>
+        </head>
+    </head>
+    <body>
+
+    <div class="container-fluid">
+        <p class="alert-success">
+            {% for msg in get_flashed_messages(category_filter=["usermng_success"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+        </p>
+        <p class="alert-danger">
+            {% for msg in get_flashed_messages(category_filter=["usermng_failed"]) %}
+
+                {{ msg }}
+
+            {% endfor %}
+        </p>
+        <p class="lead container col-3">人员管理</p>
+
+        <!-- 表格展示 -->
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">用户名</th>
+                <th scope="col">部门</th>
+                <th scope="col">员工姓名</th>
+                <th scope="col">注册时间</th>
+                <th scope="col">重置密码</th>
+                <th scope="col">冻结解冻</th>
+                <th scope="col">注销用户</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for i in user_info %}
+                <tr>
+                    <td>{{ i.username }}</td>
+                    <td>{{ i.department }}</td>
+                    <td>{{ i.realname }}</td>
+                    <td>{{ i.addtime }}</td>
+                    <td><a class="btn btn-outline-primary btn-sm"
+                           href="{{ url_for('jymng.userPswReset', sys_id=i.id) }}">重置</a></td>
+                    <td><a class="btn btn-outline-success btn-sm" href="#">冻结</a>
+                    <td><a class="btn btn-outline-danger btn-sm" href="#">注销</a>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    </body>
+
+{% endblock %}

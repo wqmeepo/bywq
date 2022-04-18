@@ -1,99 +1,98 @@
-{% extends "common/common.html" %}
-{% block content %}
-    <head>
-        <link href="{{ url_for('static',filename='home/css/sidebar.css') }}" rel="stylesheet">
+<!-- 头部开始 -->
+{% include "home/header.html" %}
+<!-- 底部结束 -->
+<head>
+    <link href="{{ url_for('static',filename='home/css/sidebar.css') }}" rel="stylesheet">
 
-    </head>
-    <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 col-lg-2">
-                <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
-                    <div class="sidebar-sticky pt-3">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-lg-2">
+            <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="sidebar-sticky pt-3">
 
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="{{ url_for('bs.index') }}">
-                                    <span data-feather="home"></span>
-                                    后台管理
-                                </a>
-                            </li>
-                            <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                                <span>系统维护</span>
-                            </h5>
-                            <li class="nav-item">
-                                <a class="nav-link bsmap bsmapset" href="{{ url_for('bs.bsMap') }}">
-                                    系统对应关系维护
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link ifmng ifupload ifsearch" href="{{ url_for('bs.ifMng') }}">
-                                    系统接口维护
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link dfmng dfsearch dfupload" href="{{ url_for('bs.dfMng') }}">
-                                    数据库信息维护
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link simng siupload sipreview" href="{{ url_for('bs.siMng') }}">
-                                    软硬件信息维护
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link usermng" href="#">
-                                    人员维护
-                                </a>
-                            </li>
-                        </ul>
-
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('bs.index') }}">
+                                <span data-feather="home"></span>
+                                后台管理
+                            </a>
+                        </li>
                         <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                            <span>研发中心管理</span>
+                            <span>系统维护</span>
                         </h5>
-                        <ul class="nav flex-column mb-2">
-                            <li class="nav-item">
-                                <a class="nav-link" id="pjmng" href="#">
-                                    项目看板
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="todo" href="#">
-                                    我的待办
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link announcemng announceset announcetypeset"
-                                   href="{{ url_for('jymng.announceMng') }}">
-                                    公告管理
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="publicshare" href="#">
-                                    公共知识管理
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="risknews" href="#">
-                                    监管信息管理
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
+                        <li class="nav-item">
+                            <a class="nav-link bsmap bsmapset" href="{{ url_for('bs.bsMap') }}">
+                                系统对应关系维护
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ifmng ifupload ifsearch" href="{{ url_for('bs.ifMng') }}">
+                                系统接口维护
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dfmng dfsearch dfupload" href="{{ url_for('bs.dfMng') }}">
+                                数据库信息维护
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link simng siupload sipreview" href="{{ url_for('bs.siMng') }}">
+                                软硬件信息维护
+                            </a>
+                        </li>
+                    </ul>
 
-            <div class="col-md-10 col-lg-10 text-center">
-                {% block content_sidebar %}{% endblock %}
-            </div>
+                    <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>研发中心管理</span>
+                    </h5>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" id="pjmng" href="#">
+                                项目看板
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="todo" href="#">
+                                我的待办
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link announcemng announceset announcetypeset"
+                               href="{{ url_for('jymng.announceMng') }}">
+                                公告管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="publicshare" href="#">
+                                公共知识管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="risknews" href="#">
+                                监管信息管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link usermng" href="{{ url_for('jymng.userMng') }}">
+                                人员管理
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-md-10 col-lg-10 text-center">
+            {% block content_sidebar %}{% endblock %}
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            let link_name = window.location.href.split('/').slice(-1);
-            $("." + link_name).addClass("list-group-item list-group-item-action");
-        });
-    </script>
-    </body>
-
-{% endblock %}
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let link_name = window.location.href.split('/').slice(-1);
+        $("." + link_name).addClass("list-group-item list-group-item-action");
+    });
+</script>
+</body>

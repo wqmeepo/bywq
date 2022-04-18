@@ -4,7 +4,11 @@
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
         <style>
             .modal-dialog {
-                max-width: 800px;
+                max-width: max-content;
+            }
+
+            .modal-content {
+                width: auto;
             }
         </style>
     </head>
@@ -80,7 +84,8 @@
     </div>
     <script type="text/javascript">
         function getDictionary(field_name) {
-            $(".modal-body").load("/bs/querydictionary/" + field_name)
+            $(".modal-body").load("/bs/querydictionary/" + field_name);
+            $(".modal-title").text('字段名：' + field_name);
         }
     </script>
     </body>

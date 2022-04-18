@@ -1,12 +1,13 @@
 import datetime
 from app.jymng import jymng
-from app.models import AnnounceInfo, AnnounceType
+from app.models import AnnounceInfo, AnnounceType, User
 from app.jymng.forms import AnnounceForm, AnnounceTypeForm, AnnounceEditForm
 from flask import g, render_template, url_for, redirect, flash, session, request, send_from_directory
 from app import db
 from flask_ckeditor import upload_fail, upload_success
 import os
 from functools import wraps
+from werkzeug.security import generate_password_hash
 
 
 # 登录验证装饰器
@@ -152,5 +153,27 @@ def announceClickToTop(sys_id):
 @jymng.route('/announcepreview/<sys_id>', methods=['GET', 'POST'])
 @jyUserLogin
 def announcePreview(sys_id):
-    announce_info = AnnounceInfo.query.get(sys_id).announce_body
-    return announce_info
+    announce_info = AnnounceInfo.query.get(sys_id)
+    return render_template('jymng/announce_preview.html', data=announce_info)
+
+
+#   jy=交易系统研发中心，人员管理
+@jymng.route('/usermng', methods=['GET', 'POST'])
+@jyUserLogin
+def userMng():
+    user_info = User.query.all()
+    return render_template('jymng/user_mng.html', user_info=user_info)
+
+
+#   jy=交易系统研发中心，人员管理
+@jymng.route('/userpwdreset/<sys_id>', methods=['GET', 'POST'])
+@jyUserLogin
+def userPswReset(sys_id):
+    try:
+        user = User.query.get(sys_id)
+        user.password = generate_password_hash('888888')
+        db.session.commit()
+        flash('密码重置成功', 'usermng_success')
+    except:
+        flash('密码重置失败', 'usermng_failed')
+    return redirect(url_for('jymng.userMng'))

@@ -4,12 +4,14 @@
         <link href="{{ url_for('static',filename='home/css/common.css') }}" rel="stylesheet">
         <style>
             .modal-dialog {
-                max-width: 70%;
+                max-width: max-content;
+            }
+            .modal-content {
+                width: auto;
             }
         </style>
     </head>
     <body>
-
     <div class="container-fluid mt-3">
         <div class="mb-3">
             <p class="lead container col-12">接口信息搜索</p>
@@ -88,9 +90,11 @@
     </div>
     <script type="text/javascript">
         function getDictionary(func_no) {
-            $(".modal-body").load("/bs/if_func_query/" + func_no)
+            $(".modal-body").load("/bs/if_func_query/" + func_no);
+            $(".modal-title").text('功能号：' + func_no);
         }
     </script>
+
     </body>
 
 {% endblock %}

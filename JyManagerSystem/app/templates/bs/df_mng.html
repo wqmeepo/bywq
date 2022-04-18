@@ -47,20 +47,17 @@
             {% endfor %}
 
             {% for i in g.bs %}
-                {% if i.sys_no in list_sys %}
-                    <tr>
-                        <td>{{ i.sys_name }}</td>
-                        <td><a class="btn btn-outline-primary btn-sm" href="{{ url_for('bs.dfDownload', file_path=list_path[loop.index0]) }}">点击下载</a></td>
-                        <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('bs.dfSearch') }}">数据库搜索</a></td>
-                    </tr>
-
-                {% else %}
-                    <tr>
-                        <td>{{ i.sys_name }}</td>
-                        <td>无文件下载</td>
-                        <td>不可搜索</td>
-                    </tr>
-                {% endif %}
+                {% for j in g.df %}
+                    {% if i.sys_no == j[0] %}
+                        <tr>
+                            <td>{{ i.sys_name }}</td>
+                            <td><a class="btn btn-outline-primary btn-sm"
+                                   href="{{ url_for('bs.dfDownload', file_path=j[1]) }}">点击下载</a></td>
+                            <td><a class="btn btn-outline-success btn-sm" href="{{ url_for('bs.dfSearch') }}">数据库搜索</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
             </tbody>
         </table>

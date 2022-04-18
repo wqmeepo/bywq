@@ -39,7 +39,8 @@
                                     <h1>公告{{ loop.index1 }} | {{ item.announce_type }}</h1>
                                     <p>{{ item.announce_head }}</p>
                                     <p><a class="btn btn-lg btn-primary"
-                                          href="{{ url_for('jymng.announcePreview', sys_id=item.id) }}">更多内容</a></p>
+                                          href="{{ url_for('jymng.announcePreview', sys_id=item.id) }}" target="_blank">更多内容</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
