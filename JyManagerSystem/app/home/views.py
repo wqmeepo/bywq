@@ -1,3 +1,5 @@
+import datetime
+
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm, IfFieldSearchForm, DfFieldSearchForm
@@ -58,6 +60,9 @@ def index():
     return render_template('home/index.html', announce_info=announce_info)
 
 
+# @home.app_template_filter()
+
+
 @home.route('/code')
 def getCode():
     image, code = getVerifyCode()
@@ -116,9 +121,18 @@ def login():
         if not user.check_password(data['password']):  # 校验密码
             flash('密码错误！', 'err_login')
             return render_template('home/login.html', form=form)
+        if user.user_status == '1':
+            flash('您的账户已被冻结，请联系系统管理员', 'err_login')
+            return render_template('home/login.html', form=form)
+        if user.user_status == '2':
+            flash('您的账户已被注销，请联系系统管理员', 'err_login')
+            return render_template('home/login.html', form=form)
         session['user_id'] = user.id
         session['department'] = user.department
         session['realname'] = user.realname
+        #   更新最近登录时间
+        user.last_login_time = datetime.datetime.now()
+        db.session.commit()
         return redirect(url_for('home.index'))
     return render_template('home/login.html', form=form)
 
@@ -138,13 +152,13 @@ def userModify():
     form = ModifyForm()
     if form.validate_on_submit():
         data = form.data
-        user = User.query.filter_by(username=session.get('username')).first()
+        user = User.query.filter_by(id=session.get('user_id')).first()
         if not user:
-            flash('已经注销', 'err_modify')
+            flash('您已经登出，请重新登录', 'err_modify')
             return redirect(url_for('home.login'))
         user.password = generate_password_hash(data['newpassword'])
         db.session.commit()
-        flash('修改完成！', 'info_modify')
+        flash('密码修改完成！', 'info_modify')
         return redirect(url_for('home.userModify'))
     return render_template('home/modify_password.html', form=form)
 
@@ -177,7 +191,7 @@ def uf20IfSearch():
         sys_no = BusinSysInfo.query.filter(
             or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
                 BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
-        key_word = data['keyword']
+        key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if select_type == 1:
@@ -204,14 +218,16 @@ def uf20DfSearch():
             or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
                 BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
         g.select_type = data['select_type']
-        key_word = data['keyword']
+        key_word = data['keyword'].strip(' ')
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
             g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.table_name.like(f"%{key_word}%"), UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
+                or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                    UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
         elif g.select_type == 2:
             g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.field_name.like(f"%{key_word}%"), UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
+                or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                    UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
         return render_template('home/uf20_df_search.html', form=form)
     return render_template('home/uf20_df_search.html', form=form)
 
@@ -220,3 +236,24 @@ def uf20DfSearch():
 @userLogin
 def otherSystem():
     return render_template('home/other_system.html')
+
+
+# 公告预览
+@home.route('/announcepreview/<sys_id>', methods=['GET', 'POST'])
+@userLogin
+def announcePreview(sys_id):
+    announce_info = AnnounceInfo.query.get(sys_id)
+    return render_template('home/announce_preview.html', data=announce_info)
+
+
+#   jy=交易系统研发中心，内部人员往期公告查看
+@home.route('/announcetuan')
+@userLogin
+def announceTuan():
+    list_to_who = ['2', '3']  # 限制to_who为2-对外与3-对内对外
+    g.ano = AnnounceInfo.query.filter(AnnounceInfo.to_who.in_(list_to_who)).order_by(
+        AnnounceInfo.modify_time.desc()).offset(3).all()
+    if len(g.ano) == 0:
+        return render_template('home/announce_tuan.html', data='暂无更多数据')
+    else:
+        return render_template('home/announce_tuan.html')

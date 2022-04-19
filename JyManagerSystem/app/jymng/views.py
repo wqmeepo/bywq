@@ -27,8 +27,21 @@ def jyUserLogin(f):
 @jymng.route('/announcemng')
 @jyUserLogin
 def announceMng():
-    g.ano = AnnounceInfo.query.order_by(AnnounceInfo.upload_time.desc()).all()
+    g.ano = AnnounceInfo.query.order_by(AnnounceInfo.modify_time.desc()).all()
     return render_template('jymng/announce_mng.html')
+
+
+#   jy=交易系统研发中心，内部人员往期公告查看
+@jymng.route('/announcetuan')
+@jyUserLogin
+def announceTuan():
+    list_to_who = ['1', '3']  # 限制to_who为1-对内与3-对内对外
+    g.ano = AnnounceInfo.query.filter(AnnounceInfo.to_who.in_(list_to_who)).order_by(
+        AnnounceInfo.modify_time.desc()).offset(3).all()
+    if len(g.ano) == 0:
+        return render_template('jymng/announce_tuan.html', data='暂无更多数据')
+    else:
+        return render_template('jymng/announce_tuan.html')
 
 
 #   jy=交易系统研发中心，新建公告
@@ -44,7 +57,7 @@ def announceSet():
             announce_type=announce_type,
             announce_head=data['announce_head'],
             announce_body=data['announce_body'],
-            publisher=session['username'],
+            publisher=session['realname'],
             to_who=data['select'],
         )
         db.session.add(announce_info)
@@ -144,7 +157,7 @@ def announceEdit(sys_id):
 @jyUserLogin
 def announceClickToTop(sys_id):
     time_now = datetime.datetime.now()
-    AnnounceInfo.query.get(sys_id).upload_time = time_now
+    AnnounceInfo.query.get(sys_id).modify_time = time_now
     db.session.commit()
     return redirect(url_for('jymng.announceMng'))
 
@@ -165,7 +178,7 @@ def userMng():
     return render_template('jymng/user_mng.html', user_info=user_info)
 
 
-#   jy=交易系统研发中心，人员管理
+#   jy=交易系统研发中心，人员管理-重置密码，默认888888
 @jymng.route('/userpwdreset/<sys_id>', methods=['GET', 'POST'])
 @jyUserLogin
 def userPswReset(sys_id):
@@ -176,4 +189,37 @@ def userPswReset(sys_id):
         flash('密码重置成功', 'usermng_success')
     except:
         flash('密码重置失败', 'usermng_failed')
+    return redirect(url_for('jymng.userMng'))
+
+
+#   jy=交易系统研发中心，人员管理-冻结解冻
+@jymng.route('/userfrozen/<sys_id>', methods=['GET', 'POST'])
+@jyUserLogin
+def userFrozen(sys_id):
+    try:
+        user = User.query.get(sys_id)
+        if user.user_status == '0':
+            user.user_status = '1'
+            db.session.commit()
+            flash('冻结成功', 'usermng_success')
+        else:
+            user.user_status = '0'
+            db.session.commit()
+            flash('解冻成功', 'usermng_success')
+    except:
+        flash('用户冻结解冻失败', 'usermng_failed')
+    return redirect(url_for('jymng.userMng'))
+
+
+#   jy=交易系统研发中心，人员管理-注销
+@jymng.route('/userrevoke/<sys_id>', methods=['GET', 'POST'])
+@jyUserLogin
+def userRevoke(sys_id):
+    try:
+        user = User.query.get(sys_id)
+        user.user_status = '2'
+        db.session.commit()
+        flash('用户注销成功', 'usermng_success')
+    except:
+        flash('用户注销失败', 'usermng_failed')
     return redirect(url_for('jymng.userMng'))

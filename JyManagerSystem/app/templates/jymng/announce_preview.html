@@ -1,10 +1,5 @@
-{% extends "common/common.html" %}
-{% block content %}
-    <body>
-    <div class="container-fluid">
-        <p>公告名称：{{ data.announce_head }}</p>
-        <p>公告内容如下：</p>
-        {{ data.announce_body|safe }}
-    </div>
-    </body>
-{% endblock %}
+<body>
+<div class="container-fluid">
+    {{ data.announce_body|safe }}
+</div>
+</body>

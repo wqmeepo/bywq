@@ -11,7 +11,7 @@
         </style>
     </head>
     <div class="container-fluid">
-        <div class="position-relative overflow-hidden p-3 p-md-3 m-md-5 text-center bg-light">
+        <div class="position-relative overflow-hidden p-3 p-md-3 m-md-2 text-center bg-light">
             <div class="col-md-5 p-lg-3 mx-auto my-5">
                 <h1 class="display-4 fw-normal">UF20接口管理</h1>
                 <p class="lead fw-normal">本界面提供UF20相关接口下载、搜索功能....</p>
@@ -22,7 +22,6 @@
         <p class="lead container col-3 mt-3"></p>
         {% for sys in g.bs %}
             {% if 'UF20' in  sys.sys_name %}
-                <p class="text-center">系统管理员 ： {{ sys.manager }}</p>
                 <p class="fw-normal text-center"><a class="btn btn-outline-success btn-sm"
                                                     href="{{ url_for('home.uf20IfSearch') }}">接口搜索</a></p>
 

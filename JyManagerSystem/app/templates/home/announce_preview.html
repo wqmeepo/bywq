@@ -1,0 +1,27 @@
+<!-- 头部开始 -->
+{% include "home/header.html" %}
+<body>
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="jumbotron">
+                <div class="container">
+                    <h1>
+                        公告：{{ data.announce_head }}
+                    </h1>
+                    <p>
+                        更新日期：{{ data.modify_time }}
+                    </p>
+                    <br>
+                    {{ data.announce_body|safe }}
+                    <br>
+                    <p>
+                        <a class="btn btn-primary btn-large" href="#">已阅</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>

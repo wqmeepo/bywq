@@ -33,7 +33,7 @@
                     <div class="mb-3 mt-2 col-2">
                         <input class="custom-select text-info" id="publisher" name="publisher" placeholder="发布人"
                                required=""
-                               size="38" type="text" value=创建人：{{ session.get('username') }} readonly>
+                               size="38" type="text" value=创建人：{{ session.get('realname') }} readonly>
                     </div>
                 </div>
                 {{ form.announce_body }}

@@ -1,0 +1,78 @@
+{% extends "common/common_sidebar.html" %}
+{% block content_sidebar %}
+    <head>
+        <style>
+            .table > tbody > tr > td {
+                /*border: 0px;*/
+                vertical-align: middle;
+            }
+
+            .modal-dialog {
+                max-width: max-content;
+            }
+
+            .modal-content {
+                width: auto;
+            }
+        </style>
+    </head>
+
+    <div class="container-fluid mt-3">
+        <p class="lead container col-3">往期公告</p>
+        <hr>
+        {% if data %}
+            <p>{{ data }}</p>
+        {% else %}
+            <table class="table table-hover">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">公告类型</th>
+                    <th scope="col">公告名称(点击查看)</th>
+                    <th scope="col">公告发表人</th>
+                    <th scope="col">发表时间</th>
+                    <th scope="col">修改时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in g.ano %}
+                    <tr>
+                        <td>{{ item.announce_type }}</td>
+                        <td><a id="modal-1" href="#modal-container-1" role="button"
+                               data-toggle="modal"
+                               onclick="getPreview({{ item.id }},$(this).text())">{{ item.announce_head }}</a></td>
+                        <td>{{ item.publisher }}</td>
+                        <td>{{ item.upload_time }}</td>
+                        <td>{{ item.modify_time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            公告预览
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function getPreview(sys_id, text) {
+                $(".modal-body").load("/jymng/announcepreview/" + sys_id);
+                $(".modal-title").text(text);
+            }
+        </script>
+    </div>
+
+{% endblock %}

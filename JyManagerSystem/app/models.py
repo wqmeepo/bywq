@@ -11,6 +11,8 @@ class User(db.Model):
     realname = db.Column(db.String(40), default='')  # 真实姓名
     department = db.Column(db.String(40), default='')  # 部门
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
+    user_status = db.Column(db.String(2), default='0')  # 0-正常 1-冻结 2-注销
+    last_login_time = db.Column(db.DateTime, default=datetime.now)
 
     def __repr__(self):
         return f'<user : {self.department} - {self.realname}>'
@@ -113,6 +115,7 @@ class AnnounceInfo(db.Model):
     announce_body = db.Column(db.Text)
     publisher = db.Column(db.String(40))
     upload_time = db.Column(db.DateTime, index=True, default=datetime.now)
+    modify_time = db.Column(db.DateTime, default=datetime.now)
     to_who = db.Column(db.String(2), default='1')
 
 

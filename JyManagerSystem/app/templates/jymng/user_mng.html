@@ -38,6 +38,7 @@
                 <th scope="col">部门</th>
                 <th scope="col">员工姓名</th>
                 <th scope="col">注册时间</th>
+                <th scope="col">最后登录时间</th>
                 <th scope="col">重置密码</th>
                 <th scope="col">冻结解冻</th>
                 <th scope="col">注销用户</th>
@@ -51,10 +52,17 @@
                     <td>{{ i.department }}</td>
                     <td>{{ i.realname }}</td>
                     <td>{{ i.addtime }}</td>
+                    <td>{{ i.last_login_time }}</td>
                     <td><a class="btn btn-outline-primary btn-sm"
                            href="{{ url_for('jymng.userPswReset', sys_id=i.id) }}">重置</a></td>
-                    <td><a class="btn btn-outline-success btn-sm" href="#">冻结</a>
-                    <td><a class="btn btn-outline-danger btn-sm" href="#">注销</a>
+                    {% if i.user_status == '0' %}
+                        <td><a class="btn btn-outline-success btn-sm"
+                               href="{{ url_for('jymng.userFrozen', sys_id=i.id) }}">冻结</a></td>
+                    {% elif i.user_status == '1' %}
+                        <td><a class="btn btn-outline-warning btn-sm"
+                               href="{{ url_for('jymng.userFrozen', sys_id=i.id) }}">解冻</a></td>
+                    {% endif %}
+                    <td><a class="btn btn-outline-danger btn-sm" href="{{ url_for('jymng.userRevoke', sys_id=i.id) }}">注销</a>
                 </tr>
             {% endfor %}
             </tbody>

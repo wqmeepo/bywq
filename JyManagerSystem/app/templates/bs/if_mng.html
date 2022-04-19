@@ -26,14 +26,25 @@
 
         <p class="lead container col-3">接口文件管理</p>
         <div class="text-right mb-4">
-            <button class="btn btn-primary"><a class="text-white" href="{{ url_for('bs.ifUpload') }}">接口文件上传</a>
+            <button class="btn btn-primary"><a class="text-white" href="{{ url_for('bs.ifUpload') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                    <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z"/>
+                </svg>
+                接口文件上传</a>
             </button>
         </div>
 
         {% for sys in g.bs %}
             {% if 'UF20' in  sys.sys_name %}
-                <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} | <a class="btn btn-outline-success btn-sm"
-                                                                        href="{{ url_for('bs.ifSearch') }}">接口搜索</a></p>
+                <hr>
+                <p class="fw-normal">所属系统 ： {{ sys.sys_name }} | <a class="btn btn-outline-success btn-sm"
+                                                                    href="{{ url_for('bs.ifSearch') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-eyeglasses" viewBox="0 0 16 16">
+                        <path d="M4 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm2.625.547a3 3 0 0 0-5.584.953H.5a.5.5 0 0 0 0 1h.541A3 3 0 0 0 7 8a1 1 0 0 1 2 0 3 3 0 0 0 5.959.5h.541a.5.5 0 0 0 0-1h-.541a3 3 0 0 0-5.584-.953A1.993 1.993 0 0 0 8 6c-.532 0-1.016.208-1.375.547zM14 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+                    </svg>
+                    接口搜索</a></p>
                 <p>系统管理员 ： {{ sys.manager }}</p>
             {% else %}
                 <hr><p class="fw-normal">所属系统 ： {{ sys.sys_name }} </p>
@@ -45,7 +56,9 @@
                     <th scope="col" class="fst-italic">接口文件</th>
                     <th scope="col" class="fst-italic">版本</th>
                     <th scope="col" class="fst-italic">上传时间</th>
-                    <th scope="col" class="fst-italic">接口文件下载</th>
+                    <th scope="col" class="fst-italic">
+                        接口文件下载
+                    </th>
                     <th scope="col" class="fst-italic">文件删除</th>
                 </tr>
                 </thead>

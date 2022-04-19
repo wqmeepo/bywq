@@ -10,6 +10,7 @@
     <div class="container col-10">
         <!-- 首页公告 -->
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- 跳转滑块 -->
             <ol class="carousel-indicators">
                 {% set num = 1 %}
                 {% for item in announce_info %}
@@ -22,66 +23,60 @@
                 {% endfor %}
                 <li data-target="#myCarousel" data-slide-to={{ num }}></li>
             </ol>
+            <!-- 幻灯片本体 -->
             <div class="carousel-inner">
                 {% for item in announce_info %}
                     {% if loop.index0 == 0 %}
                         <div class="carousel-item active">
-                            <svg class="bd-placeholder-img" width="100%" height="100%"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title></title>
-                                <rect width="100%" height="100%" fill="#777"></rect>
-                                <text x="50%" y="50%" fill="#777" dy=".3em"></text>
-                            </svg>
+                            <img class="d-block w-100" width="100%"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/banner/banner-1.jpg') }}"
+                                 alt="banner-1">
 
                             <div class="container">
                                 <div class="carousel-caption text-left">
-                                    <h1>公告{{ loop.index1 }} | {{ item.announce_type }}</h1>
-                                    <p>{{ item.announce_head }}</p>
+                                    <h1>公告：{{ item.announce_head }}</h1>
+                                    <p>{{ item.announce_type }} {{ item.modify_time|string|truncate(13) }}</p>
                                     <p><a class="btn btn-lg btn-primary"
-                                          href="{{ url_for('jymng.announcePreview', sys_id=item.id) }}" target="_blank">更多内容</a>
+                                          href="{{ url_for('home.announcePreview', sys_id=item.id) }}" target="_blank">更多内容</a>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     {% else %}
                         <div class="carousel-item">
-                            <svg class="bd-placeholder-img" width="100%" height="100%"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
-                                <title></title>
-                                <rect width="100%" height="100%" fill="#777"></rect>
-                                <text x="50%" y="50%" fill="#777" dy=".3em"></text>
-                            </svg>
+                            <img class="d-block w-100" width="100%"
+                                 style="object-fit: cover"
+                                 src="{{ url_for('static',filename='images/banner/banner-2.jpg') }}"
+                                 alt="banner-2">
 
                             <div class="container">
-                                <div class="carousel-caption text-left">
-                                    <h1>公告{{ loop.index1 }} | {{ item.announce_type }}</h1>
-                                    <p>{{ item.announce_head }}</p>
+                                <div class="carousel-caption text-center">
+                                    <h1>公告：{{ item.announce_head }}</h1>
+                                    <p>{{ item.announce_type }} {{ item.modify_time|string|truncate(13) }}</p>
                                     <p><a class="btn btn-lg btn-primary"
-                                          href="{{ url_for('jymng.announcePreview', sys_id=item.id) }}">更多内容</a></p>
+                                          href="{{ url_for('home.announcePreview', sys_id=item.id) }}">更多内容</a></p>
                                 </div>
                             </div>
                         </div>
                     {% endif %}
                 {% endfor %}
                 <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                         role="img" aria-label=" :  " preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <title></title>
-                        <rect width="100%" height="100%" fill="#777"></rect>
-                        <text x="50%" y="50%" fill="#777" dy=".3em"></text>
-                    </svg>
+                    <img class="d-block w-100" width="100%"
+                         style="object-fit: cover"
+                         src="{{ url_for('static',filename='images/banner/banner-3.jpg') }}"
+                         alt="banner-3">
 
                     <div class="container">
                         <div class="carousel-caption text-right">
                             <h1>往期公告.</h1>
                             <p>点此查看往期公告.</p>
-                            <p><a class="btn btn-lg btn-primary" href="#">更多内容</a></p>
+                            <p><a class="btn btn-lg btn-primary" href="{{ url_for('home.announceTuan') }}">更多内容</a></p>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- 前后按钮 -->
             <button class="carousel-control-prev" type="button" data-target="#myCarousel" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
@@ -140,36 +135,36 @@
                 </h3>
                 <div class="row">
                     <div class="col-lg-6 text-center mt-4">
-                        <img class="rounded-circle"
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                             alt="Generic placeholder image" width="240" height="140">
+                        <a href="#"><img class="d-block w-100 rounded-circle" width="240" height="140"
+                                         style="object-fit: contain"
+                                         src="{{ url_for('static',filename='images/index/jg.png') }}"
+                                         alt="interface"></a>
                         <h2>监管更新汇总</h2>
-                        <p>本功能页监控各监管机构更新，集中展示最近半年内或者最新10条的更新内容.</p>
-                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                        <p><small><em>本功能页监控各监管机构更新，集中展示最近半年内或者最新10条的更新内容.</em></small></p>
                     </div>
                     <div class="col-lg-6 text-center mt-4">
-                        <img class="rounded-circle"
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                             alt="Generic placeholder image" width="240" height="140">
+                        <a href="#"><img class="d-block w-100 rounded-circle" width="240" height="140"
+                                         style="object-fit: contain"
+                                         src="{{ url_for('static',filename='images/index/teamwork.png') }}"
+                                         alt="interface"></a>
                         <h2>办公协作申请</h2>
-                        <p>本功能用于向交易系统研发中心特定人员发起小型、无邮件或者OA记录的办公协作申请，包括权限开通、数据提供、知识问答等.</p>
-                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                        <p><small><em>本功能用于向交易系统研发中心特定人员发起小型、无邮件或者OA记录的办公协作申请，包括权限开通、数据提供、知识问答等.</em></small></p>
                     </div>
                     <div class="col-lg-6 text-center mt-4">
-                        <img class="rounded-circle"
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                             alt="Generic placeholder image" width="240" height="140">
+                        <a href="#"><img class="d-block w-100 rounded-circle" width="240" height="140"
+                                         style="object-fit: contain"
+                                         src="{{ url_for('static',filename='images/index/download.png') }}"
+                                         alt="interface"></a>
                         <h2>中心下载汇总</h2>
-                        <p>包括但不限于：各个系统测试环境安装包、使用手册、开发商提供的调试软件、交易系统研发中心自行开发的相关程序.</p>
-                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                        <p><small><em>包括但不限于：各个系统测试环境安装包、使用手册、开发商提供的调试软件、交易系统研发中心自行开发的相关程序.</em></small></p>
                     </div>
                     <div class="col-lg-6 text-center mt-4">
-                        <img class="rounded-circle"
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                             alt="Generic placeholder image" width="240" height="140">
+                        <a href="#"><img class="d-block w-100 rounded-circle" width="240" height="140"
+                                         style="object-fit: contain"
+                                         src="{{ url_for('static',filename='images/index/search-1.png') }}"
+                                         alt="interface"></a>
                         <h2>其他信息查询</h2>
-                        <p>提供除系统强相关信息外的查询，包括但不限于：测试测试环境软硬件信息、各个系统负责人信息等.</p>
-                        <p><a class="btn btn-secondary" href="#" role="button">更多内容 »</a></p>
+                        <p><small><em>提供除系统强相关信息外的查询，包括但不限于：测试测试环境软硬件信息、各个系统负责人信息等.</em></small></p>
                     </div>
                 </div>
             </div>

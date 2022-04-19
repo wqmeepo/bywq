@@ -19,7 +19,7 @@ from app.home.views import userLogin
 @jyUserLogin
 def index():
     announce_info = AnnounceInfo.query.filter(or_(AnnounceInfo.to_who == "1", AnnounceInfo.to_who == "3")).order_by(
-        AnnounceInfo.upload_time.desc()).limit(5).all()
+        AnnounceInfo.modify_time.desc()).limit(3).all()
     return render_template('bs/bs_index.html', announce_info=announce_info)
 
 
@@ -147,7 +147,7 @@ def ifSearch():
     if form.validate_on_submit():
         data = form.data
         sys_no = data['select_sys']
-        key_word = data['keyword']
+        key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if select_type == 1:
@@ -211,7 +211,7 @@ def dfSearch():
         data = form.data
         sys_no = data['select_sys']
         g.select_type = data['select_type']
-        key_word = data['keyword']
+        key_word = data['keyword'].strip(' ')
         g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if g.select_type == 1:
             g.query_result = UF20TableInfo.query.filter(

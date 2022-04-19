@@ -64,9 +64,10 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">公告类型</th>
-                    <th scope="col">公告名称(点击预览)</th>
+                    <th scope="col">公告名称(点击查看)</th>
                     <th scope="col">公告发表人</th>
-                    <th scope="col">公告发表时间</th>
+                    <th scope="col">发表时间</th>
+                    <th scope="col">修改时间</th>
                     <th scope="col">编辑</th>
                     <th scope="col">删除</th>
                     <th scope="col">置顶</th>
@@ -78,9 +79,10 @@
                         <td>{{ item.announce_type }}</td>
                         <td><a id="modal-1" href="#modal-container-1" role="button"
                                data-toggle="modal"
-                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
+                               onclick="getPreview({{ item.id }},$(this).text())">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
+                        <td>{{ item.modify_time }}</td>
                         <td><a class="btn btn-outline-primary btn-sm"
                                href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a class="btn btn-danger btn-sm"
@@ -95,13 +97,14 @@
         {% if list2|length > 0 %}
             <hr>
             <p>对外公告</p>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-hover">
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">公告类型</th>
-                    <th scope="col">公告名称</th>
+                    <th scope="col">公告名称(点击查看)</th>
                     <th scope="col">公告发表人</th>
-                    <th scope="col">公告发表时间</th>
+                    <th scope="col">发表时间</th>
+                    <th scope="col">修改时间</th>
                     <th scope="col">编辑</th>
                     <th scope="col">删除</th>
                     <th scope="col">置顶</th>
@@ -113,9 +116,10 @@
                         <td>{{ item.announce_type }}</td>
                         <td><a id="modal-1" href="#modal-container-1" role="button"
                                data-toggle="modal"
-                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
+                               onclick="getPreview({{ item.id }},$(this).text())">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
+                        <td>{{ item.modify_time }}</td>
                         <td><a class="btn btn-outline-primary btn-sm"
                                href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a class="btn btn-danger btn-sm"
@@ -135,9 +139,10 @@
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">公告类型</th>
-                    <th scope="col">公告名称</th>
+                    <th scope="col">公告名称(点击查看)</th>
                     <th scope="col">公告发表人</th>
-                    <th scope="col">公告发表时间</th>
+                    <th scope="col">发表时间</th>
+                    <th scope="col">修改时间</th>
                     <th scope="col">编辑</th>
                     <th scope="col">删除</th>
                     <th scope="col">置顶</th>
@@ -149,9 +154,10 @@
                         <td>{{ item.announce_type }}</td>
                         <td><a id="modal-1" href="#modal-container-1" role="button"
                                data-toggle="modal"
-                               onclick="getPreview({{ item.id }})">{{ item.announce_head }}</a></td>
+                               onclick="getPreview({{ item.id }},$(this).text())">{{ item.announce_head }}</a></td>
                         <td>{{ item.publisher }}</td>
                         <td>{{ item.upload_time }}</td>
+                        <td>{{ item.modify_time }}</td>
                         <td><a class="btn btn-outline-primary btn-sm"
                                href="{{ url_for('jymng.announceEdit', sys_id=item.id) }}">编辑</a></td>
                         <td><a class="btn btn-danger btn-sm"
@@ -169,7 +175,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel">
-                            公告预览
+                            公告查看
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
@@ -183,8 +189,9 @@
             </div>
         </div>
         <script type="text/javascript">
-            function getPreview(sys_id) {
+            function getPreview(sys_id, text) {
                 $(".modal-body").load("/jymng/announcepreview/" + sys_id);
+                $(".modal-title").text(text);
             }
         </script>
     </div>
