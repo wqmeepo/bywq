@@ -3,9 +3,9 @@ from app import db
 from app.bs.forms import BusinSysInfoForm, InterfaceFileForm, DbFileForm, DfFieldSearchForm, SiUploadForm, \
     IfFieldSearchForm
 from app.models import UF20TableInfo, BusinSysInfo, InterfaceFile, ServiceInfo, Dictionary, InterfaceFuncInfo, \
-    AnnounceInfo
+    AnnounceInfo, OsTableInfo
 from flask import render_template, url_for, redirect, flash, g, send_file
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 import os
 import time
 import xlrd
@@ -149,16 +149,19 @@ def ifSearch():
         sys_no = data['select_sys']
         key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
-        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
-        if select_type == 1:
-            g.query_result = InterfaceFuncInfo.query.filter(
-                or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
-                    InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
-        elif select_type == 2:
-            g.query_result = InterfaceFuncInfo.query.filter(
-                or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
-                    InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
-        return render_template('bs/if_search.html', form=form)
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if 'UF20' in g.sys.sys_name or 'UF2.0' in g.sys.sys_name:
+            if select_type == 1:
+                g.query_result = InterfaceFuncInfo.query.filter(
+                    or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                        InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
+            elif select_type == 2:
+                g.query_result = InterfaceFuncInfo.query.filter(
+                    or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                        InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
+            return render_template('bs/if_search.html', form=form)
+        else:
+            return render_template('bs/if_search.html', form=form)
     return render_template('bs/if_search.html', form=form)
 
 
@@ -207,22 +210,59 @@ def dfMng():
 def dfSearch():
     g.bs = BusinSysInfo.query.all()
     form = DfFieldSearchForm()
+    sys_name = 'unsearch'
     if form.validate_on_submit():
         data = form.data
         sys_no = data['select_sys']
         g.select_type = data['select_type']
         key_word = data['keyword'].strip(' ')
-        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
-        if g.select_type == 1:
-            g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
-                    UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
-        elif g.select_type == 2:
-            g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
-                    UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
-        return render_template('bs/df_search.html', form=form)
-    return render_template('bs/df_search.html', form=form)
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if 'UF20' in g.sys.sys_name and '多金融' not in g.sys.sys_name or \
+                'UF2.0' in g.sys.sys_name and '多金融' not in g.sys.sys_name:
+            if g.select_type == 1:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
+                         or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                             UF20TableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif g.select_type == 2:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
+                         or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                             UF20TableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = 'UF20'
+            return render_template('bs/df_search.html', form=form, sys_name=sys_name)
+        elif '多金融' in g.sys.sys_name:
+            if g.select_type == 1:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
+                         or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                             UF20TableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif g.select_type == 2:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
+                         or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                             UF20TableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = 'UF20'
+            return render_template('bs/df_search.html', form=form, sys_name=sys_name)
+        elif '法人清算' in g.sys.sys_name:
+            key_word = key_word.upper()
+            if g.select_type == 1:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.table_name.like(f"%{key_word}%"),
+                                                           OsTableInfo.table_describe.like(f"%{key_word}%")))).all()
+            elif g.select_type == 2:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.field_name.like(f"%{key_word}%"),
+                                                           OsTableInfo.field_describe.like(f"%{key_word}%")))).all()
+            sys_name = '法人清算'
+            return render_template('bs/df_search.html', form=form, sys_name=sys_name)
+        else:
+            return render_template('bs/df_search.html', form=form, sys_name=sys_name)
+    return render_template('bs/df_search.html', form=form, sys_name=sys_name)
 
 
 # ajax用，查询字典字段信息

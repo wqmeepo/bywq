@@ -37,7 +37,7 @@ class Admin(db.Model):
         return check_password_hash(self.password, password)
 
 
-#  数据库字段表信息表
+#  UF20数据库字段表信息表
 class UF20TableInfo(db.Model):
     __tablename__ = "uf20tableinfo"
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +49,26 @@ class UF20TableInfo(db.Model):
     field_describe = db.Column(db.String(200), index=True)
     sheet_name = db.Column(db.String(40), nullable=True, default='')
     file_path = db.Column(db.String(400), default='')
-    db.Index('idx_search_tableinfo', 'table_name', 'table_describe', 'field_name', 'field_describe')
+    db.Index('idx_search_uf20tableinfo', 'table_name', 'table_describe', 'field_name', 'field_describe')
+
+    def __repr__(self):
+        return f'<tableName: {self.table_name}>'
+
+
+#  其他数据库字段表信息表
+class OsTableInfo(db.Model):
+    __tablename__ = "ostableinfo"
+    id = db.Column(db.Integer, primary_key=True)
+    sys_no = db.Column(db.String(5), default='')
+    table_name = db.Column(db.String(100), index=True)
+    table_describe = db.Column(db.String(400), index=True)
+    db_user_name = db.Column(db.String(40), default='')
+    field_name = db.Column(db.String(100), index=True)
+    field_describe = db.Column(db.String(767), index=True)
+    busin_sys = db.Column(db.String(40), nullable=True, default='')
+    file_path = db.Column(db.String(400), default='')
+    remark = db.Column(db.String(400), default='')
+    db.Index('idx_search_ostableinfo', 'table_name', 'table_describe', 'field_name', 'field_describe')
 
     def __repr__(self):
         return f'<tableName: {self.table_name}>'

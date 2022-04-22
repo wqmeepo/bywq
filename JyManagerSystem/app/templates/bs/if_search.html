@@ -50,9 +50,9 @@
             </thead>
             <tbody>
             {% for item in g.query_result %}
-                <tr>
+                <tr class="text-small">
                     <td>{{ loop.index }}</td>
-                    <td>{{ g.sys_name.sys_name }}</td>
+                    <td>{{ g.sys.sys_name }}</td>
                     <td><a id="modal-1" href="#modal-container-1" role="button"
                            data-toggle="modal" onclick="getDictionary($(this).text())">{{ item.func_no }}</a>
                     </td>
@@ -78,7 +78,7 @@
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-small">
 
                     </div>
                     <div class="modal-footer">

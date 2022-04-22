@@ -62,7 +62,7 @@
             </thead>
             <tbody>
             {% for item in g.si %}
-                <tr>
+                <tr class="text-small">
                     <td><a id="modal-1" href="#modal-container-1" role="button"
                            data-toggle="modal"
                            onclick="getPreview({{ item.id }}, $(this).text())">{{ item.file_name }}</a></td>
@@ -92,7 +92,7 @@
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-small">
 
                     </div>
                     <div class="modal-footer">

@@ -36,20 +36,20 @@
             <thead>
             <tr>
                 <th scope="col">序号</th>
-                <th scope="col">系统名称</th>
+                <th scope="col">系统名</th>
                 <th scope="col">表名</th>
                 <th scope="col">表描述</th>
                 <th scope="col">字段名</th>
                 <th scope="col">字段描述</th>
-                <th scope="col">所属子系统</th>
-                <th scope="col">所属数据库</th>
+                <th scope="col">业务系统</th>
+                <th scope="col">DB用户</th>
             </tr>
             </thead>
             <tbody>
             {% for item in g.query_result %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ g.sys_name.sys_name }}</td>
+                    <td>{{ g.sys.sys_name }}</td>
                     <td>{{ item.table_name }}</td>
                     <td>{{ item.table_describe }}</td>
                     <td><a id="modal-1" href="#modal-container-1" role="button"
@@ -72,7 +72,7 @@
                         </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-small">
 
                     </div>
                     <div class="modal-footer">
