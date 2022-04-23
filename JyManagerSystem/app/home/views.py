@@ -11,7 +11,7 @@ import random
 import string
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
-from sqlalchemy import or_
+from sqlalchemy import or_, and_, func
 
 
 def rndColor():
@@ -94,6 +94,7 @@ def register():
             password=generate_password_hash(data['password']),
             realname=data['realname'],
             department=data['department'],
+            user_status='0',
         )
 
         db.session.add(user)
@@ -184,8 +185,9 @@ def uf20IfFetch():
 @home.route('/uf20ifsearch', methods=['GET', 'POST'])
 @userLogin
 def uf20IfSearch():
-    g.bs = BusinSysInfo.query.all()
     form = IfFieldSearchForm()
+    total_if_num = db.session.query(InterfaceFuncInfo).count()
+    if_file_list = db.session.query(InterfaceFile).all()
     if form.validate_on_submit():
         data = form.data
         sys_no = BusinSysInfo.query.filter(
@@ -193,7 +195,6 @@ def uf20IfSearch():
                 BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
         key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
-        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if select_type == 1:
             g.query_result = InterfaceFuncInfo.query.filter(
                 or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
@@ -202,34 +203,62 @@ def uf20IfSearch():
             g.query_result = InterfaceFuncInfo.query.filter(
                 or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
                     InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
-        return render_template('home/uf20_if_search.html', form=form)
-    return render_template('home/uf20_if_search.html', form=form)
+        return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
+    return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
 
 
 # df=Database File，数据库信息检索
 @home.route('/uf20dfsearch', methods=['GET', 'POST'])
 @userLogin
 def uf20DfSearch():
-    g.bs = BusinSysInfo.query.all()
+    g.bs = BusinSysInfo.query.filter(
+        or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"))).all()
     form = DfFieldSearchForm()
+    total_tabel_num = db.session.query().with_entities(UF20TableInfo.table_name).distinct().count()
+    sys_name = 'unsearch'
     if form.validate_on_submit():
         data = form.data
-        sys_no = BusinSysInfo.query.filter(
-            or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
-                BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
-        g.select_type = data['select_type']
+        sys_no = data['select_sys']
+        select_type = data['select_type']
         key_word = data['keyword'].strip(' ')
-        g.sys_name = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
-        if g.select_type == 1:
-            g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
-                    UF20TableInfo.table_describe.like(f"%{key_word}%"))).all()
-        elif g.select_type == 2:
-            g.query_result = UF20TableInfo.query.filter(
-                or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
-                    UF20TableInfo.field_describe.like(f"%{key_word}%"))).all()
-        return render_template('home/uf20_df_search.html', form=form)
-    return render_template('home/uf20_df_search.html', form=form)
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if 'UF20' in g.sys.sys_name and '多金融' not in g.sys.sys_name or \
+                'UF2.0' in g.sys.sys_name and '多金融' not in g.sys.sys_name:
+            if select_type == 1:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
+                         or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                             UF20TableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif select_type == 2:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
+                         or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                             UF20TableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = 'UF20'
+            return render_template('home/uf20_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+        elif '多金融' in g.sys.sys_name:
+            if select_type == 1:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
+                         or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
+                             UF20TableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif select_type == 2:
+                g.query_result = UF20TableInfo.query.filter(
+                    and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
+                         or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
+                             UF20TableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = 'UF20'
+            return render_template('home/uf20_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+        else:
+            return render_template('home/uf20_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+    return render_template('home/uf20_df_search.html', form=form, sys_name=sys_name, total_tabel_num=total_tabel_num)
 
 
 @home.route('/othersystem')

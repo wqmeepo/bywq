@@ -214,18 +214,18 @@ def dfSearch():
     if form.validate_on_submit():
         data = form.data
         sys_no = data['select_sys']
-        g.select_type = data['select_type']
+        select_type = data['select_type']
         key_word = data['keyword'].strip(' ')
         g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if 'UF20' in g.sys.sys_name and '多金融' not in g.sys.sys_name or \
                 'UF2.0' in g.sys.sys_name and '多金融' not in g.sys.sys_name:
-            if g.select_type == 1:
+            if select_type == 1:
                 g.query_result = UF20TableInfo.query.filter(
                     and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
                          or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
                              UF20TableInfo.table_describe.like(f"%{key_word}%")))
                 ).all()
-            elif g.select_type == 2:
+            elif select_type == 2:
                 g.query_result = UF20TableInfo.query.filter(
                     and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.notlike(f"%HS_PROD%"),
                          or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
@@ -234,13 +234,13 @@ def dfSearch():
             sys_name = 'UF20'
             return render_template('bs/df_search.html', form=form, sys_name=sys_name)
         elif '多金融' in g.sys.sys_name:
-            if g.select_type == 1:
+            if select_type == 1:
                 g.query_result = UF20TableInfo.query.filter(
                     and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
                          or_(UF20TableInfo.table_name.like(f"%{key_word}%"),
                              UF20TableInfo.table_describe.like(f"%{key_word}%")))
                 ).all()
-            elif g.select_type == 2:
+            elif select_type == 2:
                 g.query_result = UF20TableInfo.query.filter(
                     and_(UF20TableInfo.sys_no == sys_no, UF20TableInfo.db_name.like(f"%HS_PROD%"),
                          or_(UF20TableInfo.field_name.like(f"%{key_word}%"),
@@ -250,11 +250,11 @@ def dfSearch():
             return render_template('bs/df_search.html', form=form, sys_name=sys_name)
         elif '法人清算' in g.sys.sys_name:
             key_word = key_word.upper()
-            if g.select_type == 1:
+            if select_type == 1:
                 g.query_result = OsTableInfo.query.filter(
                     and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.table_name.like(f"%{key_word}%"),
                                                            OsTableInfo.table_describe.like(f"%{key_word}%")))).all()
-            elif g.select_type == 2:
+            elif select_type == 2:
                 g.query_result = OsTableInfo.query.filter(
                     and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.field_name.like(f"%{key_word}%"),
                                                            OsTableInfo.field_describe.like(f"%{key_word}%")))).all()
