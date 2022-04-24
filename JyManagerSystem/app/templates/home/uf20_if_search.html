@@ -21,7 +21,7 @@
                 <p class="lead fw-normal">本界面提供UF20相关接口查询，目前收录UF20相关接口{{ total_if_num }}个，以下为目前收录的接口文件<a
                         href="{{ url_for('home.uf20IfFetch') }}">（点此下载文件）</a>：
                     {% for sys in if_file_list %}
-                        <p class="lead fw-normal text-info"> {{ sys.file_name }} </p>
+                        <p class="lead fw-normal text-info text-small"> {{ sys.file_name }} </p>
                     {% endfor %}
                 </p>
             </div>

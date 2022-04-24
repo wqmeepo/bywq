@@ -20,7 +20,7 @@
                 <h1 class="display-4 fw-normal">UF20数据库检索</h1>
                 <p class="lead fw-normal">本界面提供UF20相关表结构信息查询,目前收录UF20相关表 {{ total_tabel_num }} 张，以下为支持查询的系统：
                     {% for sys in g.bs %}
-                        <p class="lead fw-normal text-info"> {{ sys.sys_name }} </p>
+                        <p class="lead fw-normal text-info text-small"> {{ sys.sys_name }} </p>
                     {% endfor %}
                 </p>
             </div>
