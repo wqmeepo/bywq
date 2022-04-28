@@ -120,7 +120,7 @@ def ifUpload():
             db.session.commit()
         except:
             flash('接口文件上传失败', 'ifupload_error')
-        if 'uf2' in sys_select or 'UF2' in sys_select:
+        if 'uf2' in sys_select or 'UF2' in sys_select or 'O3' in sys_select or 'o3' in sys_select:
             while not os.path.exists(save_path_file):
                 time.sleep(1)
             uf20InterfaceFileParse(data['select'], save_path_file)
@@ -150,17 +150,19 @@ def ifSearch():
         key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
         g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
-        if 'UF20' in g.sys.sys_name or 'UF2.0' in g.sys.sys_name:
-            if select_type == 1:
-                g.query_result = InterfaceFuncInfo.query.filter(
-                    or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
-                        InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
-            elif select_type == 2:
-                g.query_result = InterfaceFuncInfo.query.filter(
-                    or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
-                        InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
+        if select_type == 1:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_no_old.like(f"%{key_word}%")))
+            ).all()
             return render_template('bs/if_search.html', form=form)
-        else:
+        elif select_type == 2:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_describe.like(f"%{key_word}%")))
+            ).all()
             return render_template('bs/if_search.html', form=form)
     return render_template('bs/if_search.html', form=form)
 
@@ -201,6 +203,9 @@ def dfMng():
     g.df = UF20TableInfo.query.with_entities(UF20TableInfo.sys_no, UF20TableInfo.file_path).group_by(
         UF20TableInfo.sys_no,
         UF20TableInfo.file_path).all()
+    g.df_os = OsTableInfo.query.with_entities(OsTableInfo.sys_no, OsTableInfo.file_path).group_by(
+        OsTableInfo.sys_no,
+        OsTableInfo.file_path).all()
     return render_template('bs/df_mng.html')
 
 
@@ -260,6 +265,18 @@ def dfSearch():
                                                            OsTableInfo.field_describe.like(f"%{key_word}%")))).all()
             sys_name = '法人清算'
             return render_template('bs/df_search.html', form=form, sys_name=sys_name)
+        elif 'O32' in g.sys.sys_name or 'o32' in g.sys.sys_name:
+            key_word = key_word.upper()
+            if select_type == 1:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.table_name.like(f"%{key_word}%"),
+                                                           OsTableInfo.table_describe.like(f"%{key_word}%")))).all()
+            elif select_type == 2:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, or_(OsTableInfo.field_name.like(f"%{key_word}%"),
+                                                           OsTableInfo.field_describe.like(f"%{key_word}%")))).all()
+            sys_name = 'O32'
+            return render_template('bs/df_search.html', form=form, sys_name=sys_name)
         else:
             return render_template('bs/df_search.html', form=form, sys_name=sys_name)
     return render_template('bs/df_search.html', form=form, sys_name=sys_name)
@@ -280,11 +297,12 @@ def queryDictionary(field_name):
 @bs.route('/dfupload', methods=['GET', 'POST'])
 @jyUserLogin
 def dfUpload():
-    #   针对UF20数据库excel文件的解析方法，支持覆盖导入（先删除，后插入）
+    #   针对UF20数据库excel文件的解析方法，支持覆盖导入（先删除，后插入），写的比较烂，后续再优化
     def uf20Parse(sys_no, save_path_file):
         df = xlrd.open_workbook(save_path_file)
         total_list = []
         num = 0
+        # 解析
         for sheet in df.sheets():
             column_list = []
             for i in range(sheet.nrows):
@@ -306,6 +324,7 @@ def dfUpload():
                         cursor += 1
             total_list.append(column_list)
             num += 1
+        # 删除+新增
         for list_sheet in total_list:
             i = 0
             while i < len(list_sheet):
@@ -345,6 +364,31 @@ def dfUpload():
                     db.session.commit()
                     i += count
 
+    #   针对o32数据库excel文件的解析方法，覆盖导入（先删除，后插入）
+    def o32Parse(sys_no, save_path_file):
+        df = xlrd.open_workbook(save_path_file)
+        for sheet in df.sheets():
+            for i in range(sheet.nrows):
+                if 'table_name' in sheet.row_values(i):
+                    count = 3
+                    while len(sheet.row_values(i + count)) != sheet.row_values(i + count).count(''):
+                        os_table_info = OsTableInfo(
+                            sys_no=sys_no,
+                            table_name=sheet.row_values(i)[2],
+                            table_describe=sheet.row_values(i)[4],
+                            db_user_name='trade',
+                            field_name=sheet.row_values(i + count)[2],
+                            field_describe=sheet.row_values(i + count)[3],
+                            busin_sys=sheet.name,
+                            file_path=save_path_file,
+                            remark=sheet.row_values(i + count)[9]
+                        )
+                        db.session.add(os_table_info)
+                        count += 1
+                        if str(i + count) == str(sheet.nrows - 1):
+                            break
+                db.session.commit()
+
     g.bs = BusinSysInfo.query.all()
     form = DbFileForm()
     if form.validate_on_submit():
@@ -367,17 +411,24 @@ def dfUpload():
         except:
             flash('接口文件上传失败,请重新上传', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
-        try:
-            #   目前版本只支持UF20的数据库解析
-            if 'UF20' in sys_select:
-                #   执行数据库解析，并导入数据库（如果数据库存在相关信息，先删除，后插入）
-                uf20Parse(sys_no, save_path_file)
-            else:
-                flash('当前只支持UF20数据库解析', 'dfupload_error')
-                return render_template('bs/df_upload.html', form=form)
-        except:
-            flash('数据库新增失败，请重试', 'dfupload_error')
+        # try:
+        #   UF20的数据库解析，包含UF20与UF20多金融系统
+        if 'UF20' in sys_select:
+            #   执行数据库解析，并导入数据库（如果数据库存在相关信息，先单独删除，后单独插入）
+            uf20Parse(sys_no, save_path_file)
+        elif 'O32' in sys_select:
+            #   执行数据库解析，并导入数据库（如果数据库存在相关信息，先全量删除，后全量插入）
+            os_table_all_o32 = OsTableInfo.query.filter(OsTableInfo.sys_no == sys_no).all()
+            for each in os_table_all_o32:
+                db.session.delete(each)
+            db.session.commit()
+            o32Parse(sys_no, save_path_file)
+        else:
+            flash('当前只支持O32与UF20数据库解析', 'dfupload_error')
             return render_template('bs/df_upload.html', form=form)
+        # except:
+        #     flash('数据库新增失败，请重试', 'dfupload_error')
+        #     return render_template('bs/df_upload.html', form=form)
         flash(',接口文件解析完成', 'dfupload_success')
         return redirect(url_for('bs.dfMng'))
     return render_template('bs/df_upload.html', form=form)
@@ -491,3 +542,9 @@ def siPreview(sys_id):
 def announcePreview(sys_id):
     announce_info = AnnounceInfo.query.get(sys_id).announce_body
     return announce_info
+
+
+# split过滤器 for jinja2
+@bs.app_template_filter('jinjaSplit')
+def jinjaSplit(jinjiaString: str, splitString: str):
+    return jinjiaString.split(splitString)

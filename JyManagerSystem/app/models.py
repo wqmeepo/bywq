@@ -67,7 +67,7 @@ class OsTableInfo(db.Model):
     field_describe = db.Column(db.String(767), index=True)
     busin_sys = db.Column(db.String(40), nullable=True, default='')
     file_path = db.Column(db.String(400), default='')
-    remark = db.Column(db.String(400), default='')
+    remark = db.Column(db.Text, default='') # 数据库修改为longtext
     db.Index('idx_search_ostableinfo', 'table_name', 'table_describe', 'field_name', 'field_describe')
 
     def __repr__(self):

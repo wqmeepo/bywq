@@ -187,7 +187,8 @@ def uf20IfFetch():
 def uf20IfSearch():
     form = IfFieldSearchForm()
     total_if_num = db.session.query(InterfaceFuncInfo).count()
-    if_file_list = db.session.query(InterfaceFile).all()
+    if_file_list = db.session.query(InterfaceFile.file_name).filter(BusinSysInfo.sys_name.like('%UF2%')).filter(
+        BusinSysInfo.sys_no == InterfaceFile.sys_no).all()
     if form.validate_on_submit():
         data = form.data
         sys_no = BusinSysInfo.query.filter(
@@ -203,7 +204,8 @@ def uf20IfSearch():
             g.query_result = InterfaceFuncInfo.query.filter(
                 or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
                     InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
-        return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
+        return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num,
+                               if_file_list=if_file_list)
     return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
 
 

@@ -46,6 +46,7 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col">系统</th>
+                <th scope="col">源文件名称</th>
                 <th scope="col">
                     数据库文件下载
                 </th>
@@ -66,8 +67,31 @@
                     {% if i.sys_no == j[0] %}
                         <tr>
                             <td>{{ i.sys_name }}</td>
-                            <td><a class="btn btn-outline-primary btn-sm"
-                                   href="{{ url_for('bs.dfDownload', file_path=j[1]) }}">点击下载</a></td>
+                            {% if j[1] == ' ' %}
+                                <td>无文件,支持搜索</td>
+                                <td><a class="btn btn-outline-warning btn-sm">无此文件</a></td>
+                            {% else %}
+                                <td>{{ j[1]|jinjaSplit('\\')|last }}</td>
+                                <td><a class="btn btn-outline-primary btn-sm"
+                                       href="{{ url_for('bs.dfDownload', file_path=j[1]) }}">点击下载</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            {% for i in g.bs %}
+                {% for j in g.df_os %}
+                    {% if i.sys_no == j[0] %}
+                        <tr>
+                            <td>{{ i.sys_name }}</td>
+                            {% if j[1] == ' ' %}
+                                <td>无文件,支持搜索</td>
+                                <td><a class="btn btn-outline-warning btn-sm">无此文件</a></td>
+                            {% else %}
+                                <td>{{ j[1]|jinjaSplit('\\')|last }}</td>
+                                <td><a class="btn btn-outline-primary btn-sm"
+                                       href="{{ url_for('bs.dfDownload', file_path=j[1]) }}">点击下载</a></td>
+                            {% endif %}
                         </tr>
                     {% endif %}
                 {% endfor %}

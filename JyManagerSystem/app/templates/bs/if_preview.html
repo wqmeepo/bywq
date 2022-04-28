@@ -3,7 +3,7 @@
     {% for row in data %}
         <tr class="text-left">
             {% for item in row %}
-                {% if item|wordcount > 15 %}
+                {% if item|length > 20 %}
                     <td>
                         <a class="btn btn-sm btn-secondary" data-toggle="popover" title="参数详情"
                            data-content="{{ item }}">查看详情
