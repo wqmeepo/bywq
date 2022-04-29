@@ -61,8 +61,17 @@
                     {% elif i.user_status == '1' %}
                         <td><a class="btn btn-outline-warning btn-sm"
                                href="{{ url_for('jymng.userFrozen', sys_id=i.id) }}">解冻</a></td>
+                    {% elif i.user_status == '2' %}
+                        <td></td>
                     {% endif %}
-                    <td><a class="btn btn-outline-danger btn-sm" href="{{ url_for('jymng.userRevoke', sys_id=i.id) }}">注销</a>
+                    {% if i.user_status == '2' %}
+                        <td><a class="btn btn-dark btn-sm disabled"
+                               href="{{ url_for('jymng.userRevoke', sys_id=i.id) }}">已注销</a>
+                            {% else %}
+                        <td>
+                        <a class="btn btn-danger btn-sm" href="{{ url_for('jymng.userRevoke', sys_id=i.id) }}">注销</a>
+                    {% endif %}
+
                 </tr>
             {% endfor %}
             </tbody>

@@ -3,7 +3,7 @@ import datetime
 from app.home import home
 from app import db
 from app.home.forms import RegisterForm, LoginForm, ModifyForm, IfFieldSearchForm, DfFieldSearchForm
-from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo, InterfaceFuncInfo, UF20TableInfo
+from app.models import User, BusinSysInfo, InterfaceFile, AnnounceInfo, InterfaceFuncInfo, UF20TableInfo, OsTableInfo
 from flask import render_template, url_for, redirect, flash, session, request, make_response, g
 from werkzeug.security import generate_password_hash
 from functools import wraps
@@ -164,13 +164,21 @@ def userModify():
     return render_template('home/modify_password.html', form=form)
 
 
+#   UF20主页
 @home.route('/uf20')
 @userLogin
 def uf20():
     return render_template('home/uf20.html')
 
 
-#   if=interface，mng=manage，接口上传后的管理界面
+#   其他系统主页
+@home.route('/othersystem')
+@userLogin
+def otherSystem():
+    return render_template('home/other_system.html')
+
+
+#   if=interface，接口下载
 @home.route('/uf20iffetch', methods=['GET', 'POST'])
 @userLogin
 def uf20IfFetch():
@@ -181,40 +189,98 @@ def uf20IfFetch():
     return render_template('home/uf20_if_fetch.html')
 
 
+#   if=interface，接口下载
+@home.route('/osiffetch', methods=['GET', 'POST'])
+@userLogin
+def osIfFetch():
+    g.bs = db.session.query().filter(BusinSysInfo.sys_no == InterfaceFile.sys_no).with_entities(BusinSysInfo.sys_no,
+                                                                                                BusinSysInfo.sys_name,
+                                                                                                BusinSysInfo.manager).distinct().all()
+    g.interface = InterfaceFile.query.order_by(InterfaceFile.upload_time.desc()).all()
+    return render_template('home/os_if_fetch.html')
+
+
 # if=interface,接口信息搜索
 @home.route('/uf20ifsearch', methods=['GET', 'POST'])
 @userLogin
 def uf20IfSearch():
+    g.bs = BusinSysInfo.query.filter(
+        or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"))).all()
     form = IfFieldSearchForm()
-    total_if_num = db.session.query(InterfaceFuncInfo).count()
+    sql_total_if_num = 'select count(*) from InterfaceFuncInfo where sys_no in' \
+                       '(select sys_no from BusinSysInfo where sys_name like "%UF2%");'
+    total_if_num = db.session.execute(sql_total_if_num).fetchall()[0][0]
     if_file_list = db.session.query(InterfaceFile.file_name).filter(BusinSysInfo.sys_name.like('%UF2%')).filter(
         BusinSysInfo.sys_no == InterfaceFile.sys_no).all()
     if form.validate_on_submit():
         data = form.data
-        sys_no = BusinSysInfo.query.filter(
-            or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"),
-                BusinSysInfo.sys_name.like(f"%经纪业务运营平台V2%"))).first().sys_no
+        sys_no = data['select_sys']
         key_word = data['keyword'].strip(' ')
         select_type = data['select_type']
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
         if select_type == 1:
             g.query_result = InterfaceFuncInfo.query.filter(
-                or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
-                    InterfaceFuncInfo.func_no_old.like(f"%{key_word}%"))).all()
-        else:
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_no_old.like(f"%{key_word}%")))
+            ).all()
+            return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num,
+                                   if_file_list=if_file_list)
+        elif select_type == 2:
             g.query_result = InterfaceFuncInfo.query.filter(
-                or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
-                    InterfaceFuncInfo.func_describe.like(f"%{key_word}%"))).all()
-        return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num,
-                               if_file_list=if_file_list)
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_describe.like(f"%{key_word}%")))
+            ).all()
+            return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num,
+                                   if_file_list=if_file_list)
     return render_template('home/uf20_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
+
+
+# os=othersystem,其他系统接口信息搜索
+@home.route('/osifsearch', methods=['GET', 'POST'])
+@userLogin
+def osIfSearch():
+    sql_bs = 'select sys_no,sys_name from BusinSysInfo where sys_no in ' \
+             '(select distinct sys_no from InterfaceFuncInfo) and sys_name not like "%UF20%";'
+    g.bs = db.session.execute(sql_bs).fetchall()
+    form = IfFieldSearchForm()
+    sql_total_if_num = 'select count(*) from InterfaceFuncInfo where sys_no in' \
+                       '(select sys_no from BusinSysInfo where sys_name not like "%UF2%");'
+    total_if_num = db.session.execute(sql_total_if_num).fetchall()[0][0]
+    if_file_list = db.session.query(InterfaceFile.file_name).filter(BusinSysInfo.sys_name.notlike('%UF2%')).filter(
+        BusinSysInfo.sys_no == InterfaceFile.sys_no).all()
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = data['select_sys']
+        key_word = data['keyword'].strip(' ')
+        select_type = data['select_type']
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if select_type == 1:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_no.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_no_old.like(f"%{key_word}%")))
+            ).all()
+            return render_template('home/os_if_search.html', form=form, total_if_num=total_if_num,
+                                   if_file_list=if_file_list)
+        elif select_type == 2:
+            g.query_result = InterfaceFuncInfo.query.filter(
+                and_(InterfaceFuncInfo.sys_no == sys_no,
+                     or_(InterfaceFuncInfo.func_name.like(f"%{key_word}%"),
+                         InterfaceFuncInfo.func_describe.like(f"%{key_word}%")))
+            ).all()
+            return render_template('home/os_if_search.html', form=form, total_if_num=total_if_num,
+                                   if_file_list=if_file_list)
+    return render_template('home/os_if_search.html', form=form, total_if_num=total_if_num, if_file_list=if_file_list)
 
 
 # df=Database File，数据库信息检索
 @home.route('/uf20dfsearch', methods=['GET', 'POST'])
 @userLogin
 def uf20DfSearch():
-    g.bs = BusinSysInfo.query.filter(
-        or_(BusinSysInfo.sys_name.like(f"%UF2%"), BusinSysInfo.sys_name.like(f"%uf2%"))).all()
+    sql = 'select sys_no,sys_name from BusinSysInfo where sys_no in (select distinct sys_no from UF20TableInfo);'
+    g.bs = db.session.execute(sql).fetchall()
     form = DfFieldSearchForm()
     total_tabel_num = db.session.query().with_entities(UF20TableInfo.table_name).distinct().count()
     sys_name = 'unsearch'
@@ -263,10 +329,59 @@ def uf20DfSearch():
     return render_template('home/uf20_df_search.html', form=form, sys_name=sys_name, total_tabel_num=total_tabel_num)
 
 
-@home.route('/othersystem')
+# os=othersystem，其他系统数据库信息检索
+@home.route('/osdfsearch', methods=['GET', 'POST'])
 @userLogin
-def otherSystem():
-    return render_template('home/other_system.html')
+def osDfSearch():
+    sql = 'select sys_no,sys_name from BusinSysInfo where sys_no in (select distinct sys_no from OsTableInfo);'
+    g.bs = db.session.execute(sql).fetchall()
+    form = DfFieldSearchForm()
+    total_tabel_num = db.session.query().with_entities(OsTableInfo.table_name).distinct().count()
+    sys_name = 'unsearch'
+    if form.validate_on_submit():
+        data = form.data
+        sys_no = data['select_sys']
+        select_type = data['select_type']
+        key_word = data['keyword'].strip(' ')
+        g.sys = BusinSysInfo.query.filter_by(sys_no=sys_no).first()
+        if 'O3' in g.sys.sys_name or 'o3' in g.sys.sys_name:
+            key_word = key_word.upper()
+            if select_type == 1:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, OsTableInfo.db_user_name.like(f"trade"),
+                         or_(OsTableInfo.table_name.like(f"%{key_word}%"),
+                             OsTableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif select_type == 2:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, OsTableInfo.db_user_name.like(f"trade"),
+                         or_(OsTableInfo.field_name.like(f"%{key_word}%"),
+                             OsTableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = 'O32'
+            return render_template('home/os_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+        elif '法人清算' in g.sys.sys_name:
+            key_word = key_word.upper()
+            if select_type == 1:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, OsTableInfo.busin_sys.like(f"法人清算系统"),
+                         or_(OsTableInfo.table_name.like(f"%{key_word}%"),
+                             OsTableInfo.table_describe.like(f"%{key_word}%")))
+                ).all()
+            elif select_type == 2:
+                g.query_result = OsTableInfo.query.filter(
+                    and_(OsTableInfo.sys_no == sys_no, OsTableInfo.busin_sys.like(f"法人清算系统"),
+                         or_(OsTableInfo.field_name.like(f"%{key_word}%"),
+                             OsTableInfo.field_describe.like(f"%{key_word}%")))
+                ).all()
+            sys_name = '法人清算'
+            return render_template('home/os_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+        else:
+            return render_template('home/os_df_search.html', form=form, sys_name=sys_name,
+                                   total_tabel_num=total_tabel_num)
+    return render_template('home/os_df_search.html', form=form, sys_name=sys_name, total_tabel_num=total_tabel_num)
 
 
 # 公告预览

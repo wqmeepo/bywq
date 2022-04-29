@@ -17,8 +17,8 @@
     <div class="container-fluid mt-3">
         <div class="position-relative overflow-hidden p-3 p-md-3 m-md-4 text-center bg-light">
             <div class="col-md-5 p-lg-3 mx-auto my-5">
-                <h1 class="display-4 fw-normal">UF20数据库信息检索</h1>
-                <p class="lead fw-normal">本界面提供UF20相关表结构信息查询,目前收录UF20相关表 {{ total_tabel_num }} 张，以下为支持查询的系统：
+                <h1 class="display-4 fw-normal">其他系统数据库信息检索</h1>
+                <p class="lead fw-normal">本界面提供除UF20外其他系统表结构信息查询,目前收录表 {{ total_tabel_num }} 张，以下为支持查询的系统：
                     {% for sys in g.bs %}
                         <p class="lead fw-normal text-info text-small"> {{ sys.sys_name }} </p>
                     {% endfor %}
@@ -57,6 +57,7 @@
                     <th scope="col">字段描述</th>
                     <th scope="col">业务系统</th>
                     <th scope="col">DB用户</th>
+                    <th scope="col">备注</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -65,44 +66,48 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ g.sys.sys_name }}</td>
                         <td>{{ item.table_name }}</td>
-                        <td>{{ item.table_describe }}</td>
-                        <td><a id="modal-1" href="#modal-container-1" role="button"
-                               data-toggle="modal" onclick="getDictionary($(this).text())">{{ item.field_name }}</a>
-                        </td>
-                        <td>{{ item.field_describe }}</td>
-                        <td>{{ item.sheet_name }}</td>
-                        <td>{{ item.db_name }}</td>
+                        {% if item.table_describe|length > 35 %}
+                            <td>
+                                <a class="btn btn-sm btn-secondary" data-toggle="popover" title="表描述"
+                                   data-content="{{ item.table_describe }}">查看详情
+                                </a>
+                            </td>
+                        {% else %}
+                            <td>{{ item.table_describe }}</td>
+                        {% endif %}
+                        <td>{{ item.field_name }}</td>
+                        {% if item.field_describe|length > 35 %}
+                            <td>
+                                <a class="btn btn-sm btn-secondary" data-toggle="popover" title="表描述"
+                                   data-content="{{ item.field_describe }}">查看详情
+                                </a>
+                            </td>
+                        {% else %}
+                            <td>{{ item.field_describe }}</td>
+                        {% endif %}
+                        <td>{{ item.busin_sys }}</td>
+                        <td>{{ item.db_user_name }}</td>
+                        {% if item.remark|length > 35 %}
+                            <td>
+                                <a class="btn btn-sm btn-secondary" data-toggle="popover" title="表描述"
+                                   data-content="{{ item.remark }}">查看详情
+                                </a>
+                            </td>
+                        {% else %}
+                            <td>{{ item.remark }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         {% endif %}
-        <!-- modal -->
-        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">
-                            字段数据字典信息
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body text-small">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <script type="text/javascript">
-        function getDictionary(field_name) {
-            $(".modal-body").load("/bs/querydictionary/" + field_name);
-            $(".modal-title").text('字段名：' + field_name);
-        }
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+                placement: 'top'
+            })
+        })
     </script>
     </body>
 

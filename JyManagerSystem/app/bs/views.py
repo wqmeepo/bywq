@@ -142,7 +142,8 @@ def ifDownload(file_path):
 @bs.route('/ifsearch', methods=['GET', 'POST'])
 @jyUserLogin
 def ifSearch():
-    g.bs = BusinSysInfo.query.all()
+    sql = 'select sys_no,sys_name from BusinSysInfo where sys_no in (select distinct sys_no from InterfaceFuncInfo);'
+    g.bs = db.session.execute(sql).fetchall()
     form = IfFieldSearchForm()
     if form.validate_on_submit():
         data = form.data
@@ -213,7 +214,9 @@ def dfMng():
 @bs.route('/dfsearch', methods=['GET', 'POST'])
 @jyUserLogin
 def dfSearch():
-    g.bs = BusinSysInfo.query.all()
+    sql = 'select sys_no,sys_name from BusinSysInfo where sys_no in (select distinct sys_no from ' \
+          'UF20TableInfo union select distinct sys_no from OsTableInfo);'
+    g.bs = db.session.execute(sql).fetchall()
     form = DfFieldSearchForm()
     sys_name = 'unsearch'
     if form.validate_on_submit():

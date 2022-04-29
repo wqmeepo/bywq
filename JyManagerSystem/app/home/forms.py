@@ -208,6 +208,19 @@ class IfFieldSearchForm(FlaskForm):
     '''
     接口文件搜索
     '''
+    chioce_list = [(x, y) for x in range(20)
+                   for y in range(20) if x == y]
+    select_sys = SelectField(
+        '选择',
+        validators=[
+            DataRequired('need')
+        ],
+        render_kw={
+            'class': 'custom-select',
+        },
+        choices=chioce_list,
+        coerce=int
+    )
     select_type = SelectField(
         '选择',
         validators=[
