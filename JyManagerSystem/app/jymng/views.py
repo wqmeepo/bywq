@@ -105,14 +105,17 @@ def upload():
     from manage import app
     f = request.files.get('upload')  # 获取上传图片文件对象
     # Add more validations here
-    extension = f.filename.split('.')[1].lower()
+    extension = f.filename.split('.')[-1].lower()
     if extension not in ['jpg', 'gif', 'png', 'jpeg']:  # 验证文件类型示例
         return upload_fail(message='Image only!')  # 返回upload_fail调用
     save_path = os.path.join(app.root_path, 'storages', 'ckeditor_uploads')
     if not os.path.exists(save_path):
         os.makedirs(save_path, mode=0o777)  # 文件夹权限
-    f.save(os.path.join(save_path, f.filename))
-    url = url_for('jymng.uploaded_files', filename=f.filename)
+    # 给图片文件加时间戳
+    filename_timestamp = ''.join(f.filename.split('.')[:-1]) + '_' + datetime.datetime.now().strftime(
+        '%Y-%m-%d %H:%M:%S').replace(':', '').replace(' ', '-') + '.' + f.filename.split('.')[-1]
+    f.save(os.path.join(save_path, filename_timestamp))
+    url = url_for('jymng.uploaded_files', filename=filename_timestamp)
     return upload_success(url=url)  # 返回upload_success调用
 
 
@@ -146,6 +149,7 @@ def announceEdit(sys_id):
         ano_info.announce_body = request.form['announce_body']
         ano_info.to_who = request.form['select']
         ano_info.announce_type = announce_type
+        ano_info.modify_time = datetime.datetime.now()
         db.session.commit()
         flash('公告修改成功', 'announceSet_success')
         return redirect(url_for('jymng.announceMng'))
